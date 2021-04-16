@@ -120,11 +120,4 @@ class LaunchLoaderTests: XCTestCase {
     }
 }
 
-func anyURLRequest() -> URLRequest {
-    URLRequest(url: URL(string: "http://any-url.com")!)
-}
-
-func anyData() -> Data {
-    Data("any data".utf8)
-}
 
