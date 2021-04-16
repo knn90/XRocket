@@ -8,12 +8,6 @@
 import XCTest
 import XRocket
 
-protocol HTTPClient {
-    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
-    
-    func load(from request: URLRequest, completion: @escaping (Result) -> Void)
-}
-
 class LaunchLoader {
     private let client: HTTPClient
     private let request: URLRequest
