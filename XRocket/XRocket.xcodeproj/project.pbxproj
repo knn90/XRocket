@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6AAB50D32629312E0089DC3C /* XRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AAB50C92629312E0089DC3C /* XRocket.framework */; };
-		6AAB50D82629312E0089DC3C /* XRocketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAB50D72629312E0089DC3C /* XRocketTests.swift */; };
 		6AAB50DA2629312E0089DC3C /* XRocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AAB50CC2629312E0089DC3C /* XRocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6AAB50E9262943F30089DC3C /* LaunchLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAB50E8262943F30089DC3C /* LaunchLoaderTests.swift */; };
 /* End PBXBuildFile section */
@@ -28,7 +27,6 @@
 		6AAB50CC2629312E0089DC3C /* XRocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XRocket.h; sourceTree = "<group>"; };
 		6AAB50CD2629312E0089DC3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AAB50D22629312E0089DC3C /* XRocketTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XRocketTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6AAB50D72629312E0089DC3C /* XRocketTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XRocketTests.swift; sourceTree = "<group>"; };
 		6AAB50D92629312E0089DC3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AAB50E8262943F30089DC3C /* LaunchLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchLoaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,7 +82,6 @@
 			isa = PBXGroup;
 			children = (
 				6AAB50E726293DC40089DC3C /* Launch */,
-				6AAB50D72629312E0089DC3C /* XRocketTests.swift */,
 				6AAB50D92629312E0089DC3C /* Info.plist */,
 			);
 			path = XRocketTests;
@@ -220,7 +217,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6AAB50D82629312E0089DC3C /* XRocketTests.swift in Sources */,
 				6AAB50E9262943F30089DC3C /* LaunchLoaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
