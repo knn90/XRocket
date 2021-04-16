@@ -43,7 +43,6 @@ class LaunchLoader {
                     } catch {
                         completion(.invalidData)
                     }
-                    
                 } else {
                     completion(.badRequest)
                 }
@@ -81,35 +80,29 @@ class LaunchLoaderTests: XCTestCase {
     }
     
     func test_load_deliversErrorOnClientError() {
-        var error: LaunchLoader.LoadError?
-        let clientError = NSError(domain: "any NSError", code: 0)
         let (sut, client) = makeSUT()
         
-        sut.load { error = $0 }
-        client.completeWithError(clientError)
-        
-        XCTAssertEqual(error, .connectivity)
+        expect(sut, toCompleteWithError: .connectivity, when: {
+            let clientError = NSError(domain: "any NSError", code: 0)
+            client.completeWithError(clientError)
+        })
     }
     
     func test_load_deliversErrorOn400HTTPResponse() {
-        var error: LaunchLoader.LoadError?
         let (sut, client) = makeSUT()
-        
-        sut.load { error = $0 }
-        client.complete(withStatusCode: 400, data: anyData())
-        
-        XCTAssertEqual(error, .badRequest)
+
+        expect(sut, toCompleteWithError: .badRequest, when: {
+            client.complete(withStatusCode: 400, data: anyData())
+        })
     }
     
     func test_load_deliversErrorOn200HTTPResponseWithInvalidData() {
-        var error: LaunchLoader.LoadError?
-        let invalidData = Data("Invalid data".utf8)
         let (sut, client) = makeSUT()
         
-        sut.load { error = $0 }
-        client.complete(withStatusCode: 200, data: invalidData)
-        
-        XCTAssertEqual(error, .invalidData)
+        expect(sut, toCompleteWithError: .invalidData, when: {
+            let invalidData = Data("Invalid data".utf8)
+            client.complete(withStatusCode: 200, data: invalidData)
+        })
     }
     
     // MARK: - Helpers
@@ -142,6 +135,16 @@ class LaunchLoaderTests: XCTestCase {
             )!
             completions[index](.success((data, response)))
         }
+    }
+    
+    private func expect(_ sut: LaunchLoader, toCompleteWithError expectedError: LaunchLoader.LoadError, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        let exp = expectation(description: "Wait for load completion")
+        sut.load { receivedError in
+            XCTAssertEqual(expectedError, receivedError, file: file, line: line)
+            exp.fulfill()
+        }
+        action()
+        wait(for: [exp], timeout: 1.0)
     }
 }
 
