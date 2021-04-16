@@ -8,45 +8,6 @@
 import XCTest
 import XRocket
 
-class LaunchLoader {
-    private let client: HTTPClient
-    private let request: URLRequest
-    
-    init(client: HTTPClient, request: URLRequest) {
-        self.client = client
-        self.request = request
-    }
-    
-    enum LoadError: Error {
-        case connectivity
-        case badRequest
-        case invalidData
-    }
-    
-    typealias Result = Swift.Result<LaunchPagination, LoadError>
-    
-    func load(completion: @escaping (Result) -> Void) {
-        client.load(from: request) { result in
-            switch result {
-            case let .success((data, response)):
-                if response.statusCode == 200 {
-                    do {
-                        let decoder = JSONDecoder()
-                        let launchPagination = try decoder.decode(LaunchPagination.self, from: data)
-                        completion(.success(launchPagination))
-                    } catch {
-                        completion(.failure(.invalidData))
-                    }
-                } else {
-                    completion(.failure(.badRequest))
-                }
-            case .failure:
-                completion(.failure(.connectivity))
-            }
-        }
-    }
-}
-
 class LaunchLoaderTests: XCTestCase {
     func test_init_doesNotSendRequest() {
         let (_, client) = makeSUT()
