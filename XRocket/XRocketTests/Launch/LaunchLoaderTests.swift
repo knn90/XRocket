@@ -8,10 +8,13 @@
 import XCTest
 
 protocol HTTPClient {
-    
     typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
     
     func load(from request: URLRequest, completion: @escaping (Result) -> Void)
+}
+
+struct Launch: Codable {
+    
 }
 
 class LaunchLoader {
@@ -26,17 +29,27 @@ class LaunchLoader {
     enum LoadError: Error {
         case connectivity
         case badRequest
+        case invalidData
     }
     
     func load(completion: @escaping (LoadError?) -> Void) {
         client.load(from: request) { result in
             switch result {
-            case .success:
-                completion(.badRequest)
+            case let .success((data, response)):
+                if response.statusCode == 200 {
+                    let decoder = JSONDecoder()
+                    do {
+                        let _ = try decoder.decode([Launch].self, from: data)
+                    } catch {
+                        completion(.invalidData)
+                    }
+                    
+                } else {
+                    completion(.badRequest)
+                }
             case .failure:
                 completion(.connectivity)
             }
-
         }
     }
 }
@@ -67,7 +80,7 @@ class LaunchLoaderTests: XCTestCase {
         XCTAssertEqual(client.requestedURLs, [request, request])
     }
     
-    func test_load_deliverErrorOnClientError() {
+    func test_load_deliversErrorOnClientError() {
         var error: LaunchLoader.LoadError?
         let clientError = NSError(domain: "any NSError", code: 0)
         let (sut, client) = makeSUT()
@@ -78,7 +91,7 @@ class LaunchLoaderTests: XCTestCase {
         XCTAssertEqual(error, .connectivity)
     }
     
-    func test_load_deliverErrorOn400HTTPResponse() {
+    func test_load_deliversErrorOn400HTTPResponse() {
         var error: LaunchLoader.LoadError?
         let (sut, client) = makeSUT()
         
@@ -86,6 +99,17 @@ class LaunchLoaderTests: XCTestCase {
         client.complete(withStatusCode: 400, data: anyData())
         
         XCTAssertEqual(error, .badRequest)
+    }
+    
+    func test_load_deliversErrorOn200HTTPResponseWithInvalidData() {
+        var error: LaunchLoader.LoadError?
+        let invalidData = Data("Invalid data".utf8)
+        let (sut, client) = makeSUT()
+        
+        sut.load { error = $0 }
+        client.complete(withStatusCode: 200, data: invalidData)
+        
+        XCTAssertEqual(error, .invalidData)
     }
     
     // MARK: - Helpers
