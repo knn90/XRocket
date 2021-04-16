@@ -9,23 +9,52 @@ import XCTest
 
 class LaunchLoader {
     private let client: HTTPClientSpy
+    private let request: URLRequest
     
-    init(client: HTTPClientSpy) {
+    init(client: HTTPClientSpy, request: URLRequest) {
         self.client = client
+        self.request = request
+    }
+    
+    func load() {
+        client.load(from: request)
     }
 }
 
 class HTTPClientSpy {
-    var requestedURL: [URL] = []
+    var requestedURL: [URLRequest] = []
+    
+    func load(from request: URLRequest) {
+        requestedURL.append(request)
+    }
 }
 
 class LaunchLoaderTests: XCTestCase {
     func test_init_doesNotSendRequest() {
-        let client = HTTPClientSpy()
-        let _ = LaunchLoader(client: client)
+        let (_, client) = makeSUT()
         
         XCTAssertTrue(client.requestedURL.isEmpty)
     }
     
+    func test_load_sendRequestFromURL() {
+        let request = URLRequest(url: URL(string: "http://a-specific-url.com")!)
+        let (sut, client) = makeSUT(request: request)
+        
+        sut.load()
+        
+        XCTAssertEqual(client.requestedURL, [request])
+    }
+    
     // MARK: - Helpers
+    private func makeSUT(request: URLRequest = anyURLRequest(), file: StaticString = #file, line: UInt = #line) -> (LaunchLoader, HTTPClientSpy) {
+        let client = HTTPClientSpy()
+        let sut = LaunchLoader(client: client, request: request)
+        
+        return (sut, client)
+    }
 }
+
+func anyURLRequest() -> URLRequest {
+    URLRequest(url: URL(string: "http://any-url.com")!)
+}
+
