@@ -45,6 +45,17 @@ class LaunchLoaderTests: XCTestCase {
         XCTAssertEqual(client.requestedURL, [request])
     }
     
+    func test_loadTwice_sendRequestFromURLTwice() {
+        let request = URLRequest(url: URL(string: "http://a-specific-url.com")!)
+        
+        let (sut, client) = makeSUT(request: request)
+        
+        sut.load()
+        sut.load()
+        
+        XCTAssertEqual(client.requestedURL, [request, request])
+    }
+    
     // MARK: - Helpers
     private func makeSUT(request: URLRequest = anyURLRequest(), file: StaticString = #file, line: UInt = #line) -> (LaunchLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
