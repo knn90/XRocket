@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import XRocket
 
 class LaunchPaginationFactory {
     static func empty() -> LaunchPagination {

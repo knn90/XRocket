@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		6A59B0322629E193007D75E9 /* LaunchFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A59B0312629E193007D75E9 /* LaunchFactory.swift */; };
 		6A59B0382629E254007D75E9 /* LaunchPaginationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A59B0372629E254007D75E9 /* LaunchPaginationFactory.swift */; };
+		6A59B03F2629E8F6007D75E9 /* Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A59B03E2629E8F6007D75E9 /* Launch.swift */; };
+		6A59B0432629E95A007D75E9 /* LaunchPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A59B0422629E95A007D75E9 /* LaunchPagination.swift */; };
 		6AAB50D32629312E0089DC3C /* XRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AAB50C92629312E0089DC3C /* XRocket.framework */; };
 		6AAB50DA2629312E0089DC3C /* XRocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AAB50CC2629312E0089DC3C /* XRocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6AAB50E9262943F30089DC3C /* LaunchLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAB50E8262943F30089DC3C /* LaunchLoaderTests.swift */; };
@@ -27,6 +29,8 @@
 /* Begin PBXFileReference section */
 		6A59B0312629E193007D75E9 /* LaunchFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchFactory.swift; sourceTree = "<group>"; };
 		6A59B0372629E254007D75E9 /* LaunchPaginationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPaginationFactory.swift; sourceTree = "<group>"; };
+		6A59B03E2629E8F6007D75E9 /* Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Launch.swift; sourceTree = "<group>"; };
+		6A59B0422629E95A007D75E9 /* LaunchPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPagination.swift; sourceTree = "<group>"; };
 		6AAB50C92629312E0089DC3C /* XRocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XRocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AAB50CC2629312E0089DC3C /* XRocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XRocket.h; sourceTree = "<group>"; };
 		6AAB50CD2629312E0089DC3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -61,6 +65,15 @@
 				6A59B0372629E254007D75E9 /* LaunchPaginationFactory.swift */,
 			);
 			path = Factory;
+			sourceTree = "<group>";
+		};
+		6A59B03D2629E8EC007D75E9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6A59B03E2629E8F6007D75E9 /* Launch.swift */,
+				6A59B0422629E95A007D75E9 /* LaunchPagination.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		6AAB50BF2629312E0089DC3C = {
@@ -103,6 +116,7 @@
 		6AAB50E526293D900089DC3C /* Launch */ = {
 			isa = PBXGroup;
 			children = (
+				6A59B03D2629E8EC007D75E9 /* Model */,
 			);
 			path = Launch;
 			sourceTree = "<group>";
@@ -177,6 +191,7 @@
 				TargetAttributes = {
 					6AAB50C82629312E0089DC3C = {
 						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
 					};
 					6AAB50D12629312E0089DC3C = {
 						CreatedOnToolsVersion = 12.4;
@@ -224,6 +239,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A59B0432629E95A007D75E9 /* LaunchPagination.swift in Sources */,
+				6A59B03F2629E8F6007D75E9 /* Launch.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +389,7 @@
 		6AAB50DE2629312E0089DC3C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -388,6 +406,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kndev.XRocket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -395,6 +414,7 @@
 		6AAB50DF2629312E0089DC3C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -418,6 +438,7 @@
 		6AAB50E12629312E0089DC3C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = XRocketTests/Info.plist;
@@ -435,6 +456,7 @@
 		6AAB50E22629312E0089DC3C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = XRocketTests/Info.plist;

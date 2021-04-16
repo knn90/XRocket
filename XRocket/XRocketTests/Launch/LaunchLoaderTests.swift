@@ -6,46 +6,7 @@
 //
 
 import XCTest
-
-public struct Launch: Codable, Equatable {
-    public init(id: String, name: String, details: String) {
-        self.id = id
-        self.name = name
-        self.details = details
-    }
-    
-    let id: String
-    let name: String
-    let details: String
-}
-
-public struct LaunchPagination: Codable, Equatable {
-    public init(docs: [Launch], totalDocs: Int, offset: Int, limit: Int, totalPages: Int, page: Int, pagingCounter: Int, hasPrevPage: Bool, hasNextPage: Bool, prevPage: Int?, nextPage: Int?) {
-        self.docs = docs
-        self.totalDocs = totalDocs
-        self.offset = offset
-        self.limit = limit
-        self.totalPages = totalPages
-        self.page = page
-        self.pagingCounter = pagingCounter
-        self.hasPrevPage = hasPrevPage
-        self.hasNextPage = hasNextPage
-        self.prevPage = prevPage
-        self.nextPage = nextPage
-    }
-    
-    let docs: [Launch]
-    let totalDocs: Int
-    let offset: Int
-    let limit: Int
-    let totalPages: Int
-    let page: Int
-    let pagingCounter: Int
-    let hasPrevPage: Bool
-    let hasNextPage: Bool
-    let prevPage: Int?
-    let nextPage: Int?
-}
+import XRocket
 
 protocol HTTPClient {
     typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import XRocket
 
 class LaunchFactory {
     static func any() -> Launch {
