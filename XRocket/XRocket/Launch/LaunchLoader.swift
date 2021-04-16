@@ -8,7 +8,7 @@
 import Foundation
 
 public class LaunchLoader {
-    public typealias Result = Swift.Result<LaunchPagination, LoadError>
+    public typealias Result = Swift.Result<LaunchPagination, Error>
     private let client: HTTPClient
     private let request: URLRequest
     
@@ -17,7 +17,7 @@ public class LaunchLoader {
         self.request = request
     }
     
-    public enum LoadError: Error {
+    public enum Error: Swift.Error {
         case connectivity
         case badRequest
         case invalidData
@@ -27,20 +27,24 @@ public class LaunchLoader {
         client.load(from: request) { result in
             switch result {
             case let .success((data, response)):
-                if response.statusCode == 200 {
-                    do {
-                        let decoder = JSONDecoder()
-                        let launchPagination = try decoder.decode(LaunchPagination.self, from: data)
-                        completion(.success(launchPagination))
-                    } catch {
-                        completion(.failure(.invalidData))
-                    }
-                } else {
-                    completion(.failure(.badRequest))
-                }
+                completion(LaunchLoader.map(from: data, response: response))
             case .failure:
                 completion(.failure(.connectivity))
             }
+        }
+    }
+    
+    private static let success = 200
+    private static func map(from data: Data, response: HTTPURLResponse) -> Result {
+        if response.statusCode == success {
+            do {
+                let launchPagination = try JSONDecoder().decode(LaunchPagination.self, from: data)
+                return .success(launchPagination)
+            } catch {
+                return .failure(.invalidData)
+            }
+        } else {
+            return .failure(.badRequest)
         }
     }
 }
