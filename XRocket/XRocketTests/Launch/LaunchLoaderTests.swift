@@ -7,11 +7,18 @@
 
 import XCTest
 
+protocol HTTPClient {
+    
+    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
+    
+    func load(from request: URLRequest, completion: @escaping (Result) -> Void)
+}
+
 class LaunchLoader {
-    private let client: HTTPClientSpy
+    private let client: HTTPClient
     private let request: URLRequest
     
-    init(client: HTTPClientSpy, request: URLRequest) {
+    init(client: HTTPClient, request: URLRequest) {
         self.client = client
         self.request = request
     }
@@ -31,30 +38,6 @@ class LaunchLoader {
             }
 
         }
-    }
-}
-
-class HTTPClientSpy {
-    var requestedURLs: [URLRequest] = []
-    var completions = [(Result<(Data, HTTPURLResponse), Error>) -> Void]()
-    
-    func load(from request: URLRequest, completion: @escaping (Result<(Data, HTTPURLResponse), Error>) -> Void) {
-        requestedURLs.append(request)
-        completions.append(completion)
-    }
-    
-    func completeWithError(_ error: Error, at index: Int = 0) {
-        completions[index](.failure(error))
-    }
-    
-    func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
-        let response = HTTPURLResponse(
-            url: requestedURLs[index].url!,
-            statusCode: code,
-            httpVersion: nil,
-            headerFields: nil
-        )!
-        completions[index](.success((data, response)))
     }
 }
 
@@ -111,6 +94,30 @@ class LaunchLoaderTests: XCTestCase {
         let sut = LaunchLoader(client: client, request: request)
         
         return (sut, client)
+    }
+    
+    private class HTTPClientSpy: HTTPClient {
+        var requestedURLs: [URLRequest] = []
+        var completions = [(Result) -> Void]()
+        
+        func load(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+            requestedURLs.append(request)
+            completions.append(completion)
+        }
+        
+        func completeWithError(_ error: Error, at index: Int = 0) {
+            completions[index](.failure(error))
+        }
+        
+        func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
+            let response = HTTPURLResponse(
+                url: requestedURLs[index].url!,
+                statusCode: code,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            completions[index](.success((data, response)))
+        }
     }
 }
 
