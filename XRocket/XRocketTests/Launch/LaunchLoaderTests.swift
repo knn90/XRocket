@@ -7,13 +7,7 @@
 
 import XCTest
 
-protocol HTTPClient {
-    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
-    
-    func load(from request: URLRequest, completion: @escaping (Result) -> Void)
-}
-
-public struct Launch: Decodable {
+public struct Launch: Codable, Equatable {
     public init(id: String, name: String, details: String) {
         self.id = id
         self.name = name
@@ -25,7 +19,7 @@ public struct Launch: Decodable {
     let details: String
 }
 
-public struct LaunchPagination: Decodable {
+public struct LaunchPagination: Codable, Equatable {
     public init(docs: [Launch], totalDocs: Int, offset: Int, limit: Int, totalPages: Int, page: Int, pagingCounter: Int, hasPrevPage: Bool, hasNextPage: Bool, prevPage: Int?, nextPage: Int?) {
         self.docs = docs
         self.totalDocs = totalDocs
@@ -53,6 +47,12 @@ public struct LaunchPagination: Decodable {
     let nextPage: Int?
 }
 
+protocol HTTPClient {
+    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
+    
+    func load(from request: URLRequest, completion: @escaping (Result) -> Void)
+}
+
 class LaunchLoader {
     private let client: HTTPClient
     private let request: URLRequest
@@ -68,22 +68,25 @@ class LaunchLoader {
         case invalidData
     }
     
-    func load(completion: @escaping (LoadError?) -> Void) {
+    typealias Result = Swift.Result<LaunchPagination, LoadError>
+    
+    func load(completion: @escaping (Result) -> Void) {
         client.load(from: request) { result in
             switch result {
             case let .success((data, response)):
                 if response.statusCode == 200 {
-                    let decoder = JSONDecoder()
                     do {
-                        let _ = try decoder.decode(LaunchPagination.self, from: data)
+                        let decoder = JSONDecoder()
+                        let launchPagination = try decoder.decode(LaunchPagination.self, from: data)
+                        completion(.success(launchPagination))
                     } catch {
-                        completion(.invalidData)
+                        completion(.failure(.invalidData))
                     }
                 } else {
-                    completion(.badRequest)
+                    completion(.failure(.badRequest))
                 }
             case .failure:
-                completion(.connectivity)
+                completion(.failure(.connectivity))
             }
         }
     }
@@ -118,7 +121,7 @@ class LaunchLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithError: .connectivity, when: {
+        expect(sut, toCompleteWithResult: .failure(.connectivity), when: {
             let clientError = NSError(domain: "any NSError", code: 0)
             client.completeWithError(clientError)
         })
@@ -127,7 +130,7 @@ class LaunchLoaderTests: XCTestCase {
     func test_load_deliversErrorOn400HTTPResponse() {
         let (sut, client) = makeSUT()
 
-        expect(sut, toCompleteWithError: .badRequest, when: {
+        expect(sut, toCompleteWithResult: .failure(.badRequest), when: {
             client.complete(withStatusCode: 400, data: anyData())
         })
     }
@@ -135,9 +138,19 @@ class LaunchLoaderTests: XCTestCase {
     func test_load_deliversErrorOn200HTTPResponseWithInvalidData() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithError: .invalidData, when: {
+        expect(sut, toCompleteWithResult: .failure(.invalidData), when: {
             let invalidData = Data("Invalid data".utf8)
             client.complete(withStatusCode: 200, data: invalidData)
+        })
+    }
+    
+    func test_load_deliversLaunchesOn200HTTPResponseWithValidData() {
+        let (sut, client) = makeSUT()
+        let expectedResponse = LaunchPaginationFactory.single()
+            
+        expect(sut, toCompleteWithResult: .success(expectedResponse), when: {
+            let data = expectedResponse.toJSONData()
+            client.complete(withStatusCode: 200, data: data)
         })
     }
     
@@ -173,10 +186,17 @@ class LaunchLoaderTests: XCTestCase {
         }
     }
     
-    private func expect(_ sut: LaunchLoader, toCompleteWithError expectedError: LaunchLoader.LoadError, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: LaunchLoader, toCompleteWithResult expectedResult: LaunchLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
-        sut.load { receivedError in
-            XCTAssertEqual(expectedError, receivedError, file: file, line: line)
+        sut.load { receivedResult in
+            switch (expectedResult, receivedResult) {
+            case let (.success(expectedResponse), .success(receivedResponse)):
+                XCTAssertEqual(expectedResponse, receivedResponse, "Expected to get success with \(expectedResponse), got \(receivedResponse) instead", file: file, line: line)
+            case let (.failure(expectedError), .failure(receivedError)):
+                XCTAssertEqual(expectedError, receivedError, "Expected to get failure with \(expectedError), got \(receivedError) instead", file: file, line: line)
+            default:
+                XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+            }
             exp.fulfill()
         }
         action()

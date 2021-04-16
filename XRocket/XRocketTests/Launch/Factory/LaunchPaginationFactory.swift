@@ -23,7 +23,7 @@ class LaunchPaginationFactory {
             nextPage: nil)
     }
     
-    static func singlePage() -> LaunchPagination {
+    static func single() -> LaunchPagination {
         LaunchPagination(
             docs: [
                 LaunchFactory.any(),
@@ -40,5 +40,11 @@ class LaunchPaginationFactory {
             hasNextPage: false,
             prevPage: nil,
             nextPage: nil)
+    }
+}
+
+extension LaunchPagination {
+    func toJSONData() -> Data {
+        return try! JSONEncoder().encode(self)
     }
 }
