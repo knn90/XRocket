@@ -41,6 +41,16 @@ class ImageDataLoaderTests: XCTestCase {
         XCTAssertEqual(client.requestedURLs, [request])
     }
     
+    func test_loadTwice_requestDataFromURLTwice() {
+        let request = URLRequest(url: URL(string: "http://a-specific-url")!)
+        let (sut, client) = makeSUT(request: request)
+        
+        sut.load { _ in }
+        sut.load { _ in }
+        
+        XCTAssertEqual(client.requestedURLs, [request, request])
+    }
+    
     // MARK: - Helpers
     private func makeSUT(request: URLRequest = anyURLRequest(), file: StaticString = #file, line: UInt = #line) -> (ImageDataLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
