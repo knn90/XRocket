@@ -27,9 +27,10 @@ class ImageDataLoader {
         client.load(from: request) { (result) in
             switch result {
             case let .success((data, response)):
-                if response.statusCode != 200 || data.isEmpty {
-                    completion(.failure(.invalidData))
+                guard response.statusCode == 200, !data.isEmpty else {
+                    return completion(.failure(.invalidData))
                 }
+                completion(.success(data))
             case .failure:
                 completion(.failure(.connectivity))
             }
@@ -89,6 +90,14 @@ class ImageDataLoaderTests: XCTestCase {
         expect(sut, toCompleteWithResult: .failure(.invalidData), when: {
             let emptyData = Data()
             client.complete(withStatusCode: 200, data: emptyData)
+        })
+    }
+    
+    func test_load_deliversSuccessWithDataOn200HTTPReponseWithData() {
+        let (sut, client) = makeSUT()
+        let nonEmptyData = Data("non-empty data".utf8)
+        expect(sut, toCompleteWithResult: .success(nonEmptyData), when: {
+            client.complete(withStatusCode: 200, data: nonEmptyData)
         })
     }
     
