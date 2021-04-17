@@ -15,10 +15,16 @@ class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
     
+    private struct UnexpectedValuesRepresentation: Error {}
+    
     func load(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
         let task = session.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 completion(.failure(error))
+            }
+            
+            if data?.count == 0, response == nil, error == nil {
+                completion(.failure(UnexpectedValuesRepresentation()))
             }
         }
         
@@ -51,6 +57,28 @@ class URLSessionHTTPClientTests: XCTestCase {
         let exp = expectation(description: "Wait for load completion")
         var receivedError: Error?
         URLProtocolStub.stub(data: nil, response: nil, error: requestError)
+        
+        sut.load(from: anyURLRequest()) { result in
+            switch result {
+            case let .failure(error):
+                receivedError = error
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+        
+        XCTAssertNotNil(receivedError)
+    }
+    
+    func test_load_failsOnAllNilValues() {
+        let sut = makeSUT()
+        
+        let exp = expectation(description: "Wait for load completion")
+        var receivedError: Error?
+        
+        URLProtocolStub.stub(data: nil, response: nil, error: nil)
         
         sut.load(from: anyURLRequest()) { result in
             switch result {
