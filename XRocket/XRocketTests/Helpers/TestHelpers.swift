@@ -20,4 +20,8 @@ func anyData() -> Data {
     Data("any data".utf8)
 }
 
+func anyNSError() -> NSError {
+    NSError(domain: "any", code: 0)
+}
+
 

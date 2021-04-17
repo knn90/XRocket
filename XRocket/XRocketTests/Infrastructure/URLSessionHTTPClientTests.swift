@@ -17,7 +17,9 @@ class URLSessionHTTPClient: HTTPClient {
     
     func load(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
         let task = session.dataTask(with: request) { (data, response, error) in
-            
+            if let error = error {
+                completion(.failure(error))
+            }
         }
         
         task.resume()
@@ -40,6 +42,28 @@ class URLSessionHTTPClientTests: XCTestCase {
         makeSUT().load(from: request) { _ in }
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_load_failsOnRequestError() {
+        let sut = makeSUT()
+        let requestError = anyNSError()
+        
+        let exp = expectation(description: "Wait for load completion")
+        var receivedError: Error?
+        URLProtocolStub.stub(data: nil, response: nil, error: requestError)
+        
+        sut.load(from: anyURLRequest()) { result in
+            switch result {
+            case let .failure(error):
+                receivedError = error
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+        
+        XCTAssertNotNil(receivedError)
     }
     
     // MARK: - Helpers
