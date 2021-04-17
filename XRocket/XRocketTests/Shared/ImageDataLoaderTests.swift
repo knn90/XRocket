@@ -11,11 +11,9 @@ import XRocket
 class ImageDataLoader {
     public typealias Result = Swift.Result<Data, Error>
     private let client: HTTPClient
-    private let request: URLRequest
     
-    public init(client: HTTPClient, request: URLRequest) {
+    public init(client: HTTPClient) {
         self.client = client
-        self.request = request
     }
     
     public enum Error: Swift.Error {
@@ -23,7 +21,7 @@ class ImageDataLoader {
         case invalidData
     }
     
-    public func load(completion: @escaping (Result) -> Void) {
+    public func load(from request: URLRequest, completion: @escaping (Result) -> Void) {
         client.load(from: request) { (result) in
             switch result {
             case let .success((data, response)):
@@ -47,19 +45,19 @@ class ImageDataLoaderTests: XCTestCase {
     
     func test_load_requestDataFromURL() {
         let request = URLRequest(url: URL(string: "http://a-specific-url")!)
-        let (sut, client) = makeSUT(request: request)
+        let (sut, client) = makeSUT()
         
-        sut.load { _ in }
+        sut.load(from: request) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [request])
     }
     
     func test_loadTwice_requestDataFromURLTwice() {
         let request = URLRequest(url: URL(string: "http://a-specific-url")!)
-        let (sut, client) = makeSUT(request: request)
+        let (sut, client) = makeSUT()
         
-        sut.load { _ in }
-        sut.load { _ in }
+        sut.load(from: request) { _ in }
+        sut.load(from: request) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [request, request])
     }
@@ -101,10 +99,11 @@ class ImageDataLoaderTests: XCTestCase {
         })
     }
     
+    
     // MARK: - Helpers
-    private func makeSUT(request: URLRequest = anyURLRequest(), file: StaticString = #file, line: UInt = #line) -> (ImageDataLoader, HTTPClientSpy) {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (ImageDataLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = ImageDataLoader(client: client, request: request)
+        let sut = ImageDataLoader(client: client)
         
         trackForMemoryLeak(client, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
@@ -114,7 +113,7 @@ class ImageDataLoaderTests: XCTestCase {
     
     private func expect(_ sut: ImageDataLoader, toCompleteWithResult expectedResult: ImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
-        sut.load { receivedResult in
+        sut.load(from: anyURLRequest()) { receivedResult in
             switch (expectedResult, receivedResult) {
             case let (.success(expectedResponse), .success(receivedResponse)):
                 XCTAssertEqual(expectedResponse, receivedResponse, "Expected to get success with \(expectedResponse), got \(receivedResponse) instead", file: file, line: line)
