@@ -7,13 +7,17 @@
 import Foundation
 
 func anyURLRequest(
-    url: URL = URL(string: "http://any-url.com")!,
+    url: URL = anyURL(),
     httpMethod: String = "GET")
 -> URLRequest {
     var request = URLRequest(url: url)
     request.httpMethod = httpMethod
     
     return request
+}
+
+func anyURL() -> URL {
+    URL(string: "http://any-url.com")!
 }
 
 func anyData() -> Data {

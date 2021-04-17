@@ -21,9 +21,9 @@ class URLSessionHTTPClient: HTTPClient {
         let task = session.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 completion(.failure(error))
-            }
-            
-            if data?.count == 0, response == nil, error == nil {
+            } else if let _ = data, let _ = response as? HTTPURLResponse {
+
+            } else {
                 completion(.failure(UnexpectedValuesRepresentation()))
             }
         }
@@ -33,6 +33,11 @@ class URLSessionHTTPClient: HTTPClient {
 }
 
 class URLSessionHTTPClientTests: XCTestCase {
+    override func tearDown() {
+        super.tearDown()
+        URLProtocolStub.removeStub()
+    }
+    
     func test_load_performsRequestFromURL() {
         let url = URL(string: "http://a-specific-url.com")!
         let request = anyURLRequest(url: url, httpMethod: "POST")
@@ -72,26 +77,16 @@ class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(receivedError)
     }
     
-    func test_load_failsOnAllNilValues() {
-        let sut = makeSUT()
-        
-        let exp = expectation(description: "Wait for load completion")
-        var receivedError: Error?
-        
-        URLProtocolStub.stub(data: nil, response: nil, error: nil)
-        
-        sut.load(from: anyURLRequest()) { result in
-            switch result {
-            case let .failure(error):
-                receivedError = error
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1.0)
-        
-        XCTAssertNotNil(receivedError)
+    func test_load_failsOnAllInvalidCases() {
+        XCTAssertNotNil(resultError(whenLoadWith: (data: nil, response: nil, error: nil)))
+        XCTAssertNotNil(resultError(whenLoadWith: (data: nil, response: nonHTTPURLResponse(), error: nil)))
+        XCTAssertNotNil(resultError(whenLoadWith: (data: anyData(), response: nil, error: nil)))
+        XCTAssertNotNil(resultError(whenLoadWith: (data: anyData(), response: nil, error: anyNSError())))
+        XCTAssertNotNil(resultError(whenLoadWith: (data: nil, response: nonHTTPURLResponse(), error: anyNSError())))
+        XCTAssertNotNil(resultError(whenLoadWith: (data: nil, response: anyHTTPURLResponse(), error: anyNSError())))
+        XCTAssertNotNil(resultError(whenLoadWith: (data: anyData(), response: nonHTTPURLResponse(), error: anyNSError())))
+        XCTAssertNotNil(resultError(whenLoadWith: (data: anyData(), response: anyHTTPURLResponse(), error: anyNSError())))
+        XCTAssertNotNil(resultError(whenLoadWith: (data: anyData(), response: nonHTTPURLResponse(), error: nil)))
     }
     
     // MARK: - Helpers
@@ -164,5 +159,39 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         override func stopLoading() {}
+    }
+    
+    private func resultError(whenLoadWith values: (data: Data?, response: URLResponse?, error: Error?), file: StaticString = #filePath, line: UInt = #line) -> Error? {
+        let receivedResult = result(whenLoadWith: values)
+        switch receivedResult {
+        case let .failure(error):
+            return error
+        default:
+            XCTFail("Expected failure, got \(receivedResult) instead", file: file, line: line)
+            return nil
+        }
+    }
+    
+    private func result(whenLoadWith values: (data: Data?, response: URLResponse?, error: Error?)) -> HTTPClient.Result {
+        let sut = makeSUT()
+        URLProtocolStub.stub(data: values.data, response: values.response, error: values.error)
+        var receivedResult: HTTPClient.Result!
+        let exp = expectation(description: "Wait for load completion")
+        sut.load(from: anyURLRequest()) { result in
+            receivedResult = result
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+        
+        return receivedResult
+    }
+    
+    private func anyHTTPURLResponse() -> HTTPURLResponse {
+        return HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
+    }
+    
+    private func nonHTTPURLResponse() -> URLResponse {
+        return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
     }
 }
