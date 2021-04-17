@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6A54AF8E262A8BC60007D021 /* XCTestCase+MemoryLeak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A54AF8D262A8BC60007D021 /* XCTestCase+MemoryLeak.swift */; };
 		6A54AF95262A8EAF0007D021 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A54AF94262A8EAF0007D021 /* URLSessionHTTPClientTests.swift */; };
+		6A54AF9C262ACD750007D021 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A54AF9B262ACD750007D021 /* URLSessionHTTPClient.swift */; };
 		6A59B0322629E193007D75E9 /* LaunchFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A59B0312629E193007D75E9 /* LaunchFactory.swift */; };
 		6A59B0382629E254007D75E9 /* LaunchPaginationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A59B0372629E254007D75E9 /* LaunchPaginationFactory.swift */; };
 		6A59B03F2629E8F6007D75E9 /* Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A59B03E2629E8F6007D75E9 /* Launch.swift */; };
@@ -34,6 +35,7 @@
 /* Begin PBXFileReference section */
 		6A54AF8D262A8BC60007D021 /* XCTestCase+MemoryLeak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeak.swift"; sourceTree = "<group>"; };
 		6A54AF94262A8EAF0007D021 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
+		6A54AF9B262ACD750007D021 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		6A59B0312629E193007D75E9 /* LaunchFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchFactory.swift; sourceTree = "<group>"; };
 		6A59B0372629E254007D75E9 /* LaunchPaginationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPaginationFactory.swift; sourceTree = "<group>"; };
 		6A59B03E2629E8F6007D75E9 /* Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Launch.swift; sourceTree = "<group>"; };
@@ -72,6 +74,14 @@
 			isa = PBXGroup;
 			children = (
 				6A54AF94262A8EAF0007D021 /* URLSessionHTTPClientTests.swift */,
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		6A54AF9A262ACD670007D021 /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				6A54AF9B262ACD750007D021 /* URLSessionHTTPClient.swift */,
 			);
 			path = Infrastructure;
 			sourceTree = "<group>";
@@ -124,6 +134,7 @@
 		6AAB50CB2629312E0089DC3C /* XRocket */ = {
 			isa = PBXGroup;
 			children = (
+				6A54AF9A262ACD670007D021 /* Infrastructure */,
 				6AAB50E526293D900089DC3C /* Launch */,
 				6AAB50CC2629312E0089DC3C /* XRocket.h */,
 				6AAB50CD2629312E0089DC3C /* Info.plist */,
@@ -271,6 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A59B0432629E95A007D75E9 /* LaunchPagination.swift in Sources */,
+				6A54AF9C262ACD750007D021 /* URLSessionHTTPClient.swift in Sources */,
 				6A59B0472629E9C7007D75E9 /* HTTPClient.swift in Sources */,
 				6A59B03F2629E8F6007D75E9 /* Launch.swift in Sources */,
 				6A59B04D2629EA0F007D75E9 /* LaunchLoader.swift in Sources */,
