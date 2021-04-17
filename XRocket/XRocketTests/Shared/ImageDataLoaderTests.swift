@@ -20,12 +20,16 @@ class ImageDataLoader {
     
     public enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     public func load(completion: @escaping (Result) -> Void) {
         client.load(from: request) { (result) in
             switch result {
-            case .success: break
+            case let .success((data, response)):
+                if response.statusCode != 200 {
+                    completion(.failure(.invalidData))
+                }
             case .failure:
                 completion(.failure(.connectivity))
             }
@@ -59,13 +63,24 @@ class ImageDataLoaderTests: XCTestCase {
         XCTAssertEqual(client.requestedURLs, [request, request])
     }
     
-    func test_load_deliversErrorOnClientError() {
+    func test_load_deliversConnectivityErrorOnClientError() {
         let (sut, client) = makeSUT()
         
         expect(sut, toCompleteWithResult: .failure(.connectivity), when: {
             let clientError = NSError(domain: "any NSError", code: 0)
             client.completeWithError(clientError)
         })
+    }
+    
+    func test_load_deliversInvalidErrorOnNon200HTTPResponse() {
+        let (sut, client) = makeSUT()
+        
+        let sampleCode = [199, 201, 330, 486, 500]
+        sampleCode.enumerated().forEach { index,code in
+            expect(sut, toCompleteWithResult: .failure(.invalidData), when: {
+                client.complete(withStatusCode: code, data: anyData(), at: index)
+            })
+        }
     }
     
     // MARK: - Helpers
