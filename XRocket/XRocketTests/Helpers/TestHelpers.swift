@@ -6,8 +6,14 @@
 //
 import Foundation
 
-func anyURLRequest() -> URLRequest {
-    URLRequest(url: URL(string: "http://any-url.com")!)
+func anyURLRequest(
+    url: URL = URL(string: "http://any-url.com")!,
+    httpMethod: String = "GET")
+-> URLRequest {
+    var request = URLRequest(url: url)
+    request.httpMethod = httpMethod
+    
+    return request
 }
 
 func anyData() -> Data {
