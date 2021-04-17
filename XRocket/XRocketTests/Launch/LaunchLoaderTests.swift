@@ -75,6 +75,9 @@ class LaunchLoaderTests: XCTestCase {
         let client = HTTPClientSpy()
         let sut = LaunchLoader(client: client, request: request)
         
+        trackForMemoryLeak(sut, file: file, line: line)
+        trackForMemoryLeak(client, file: file, line: line)
+        
         return (sut, client)
     }
     
