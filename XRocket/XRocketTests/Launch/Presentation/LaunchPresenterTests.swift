@@ -41,10 +41,21 @@ class LaunchPresenterTests: XCTestCase {
         ])
     }
     
+    func test_didFinishLoadingWithLaunches_displaysLaunchesAndStopLoading() {
+        let (sut, view) = makeSUT()
+        let launchPagination = LaunchPaginationFactory.single()
+        sut.didFinishLoading(with: launchPagination)
+        
+        XCTAssertEqual(view.messages, [
+            .display(launches: launchPagination.docs),
+            .display(isLoading: false)
+        ])
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchPresenter, ViewSpy) {
         let view = ViewSpy()
-        let sut = LaunchPresenter(loadingView: view, errorView: view)
+        let sut = LaunchPresenter(loadingView: view, errorView: view, launchView: view)
         
         trackForMemoryLeak(view, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
@@ -52,10 +63,11 @@ class LaunchPresenterTests: XCTestCase {
         return (sut, view)
     }
     
-    private class ViewSpy: LaunchLoadingView, LaunchErrorView {
+    private class ViewSpy: LaunchLoadingView, LaunchErrorView, LaunchView {
         enum Message: Equatable {
             case display(isLoading: Bool)
             case display(errorMessage: String?)
+            case display(launches: [Launch])
         }
         
         private(set) var messages = [Message]()
@@ -66,6 +78,10 @@ class LaunchPresenterTests: XCTestCase {
         
         func display(isLoading: Bool) {
             messages.append(.display(isLoading: isLoading))
+        }
+        
+        func display(launches: [Launch]) {
+            messages.append(.display(launches: launches))
         }
     }
     

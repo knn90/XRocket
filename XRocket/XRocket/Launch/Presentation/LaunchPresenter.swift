@@ -15,6 +15,10 @@ public protocol LaunchErrorView {
     func display(errorMessage: String?)
 }
 
+public protocol LaunchView {
+    func display(launches: [Launch])
+}
+
 public final class LaunchPresenter {
     public static var title: String {
         NSLocalizedString("launch_view_title",
@@ -25,6 +29,7 @@ public final class LaunchPresenter {
     
     private let loadingView: LaunchLoadingView
     private let errorView: LaunchErrorView
+    private let launchView: LaunchView
     private var loadErrorMessage: String {
         NSLocalizedString("launch_view_connection_error",
                           tableName: "Launch",
@@ -32,9 +37,10 @@ public final class LaunchPresenter {
                           comment: "Error message when loading launches")
     }
     
-    public init(loadingView: LaunchLoadingView, errorView: LaunchErrorView) {
+    public init(loadingView: LaunchLoadingView, errorView: LaunchErrorView, launchView: LaunchView) {
         self.loadingView = loadingView
         self.errorView = errorView
+        self.launchView = launchView
     }
     
     public func didStartLoadingLaunch() {
@@ -44,6 +50,11 @@ public final class LaunchPresenter {
     
     public func didFinishLoading(with error: Error) {
         errorView.display(errorMessage: loadErrorMessage)
+        loadingView.display(isLoading: false)
+    }
+    
+    public func didFinishLoading(with launchPagination: LaunchPagination) {
+        launchView.display(launches: launchPagination.docs)
         loadingView.display(isLoading: false)
     }
 }
