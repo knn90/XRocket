@@ -34,6 +34,9 @@
 		6AB7499F262C7D4200C8F56A /* XRocketiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB7499E262C7D4200C8F56A /* XRocketiOSTests.swift */; };
 		6AB749A1262C7D4200C8F56A /* XRocketiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AB74993262C7D4200C8F56A /* XRocketiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6AB749AD262C7E3B00C8F56A /* LaunchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB749AC262C7E3B00C8F56A /* LaunchViewControllerTests.swift */; };
+		6AB749B7262C813500C8F56A /* XRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AAB50C92629312E0089DC3C /* XRocket.framework */; };
+		6AB749B8262C813500C8F56A /* XRocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6AAB50C92629312E0089DC3C /* XRocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6AB749C2262C823600C8F56A /* XCTestCase+MemoryLeak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB749C1262C823600C8F56A /* XCTestCase+MemoryLeak.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +54,28 @@
 			remoteGlobalIDString = 6AB74990262C7D4100C8F56A;
 			remoteInfo = XRocketiOS;
 		};
+		6AB749B9262C813500C8F56A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6AAB50C02629312E0089DC3C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6AAB50C82629312E0089DC3C;
+			remoteInfo = XRocket;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6AB749BB262C813500C8F56A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6AB749B8262C813500C8F56A /* XRocket.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		6A54AF8D262A8BC60007D021 /* XCTestCase+MemoryLeak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeak.swift"; sourceTree = "<group>"; };
@@ -87,6 +111,7 @@
 		6AB7499E262C7D4200C8F56A /* XRocketiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XRocketiOSTests.swift; sourceTree = "<group>"; };
 		6AB749A0262C7D4200C8F56A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AB749AC262C7E3B00C8F56A /* LaunchViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewControllerTests.swift; sourceTree = "<group>"; };
+		6AB749C1262C823600C8F56A /* XCTestCase+MemoryLeak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeak.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AB749B7262C813500C8F56A /* XRocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +210,7 @@
 				6AB74992262C7D4200C8F56A /* XRocketiOS */,
 				6AB7499D262C7D4200C8F56A /* XRocketiOSTests */,
 				6AAB50CA2629312E0089DC3C /* Products */,
+				6AB749B6262C813500C8F56A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -299,11 +326,27 @@
 		6AB7499D262C7D4200C8F56A /* XRocketiOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				6AB749C0262C821900C8F56A /* Helpers */,
 				6AB7499E262C7D4200C8F56A /* XRocketiOSTests.swift */,
 				6AB749A0262C7D4200C8F56A /* Info.plist */,
 				6AB749AC262C7E3B00C8F56A /* LaunchViewControllerTests.swift */,
 			);
 			path = XRocketiOSTests;
+			sourceTree = "<group>";
+		};
+		6AB749B6262C813500C8F56A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6AB749C0262C821900C8F56A /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				6AB749C1262C823600C8F56A /* XCTestCase+MemoryLeak.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -372,10 +415,12 @@
 				6AB7498D262C7D4100C8F56A /* Sources */,
 				6AB7498E262C7D4100C8F56A /* Frameworks */,
 				6AB7498F262C7D4100C8F56A /* Resources */,
+				6AB749BB262C813500C8F56A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6AB749BA262C813500C8F56A /* PBXTargetDependency */,
 			);
 			name = XRocketiOS;
 			productName = XRocketiOS;
@@ -524,6 +569,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6AB7499F262C7D4200C8F56A /* XRocketiOSTests.swift in Sources */,
+				6AB749C2262C823600C8F56A /* XCTestCase+MemoryLeak.swift in Sources */,
 				6AB749AD262C7E3B00C8F56A /* LaunchViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -540,6 +586,11 @@
 			isa = PBXTargetDependency;
 			target = 6AB74990262C7D4100C8F56A /* XRocketiOS */;
 			targetProxy = 6AB7499B262C7D4200C8F56A /* PBXContainerItemProxy */;
+		};
+		6AB749BA262C813500C8F56A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6AAB50C82629312E0089DC3C /* XRocket */;
+			targetProxy = 6AB749B9262C813500C8F56A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -685,6 +736,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kndev.XRocket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -710,6 +762,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kndev.XRocket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
