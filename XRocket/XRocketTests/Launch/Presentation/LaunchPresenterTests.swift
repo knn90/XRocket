@@ -72,17 +72,18 @@ class LaunchPresenterTests: XCTestCase {
         
         private(set) var messages = [Message]()
         
-        func display(errorMessage: String?) {
-            messages.append(.display(errorMessage: errorMessage))
+        func display(_ viewModel: LaunchLoadingViewModel) {
+            messages.append(.display(isLoading: viewModel.isLoading))
         }
         
-        func display(isLoading: Bool) {
-            messages.append(.display(isLoading: isLoading))
+        func display(_ viewModel: LaunchErrorViewModel) {
+            messages.append(.display(errorMessage: viewModel.message))
         }
         
-        func display(launches: [Launch]) {
-            messages.append(.display(launches: launches))
+        func display(_ viewModel: LaunchViewModel) {
+            messages.append(.display(launches: viewModel.launches))
         }
+      
     }
     
     private func localized(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {

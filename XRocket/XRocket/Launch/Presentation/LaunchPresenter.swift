@@ -7,16 +7,28 @@
 
 import Foundation
 
+public struct LaunchLoadingViewModel {
+    public let isLoading: Bool
+}
+
+public struct LaunchErrorViewModel {
+    public let message: String?
+}
+
+public struct LaunchViewModel {
+    public let launches: [Launch]
+}
+
 public protocol LaunchLoadingView {
-    func display(isLoading: Bool)
+    func display(_ viewModel: LaunchLoadingViewModel)
 }
 
 public protocol LaunchErrorView {
-    func display(errorMessage: String?)
+    func display(_ viewModel: LaunchErrorViewModel)
 }
 
 public protocol LaunchView {
-    func display(launches: [Launch])
+    func display(_ viewModel: LaunchViewModel)
 }
 
 public final class LaunchPresenter {
@@ -44,17 +56,17 @@ public final class LaunchPresenter {
     }
     
     public func didStartLoadingLaunch() {
-        errorView.display(errorMessage: nil)
-        loadingView.display(isLoading: true)
+        errorView.display(LaunchErrorViewModel(message: nil))
+        loadingView.display(LaunchLoadingViewModel(isLoading: true))
     }
     
     public func didFinishLoading(with error: Error) {
-        errorView.display(errorMessage: loadErrorMessage)
-        loadingView.display(isLoading: false)
+        errorView.display(LaunchErrorViewModel(message: loadErrorMessage))
+        loadingView.display(LaunchLoadingViewModel(isLoading: false))
     }
     
     public func didFinishLoading(with launchPagination: LaunchPagination) {
-        launchView.display(launches: launchPagination.docs)
-        loadingView.display(isLoading: false)
+        launchView.display(LaunchViewModel(launches: launchPagination.docs))
+        loadingView.display(LaunchLoadingViewModel(isLoading: false))
     }
 }
