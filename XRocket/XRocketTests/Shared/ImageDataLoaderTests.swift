@@ -80,7 +80,7 @@ class ImageDataLoaderTests: XCTestCase {
         let request = URLRequest(url: URL(string: "http://a-specific-url")!)
         let (sut, client) = makeSUT()
         
-        sut.load(from: request) { _ in }
+        _ = sut.load(from: request) { _ in }
         
         XCTAssertEqual(client.requestedRequests, [request])
     }
@@ -89,8 +89,8 @@ class ImageDataLoaderTests: XCTestCase {
         let request = URLRequest(url: URL(string: "http://a-specific-url")!)
         let (sut, client) = makeSUT()
         
-        sut.load(from: request) { _ in }
-        sut.load(from: request) { _ in }
+        _ = sut.load(from: request) { _ in }
+        _ = sut.load(from: request) { _ in }
         
         XCTAssertEqual(client.requestedRequests, [request, request])
     }
@@ -162,7 +162,7 @@ class ImageDataLoaderTests: XCTestCase {
         var sut: ImageDataLoader? = ImageDataLoader(client: client)
         
         var receivedResult: ImageDataLoader.Result?
-        sut?.load(from: anyURLRequest()) { receivedResult = $0 }
+        _ = sut?.load(from: anyURLRequest()) { receivedResult = $0 }
         
         sut = nil
         client.completeWithError(anyNSError())
@@ -183,7 +183,7 @@ class ImageDataLoaderTests: XCTestCase {
     
     private func expect(_ sut: ImageDataLoader, toCompleteWithResult expectedResult: ImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
-        sut.load(from: anyURLRequest()) { receivedResult in
+        _ = sut.load(from: anyURLRequest()) { receivedResult in
             switch (expectedResult, receivedResult) {
             case let (.success(expectedResponse), .success(receivedResponse)):
                 XCTAssertEqual(expectedResponse, receivedResponse, "Expected to get success with \(expectedResponse), got \(receivedResponse) instead", file: file, line: line)
