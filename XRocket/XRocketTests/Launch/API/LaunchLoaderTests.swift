@@ -37,7 +37,7 @@ class LaunchLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithResult: .failure(.connectivity), when: {
+        expect(sut, toCompleteWithResult: .failure(RemoteLaunchLoader.Error.connectivity), when: {
             let clientError = NSError(domain: "any NSError", code: 0)
             client.completeWithError(clientError)
         })
@@ -46,7 +46,7 @@ class LaunchLoaderTests: XCTestCase {
     func test_load_deliversErrorOn400HTTPResponse() {
         let (sut, client) = makeSUT()
 
-        expect(sut, toCompleteWithResult: .failure(.badRequest), when: {
+        expect(sut, toCompleteWithResult: .failure(RemoteLaunchLoader.Error.badRequest), when: {
             client.complete(withStatusCode: 400, data: anyData())
         })
     }
@@ -54,7 +54,7 @@ class LaunchLoaderTests: XCTestCase {
     func test_load_deliversErrorOn200HTTPResponseWithInvalidData() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithResult: .failure(.invalidData), when: {
+        expect(sut, toCompleteWithResult: .failure(RemoteLaunchLoader.Error.invalidData), when: {
             let invalidData = Data("Invalid data".utf8)
             client.complete(withStatusCode: 200, data: invalidData)
         })
@@ -72,9 +72,9 @@ class LaunchLoaderTests: XCTestCase {
     
     func test_load_doesNotDeliverResultAfterSUTHasBeenDeallocated() {
         let client = HTTPClientSpy()
-        var sut: LaunchLoader? = LaunchLoader(client: client, request: anyURLRequest())
+        var sut: RemoteLaunchLoader? = RemoteLaunchLoader(client: client, request: anyURLRequest())
         
-        var receivedResult: LaunchLoader.Result?
+        var receivedResult: RemoteLaunchLoader.Result?
         sut?.load { receivedResult = $0 }
         
         sut = nil
@@ -84,9 +84,9 @@ class LaunchLoaderTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func makeSUT(request: URLRequest = anyURLRequest(), file: StaticString = #file, line: UInt = #line) -> (LaunchLoader, HTTPClientSpy) {
+    private func makeSUT(request: URLRequest = anyURLRequest(), file: StaticString = #file, line: UInt = #line) -> (RemoteLaunchLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = LaunchLoader(client: client, request: request)
+        let sut = RemoteLaunchLoader(client: client, request: request)
         
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(client, file: file, line: line)
@@ -94,14 +94,14 @@ class LaunchLoaderTests: XCTestCase {
         return (sut, client)
     }
     
-    private func expect(_ sut: LaunchLoader, toCompleteWithResult expectedResult: LaunchLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: RemoteLaunchLoader, toCompleteWithResult expectedResult: RemoteLaunchLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
         sut.load { receivedResult in
             switch (expectedResult, receivedResult) {
             case let (.success(expectedResponse), .success(receivedResponse)):
                 XCTAssertEqual(expectedResponse, receivedResponse, "Expected to get success with \(expectedResponse), got \(receivedResponse) instead", file: file, line: line)
             case let (.failure(expectedError), .failure(receivedError)):
-                XCTAssertEqual(expectedError, receivedError, "Expected to get failure with \(expectedError), got \(receivedError) instead", file: file, line: line)
+                XCTAssertEqual(expectedError as? RemoteLaunchLoader.Error, receivedError as? RemoteLaunchLoader.Error, "Expected to get failure with \(expectedError), got \(receivedError) instead", file: file, line: line)
             default:
                 XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
             }
