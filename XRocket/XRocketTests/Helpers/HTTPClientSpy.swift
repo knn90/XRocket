@@ -9,20 +9,24 @@ import Foundation
 import XRocket
 
 class HTTPClientSpy: HTTPClient {
-    var requestedURLs: [URLRequest] = []
-    var completions = [(Result) -> Void]()
+    private(set) var requestedRequests: [URLRequest] = []
+    private(set) var cancelledRequests: [URLRequest] = []
+    private var completions = [(Result) -> Void]()
     
     private struct Task: HTTPClientTask {
+        let callback: () -> Void
         func cancel() {
-            
+            callback()
         }
     }
     
     func load(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-        requestedURLs.append(request)
+        requestedRequests.append(request)
         completions.append(completion)
         
-        return Task()
+        return Task { [weak self] in
+            self?.cancelledRequests.append(request)
+        }
     }
     
     func completeWithError(_ error: Error, at index: Int = 0) {
@@ -31,7 +35,7 @@ class HTTPClientSpy: HTTPClient {
     
     func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
         let response = HTTPURLResponse(
-            url: requestedURLs[index].url!,
+            url: requestedRequests[index].url!,
             statusCode: code,
             httpVersion: nil,
             headerFields: nil

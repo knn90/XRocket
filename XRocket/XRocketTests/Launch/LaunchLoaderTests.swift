@@ -12,7 +12,7 @@ class LaunchLoaderTests: XCTestCase {
     func test_init_doesNotSendRequest() {
         let (_, client) = makeSUT()
         
-        XCTAssertTrue(client.requestedURLs.isEmpty)
+        XCTAssertTrue(client.requestedRequests.isEmpty)
     }
     
     func test_load_sendsRequestFromURL() {
@@ -21,7 +21,7 @@ class LaunchLoaderTests: XCTestCase {
         
         sut.load { _ in }
         
-        XCTAssertEqual(client.requestedURLs, [request])
+        XCTAssertEqual(client.requestedRequests, [request])
     }
     
     func test_loadTwice_sendsRequestFromURLTwice() {
@@ -31,7 +31,7 @@ class LaunchLoaderTests: XCTestCase {
         sut.load { _ in }
         sut.load { _ in }
         
-        XCTAssertEqual(client.requestedURLs, [request, request])
+        XCTAssertEqual(client.requestedRequests, [request, request])
     }
     
     func test_load_deliversErrorOnClientError() {

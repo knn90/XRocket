@@ -8,6 +8,10 @@
 import XCTest
 import XRocket
 
+protocol ImageDataLoaderTask {
+    func cancel()
+}
+
 class ImageDataLoader {
     public typealias Result = Swift.Result<Data, Error>
     private let client: HTTPClient
@@ -21,18 +25,46 @@ class ImageDataLoader {
         case invalidData
     }
     
-    public func load(from request: URLRequest, completion: @escaping (Result) -> Void) {
-        client.load(from: request) { (result) in
-            switch result {
-            case let .success((data, response)):
-                guard response.statusCode == 200, !data.isEmpty else {
-                    return completion(.failure(.invalidData))
-                }
-                completion(.success(data))
-            case .failure:
-                completion(.failure(.connectivity))
-            }
+    private final class HTTPClientTaskWrapper: ImageDataLoaderTask {
+        var wrapped: HTTPClientTask?
+        private var completion: ((Result) -> Void)?
+        
+        init(_ completion: @escaping (Result) -> Void) {
+            self.completion = completion
         }
+        
+        func cancel() {
+            preventFurtherCompletions()
+            wrapped?.cancel()
+        }
+        
+        private func preventFurtherCompletions() {
+            completion = nil
+        }
+        
+        func complete(with result: Result) {
+            completion?(result)
+        }
+    }
+    
+    public func load(from request: URLRequest, completion: @escaping (Result) -> Void) -> ImageDataLoaderTask {
+        let task = HTTPClientTaskWrapper(completion)
+        task.wrapped = client.load(from: request) { (result) in
+            task.complete(
+                with: result
+                    .mapError { _ in Error.connectivity }
+                    .flatMap { data, response in
+                        let isResponseValid = ImageDataLoader.validate(data, response: response)
+                        return isResponseValid ? .success(data) : .failure(.invalidData)
+                    }
+            )
+        }
+        return task
+    }
+    
+    private static let success = 200
+    private static func validate(_ data: Data, response: HTTPURLResponse) -> Bool {
+        return response.statusCode == success && !data.isEmpty
     }
 }
 
@@ -40,7 +72,7 @@ class ImageDataLoaderTests: XCTestCase {
     func test_init_doesNotSendRequest() {
         let (_, client) = makeSUT()
         
-        XCTAssertTrue(client.requestedURLs.isEmpty)
+        XCTAssertTrue(client.requestedRequests.isEmpty)
     }
     
     func test_load_requestDataFromURL() {
@@ -49,7 +81,7 @@ class ImageDataLoaderTests: XCTestCase {
         
         sut.load(from: request) { _ in }
         
-        XCTAssertEqual(client.requestedURLs, [request])
+        XCTAssertEqual(client.requestedRequests, [request])
     }
     
     func test_loadTwice_requestDataFromURLTwice() {
@@ -59,7 +91,7 @@ class ImageDataLoaderTests: XCTestCase {
         sut.load(from: request) { _ in }
         sut.load(from: request) { _ in }
         
-        XCTAssertEqual(client.requestedURLs, [request, request])
+        XCTAssertEqual(client.requestedRequests, [request, request])
     }
     
     func test_load_deliversConnectivityErrorOnClientError() {
@@ -99,6 +131,30 @@ class ImageDataLoaderTests: XCTestCase {
         })
     }
     
+    func test_cancel_cancelsClientURLRequest() {
+        let (sut, client) = makeSUT()
+        let request = URLRequest(url: URL(string: "http://a-specific-url")!)
+        
+        let task = sut.load(from: request) { _  in }
+        XCTAssertEqual(client.cancelledRequests, [])
+        task.cancel()
+        XCTAssertEqual(client.cancelledRequests, [request])
+    }
+    
+    func test_cancel_doesNotDeliverResultAfterCancellingTask() {
+        let (sut, client) = makeSUT()
+        let request = URLRequest(url: URL(string: "http://a-specific-url")!)
+        
+        var receivedResults = [ImageDataLoader.Result]()
+        let task = sut.load(from: request) { receivedResults.append($0) }
+        task.cancel()
+        
+        client.complete(withStatusCode: 400, data: Data())
+        client.complete(withStatusCode: 200, data: Data("non-empty-data".utf8))
+        client.completeWithError(anyNSError())
+        
+        XCTAssertTrue(receivedResults.isEmpty)
+    }
     
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (ImageDataLoader, HTTPClientSpy) {
@@ -127,5 +183,5 @@ class ImageDataLoaderTests: XCTestCase {
         action()
         wait(for: [exp], timeout: 1.0)
     }
-
+    
 }
