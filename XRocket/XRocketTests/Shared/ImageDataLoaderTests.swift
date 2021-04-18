@@ -49,7 +49,8 @@ class ImageDataLoader {
     
     public func load(from request: URLRequest, completion: @escaping (Result) -> Void) -> ImageDataLoaderTask {
         let task = HTTPClientTaskWrapper(completion)
-        task.wrapped = client.load(from: request) { (result) in
+        task.wrapped = client.load(from: request) { [weak self] (result) in
+            guard self != nil else { return }
             task.complete(
                 with: result
                     .mapError { _ in Error.connectivity }
@@ -154,6 +155,19 @@ class ImageDataLoaderTests: XCTestCase {
         client.completeWithError(anyNSError())
         
         XCTAssertTrue(receivedResults.isEmpty)
+    }
+    
+    func test_load_doesNotDeliverResultAfterSUTHasBeenDeallocated() {
+        let client = HTTPClientSpy()
+        var sut: ImageDataLoader? = ImageDataLoader(client: client)
+        
+        var receivedResult: ImageDataLoader.Result?
+        sut?.load(from: anyURLRequest()) { receivedResult = $0 }
+        
+        sut = nil
+        client.completeWithError(anyNSError())
+        
+        XCTAssertNil(receivedResult)
     }
     
     // MARK: - Helpers
