@@ -7,6 +7,10 @@
 
 import Foundation
 
+public protocol ViewType {
+    
+}
+
 public final class LaunchPresenter {
     public static var title: String {
         NSLocalizedString("launch_view_title",
@@ -15,6 +19,6 @@ public final class LaunchPresenter {
                           comment: "Title for the launch view")
     }
     
-    public init() {
+    public init(view: ViewType) {
     }
 }
