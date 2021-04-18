@@ -1,1 +1,2 @@
 "launch_view_title" = "Launch";
+"launch_view_connection_error" = "Couldn't connect to server";

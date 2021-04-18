@@ -30,6 +30,17 @@ class LaunchPresenterTests: XCTestCase {
         ])
     }
     
+    func test_didFinishLoadingWithError_displaysErrorAndStopLoading() {
+        let (sut, view) = makeSUT()
+        
+        sut.didFinishLoading(with: anyNSError())
+        
+        XCTAssertEqual(view.messages, [
+            .display(errorMessage: localized("launch_view_connection_error")),
+            .display(isLoading: false)
+        ])
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchPresenter, ViewSpy) {
         let view = ViewSpy()
@@ -46,6 +57,7 @@ class LaunchPresenterTests: XCTestCase {
             case display(isLoading: Bool)
             case display(errorMessage: String?)
         }
+        
         private(set) var messages = [Message]()
         
         func display(errorMessage: String?) {
