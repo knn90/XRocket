@@ -37,7 +37,7 @@ class ImageDataLoaderTests: XCTestCase {
     func test_load_deliversConnectivityErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithResult: .failure(.connectivity), when: {
+        expect(sut, toCompleteWithResult: .failure(RemoteImageDataLoader.Error.connectivity), when: {
             let clientError = NSError(domain: "any NSError", code: 0)
             client.completeWithError(clientError)
         })
@@ -48,7 +48,7 @@ class ImageDataLoaderTests: XCTestCase {
         
         let sampleCode = [199, 201, 330, 486, 500]
         sampleCode.enumerated().forEach { index,code in
-            expect(sut, toCompleteWithResult: .failure(.invalidData), when: {
+            expect(sut, toCompleteWithResult: .failure(RemoteImageDataLoader.Error.invalidData), when: {
                 client.complete(withStatusCode: code, data: anyData(), at: index)
             })
         }
@@ -57,7 +57,7 @@ class ImageDataLoaderTests: XCTestCase {
     func test_load_deliversInvalidErrorOn200HTTPResponseWithEmptyData() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithResult: .failure(.invalidData), when: {
+        expect(sut, toCompleteWithResult: .failure(RemoteImageDataLoader.Error.invalidData), when: {
             let emptyData = Data()
             client.complete(withStatusCode: 200, data: emptyData)
         })
@@ -85,7 +85,7 @@ class ImageDataLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         let request = URLRequest(url: URL(string: "http://a-specific-url")!)
         
-        var receivedResults = [ImageDataLoader.Result]()
+        var receivedResults = [RemoteImageDataLoader.Result]()
         let task = sut.load(from: request) { receivedResults.append($0) }
         task.cancel()
         
@@ -98,9 +98,9 @@ class ImageDataLoaderTests: XCTestCase {
     
     func test_load_doesNotDeliverResultAfterSUTHasBeenDeallocated() {
         let client = HTTPClientSpy()
-        var sut: ImageDataLoader? = ImageDataLoader(client: client)
+        var sut: RemoteImageDataLoader? = RemoteImageDataLoader(client: client)
         
-        var receivedResult: ImageDataLoader.Result?
+        var receivedResult: RemoteImageDataLoader.Result?
         _ = sut?.load(from: anyURLRequest()) { receivedResult = $0 }
         
         sut = nil
@@ -110,9 +110,9 @@ class ImageDataLoaderTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (ImageDataLoader, HTTPClientSpy) {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (RemoteImageDataLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = ImageDataLoader(client: client)
+        let sut = RemoteImageDataLoader(client: client)
         
         trackForMemoryLeak(client, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
@@ -120,14 +120,14 @@ class ImageDataLoaderTests: XCTestCase {
         return (sut, client)
     }
     
-    private func expect(_ sut: ImageDataLoader, toCompleteWithResult expectedResult: ImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: RemoteImageDataLoader, toCompleteWithResult expectedResult: RemoteImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
         _ = sut.load(from: anyURLRequest()) { receivedResult in
             switch (expectedResult, receivedResult) {
             case let (.success(expectedResponse), .success(receivedResponse)):
                 XCTAssertEqual(expectedResponse, receivedResponse, "Expected to get success with \(expectedResponse), got \(receivedResponse) instead", file: file, line: line)
             case let (.failure(expectedError), .failure(receivedError)):
-                XCTAssertEqual(expectedError, receivedError, "Expected to get failure with \(expectedError), got \(receivedError) instead", file: file, line: line)
+                XCTAssertEqual(expectedError as? RemoteImageDataLoader.Error, receivedError as? RemoteImageDataLoader.Error, "Expected to get failure with \(expectedError), got \(receivedError) instead", file: file, line: line)
             default:
                 XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
             }

@@ -11,8 +11,13 @@ public protocol ImageDataLoaderTask {
     func cancel()
 }
 
-public class RemoteImageDataLoader {
-    public typealias Result = Swift.Result<Data, Error>
+public protocol ImageDataLoader {
+    typealias Result = Swift.Result<Data, Error>
+    func load(from request: URLRequest, completion: @escaping (Result) -> Void) -> ImageDataLoaderTask
+}
+
+public class RemoteImageDataLoader: ImageDataLoader {
+    
     private let client: HTTPClient
     
     public init(client: HTTPClient) {
@@ -26,9 +31,9 @@ public class RemoteImageDataLoader {
     
     private final class HTTPClientTaskWrapper: ImageDataLoaderTask {
         var wrapped: HTTPClientTask?
-        private var completion: ((Result) -> Void)?
+        private var completion: ((ImageDataLoader.Result) -> Void)?
         
-        init(_ completion: @escaping (Result) -> Void) {
+        init(_ completion: @escaping (ImageDataLoader.Result) -> Void) {
             self.completion = completion
         }
         
@@ -41,12 +46,12 @@ public class RemoteImageDataLoader {
             completion = nil
         }
         
-        func complete(with result: Result) {
+        func complete(with result: ImageDataLoader.Result) {
             completion?(result)
         }
     }
     
-    public func load(from request: URLRequest, completion: @escaping (Result) -> Void) -> ImageDataLoaderTask {
+    public func load(from request: URLRequest, completion: @escaping (ImageDataLoader.Result) -> Void) -> ImageDataLoaderTask {
         let task = HTTPClientTaskWrapper(completion)
         task.wrapped = client.load(from: request) { [weak self] (result) in
             guard self != nil else { return }
@@ -55,7 +60,7 @@ public class RemoteImageDataLoader {
                     .mapError { _ in Error.connectivity }
                     .flatMap { data, response in
                         let isResponseValid = RemoteImageDataLoader.validate(data, response: response)
-                        return isResponseValid ? .success(data) : .failure(.invalidData)
+                        return isResponseValid ? .success(data) : .failure(Error.invalidData)
                     }
             )
         }
