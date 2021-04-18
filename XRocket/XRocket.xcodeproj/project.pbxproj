@@ -23,6 +23,7 @@
 		6AAB50DA2629312E0089DC3C /* XRocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AAB50CC2629312E0089DC3C /* XRocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6AAB50E9262943F30089DC3C /* LaunchLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAB50E8262943F30089DC3C /* LaunchLoaderTests.swift */; };
 		6AB74966262BE3C200C8F56A /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB74965262BE3C200C8F56A /* URLProtocolStub.swift */; };
+		6AB7496B262BF9B700C8F56A /* ImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB7496A262BF9B700C8F56A /* ImageDataLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		6AAB50D92629312E0089DC3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AAB50E8262943F30089DC3C /* LaunchLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchLoaderTests.swift; sourceTree = "<group>"; };
 		6AB74965262BE3C200C8F56A /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
+		6AB7496A262BF9B700C8F56A /* ImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 		6AAB50CB2629312E0089DC3C /* XRocket */ = {
 			isa = PBXGroup;
 			children = (
+				6AB74969262BF9AC00C8F56A /* Shared */,
 				6A54AF9A262ACD670007D021 /* Infrastructure */,
 				6AAB50E526293D900089DC3C /* Launch */,
 				6AAB50CC2629312E0089DC3C /* XRocket.h */,
@@ -187,6 +190,14 @@
 				6AAB50E8262943F30089DC3C /* LaunchLoaderTests.swift */,
 			);
 			path = Launch;
+			sourceTree = "<group>";
+		};
+		6AB74969262BF9AC00C8F56A /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				6AB7496A262BF9B700C8F56A /* ImageDataLoader.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -298,6 +309,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AB7496B262BF9B700C8F56A /* ImageDataLoader.swift in Sources */,
 				6A59B0432629E95A007D75E9 /* LaunchPagination.swift in Sources */,
 				6A54AF9C262ACD750007D021 /* URLSessionHTTPClient.swift in Sources */,
 				6A59B0472629E9C7007D75E9 /* HTTPClient.swift in Sources */,
