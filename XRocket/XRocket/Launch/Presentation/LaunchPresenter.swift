@@ -7,8 +7,12 @@
 
 import Foundation
 
-public protocol ViewType {
-    
+public protocol LaunchLoadingView {
+    func display(isLoading: Bool)
+}
+
+public protocol LaunchErrorView {
+    func display(errorMessage: String?)
 }
 
 public final class LaunchPresenter {
@@ -19,6 +23,16 @@ public final class LaunchPresenter {
                           comment: "Title for the launch view")
     }
     
-    public init(view: ViewType) {
+    private let loadingView: LaunchLoadingView
+    private let errorView: LaunchErrorView
+    
+    public init(loadingView: LaunchLoadingView, errorView: LaunchErrorView) {
+        self.loadingView = loadingView
+        self.errorView = errorView
+    }
+    
+    public func didStartLoadingLaunch() {
+        errorView.display(errorMessage: nil)
+        loadingView.display(isLoading: true)
     }
 }

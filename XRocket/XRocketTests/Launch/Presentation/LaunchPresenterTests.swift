@@ -14,15 +14,26 @@ class LaunchPresenterTests: XCTestCase {
     }
     
     func test_init_doesNotSendMessageToView() {
-        let (sut, view) = makeSUT()
+        let (_, view) = makeSUT()
         
         XCTAssertTrue(view.messages.isEmpty)
+    }
+    
+    func test_didStartLoadingLaunch_displaysNoErrorMessageAndStartLoading() {
+        let (sut, view) = makeSUT()
+        
+        sut.didStartLoadingLaunch()
+        
+        XCTAssertEqual(view.messages, [
+            .display(errorMessage: nil),
+            .display(isLoading: true)            
+        ])
     }
     
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchPresenter, ViewSpy) {
         let view = ViewSpy()
-        let sut = LaunchPresenter(view: view)
+        let sut = LaunchPresenter(loadingView: view, errorView: view)
         
         trackForMemoryLeak(view, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
@@ -30,11 +41,20 @@ class LaunchPresenterTests: XCTestCase {
         return (sut, view)
     }
     
-    private class ViewSpy: ViewType {
-        enum Message {
-            
+    private class ViewSpy: LaunchLoadingView, LaunchErrorView {
+        enum Message: Equatable {
+            case display(isLoading: Bool)
+            case display(errorMessage: String?)
         }
         private(set) var messages = [Message]()
+        
+        func display(errorMessage: String?) {
+            messages.append(.display(errorMessage: errorMessage))
+        }
+        
+        func display(isLoading: Bool) {
+            messages.append(.display(isLoading: isLoading))
+        }
     }
     
     private func localized(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {
