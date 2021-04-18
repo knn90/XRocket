@@ -12,9 +12,17 @@ class HTTPClientSpy: HTTPClient {
     var requestedURLs: [URLRequest] = []
     var completions = [(Result) -> Void]()
     
-    func load(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+    private struct Task: HTTPClientTask {
+        func cancel() {
+            
+        }
+    }
+    
+    func load(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
         requestedURLs.append(request)
         completions.append(completion)
+        
+        return Task()
     }
     
     func completeWithError(_ error: Error, at index: Int = 0) {

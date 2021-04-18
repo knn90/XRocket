@@ -16,7 +16,15 @@ public class URLSessionHTTPClient: HTTPClient {
     
     private struct UnexpectedValuesRepresentation: Error {}
     
-    public func load(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+    private struct URLSessionTaskWrapper: HTTPClientTask {
+        let wrapped: URLSessionTask
+        
+        func cancel() {
+            wrapped.cancel()
+        }
+    }
+    
+    public func load(from request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
         let task = session.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 completion(.failure(error))
@@ -28,5 +36,7 @@ public class URLSessionHTTPClient: HTTPClient {
         }
         
         task.resume()
+        
+        return URLSessionTaskWrapper(wrapped: task)
     }
 }
