@@ -70,6 +70,19 @@ class LaunchLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_doesNotDeliverResultAfterSUTHasBeenDeallocated() {
+        let client = HTTPClientSpy()
+        var sut: LaunchLoader? = LaunchLoader(client: client, request: anyURLRequest())
+        
+        var receivedResult: LaunchLoader.Result?
+        sut?.load { receivedResult = $0 }
+        
+        sut = nil
+        client.complete(withStatusCode: 200, data: Data())
+        
+        XCTAssertNil(receivedResult)
+    }
+    
     // MARK: - Helpers
     private func makeSUT(request: URLRequest = anyURLRequest(), file: StaticString = #file, line: UInt = #line) -> (LaunchLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()

@@ -24,7 +24,8 @@ public class LaunchLoader {
     }
     
     public func load(completion: @escaping (Result) -> Void) {
-        client.load(from: request) { result in
+        client.load(from: request) { [weak self] result in
+            guard self != nil else { return }
             switch result {
             case let .success((data, response)):
                 completion(LaunchLoader.map(from: data, response: response))
