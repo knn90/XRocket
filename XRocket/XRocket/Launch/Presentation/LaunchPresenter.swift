@@ -7,17 +7,11 @@
 
 import Foundation
 
-public struct LaunchLoadingViewModel {
-    public let isLoading: Bool
-}
 
-public struct LaunchErrorViewModel {
-    public let message: String?
-}
 
-public struct LaunchViewModel {
-    public let launches: [Launch]
-}
+
+
+
 
 public protocol LaunchLoadingView {
     func display(_ viewModel: LaunchLoadingViewModel)
