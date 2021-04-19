@@ -34,6 +34,22 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadLaunchCallCount, 3, "Expected yet another requests when user initiated another reload")
     }
     
+    func test_loadingIndicator_isVisibleWhileLoadingLaunches() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator after view is loaded")
+        
+        loader.completeLoading(at: 0)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator after loading successfully")
+        
+        sut.simulateUserInitiatedReload()
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator when user initiated a reload")
+        
+        loader.completeLoading(with: anyNSError(), at: 0)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator after loading failed")
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
         let loader = LoaderSpy()
@@ -49,9 +65,18 @@ class LaunchViewControllerTests: XCTestCase {
     
     private class LoaderSpy: LaunchLoader {
         private(set) var loadLaunchCallCount = 0
-        
+        private(set) var completions = [(Result) -> Void]()
         func load(completion: @escaping (Result<LaunchPagination, Error>) -> Void) {
             loadLaunchCallCount += 1
+            completions.append(completion)
+        }
+        
+        func completeLoading(with launchPagination: LaunchPagination = LaunchPaginationFactory.empty(), at index: Int) {
+            completions[index](.success(launchPagination))
+        }
+        
+        func completeLoading(with error: Error, at index: Int) {
+            completions[index](.failure(error))
         }
     }
     
@@ -85,5 +110,9 @@ extension UIControl {
 extension LaunchViewController {
     func simulateUserInitiatedReload() {
         refreshControl?.simulatePullToRefresh()
+    }
+    
+    var isShowingLoadingIndicator: Bool {
+        return refreshControl?.isRefreshing == true
     }
 }

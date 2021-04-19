@@ -19,6 +19,9 @@ public final class LaunchViewController: UITableViewController {
     }
     
     @IBAction private func loadLaunches() {
-        loader?.load { _ in }
+        refreshControl?.beginRefreshing()
+        loader?.load { [unowned self] _ in
+            self.refreshControl?.endRefreshing()
+        }
     }
 }
