@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A0BFE00262D3030006818CB /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A0BFDFF262D3030006818CB /* Launch.storyboard */; };
+		6A0BFE0C262D38BE006818CB /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BFE0B262D38BE006818CB /* LaunchViewController.swift */; };
 		6A54AF8E262A8BC60007D021 /* XCTestCase+MemoryLeak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A54AF8D262A8BC60007D021 /* XCTestCase+MemoryLeak.swift */; };
 		6A54AF95262A8EAF0007D021 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A54AF94262A8EAF0007D021 /* URLSessionHTTPClientTests.swift */; };
 		6A54AF9C262ACD750007D021 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A54AF9B262ACD750007D021 /* URLSessionHTTPClient.swift */; };
@@ -31,7 +33,6 @@
 		6AB74985262C2EA000C8F56A /* LaunchErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB74984262C2EA000C8F56A /* LaunchErrorViewModel.swift */; };
 		6AB74989262C2EAE00C8F56A /* LaunchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB74988262C2EAE00C8F56A /* LaunchViewModel.swift */; };
 		6AB7499A262C7D4200C8F56A /* XRocketiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AB74991262C7D4100C8F56A /* XRocketiOS.framework */; };
-		6AB7499F262C7D4200C8F56A /* XRocketiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB7499E262C7D4200C8F56A /* XRocketiOSTests.swift */; };
 		6AB749A1262C7D4200C8F56A /* XRocketiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AB74993262C7D4200C8F56A /* XRocketiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6AB749AD262C7E3B00C8F56A /* LaunchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB749AC262C7E3B00C8F56A /* LaunchViewControllerTests.swift */; };
 		6AB749B7262C813500C8F56A /* XRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AAB50C92629312E0089DC3C /* XRocket.framework */; };
@@ -78,6 +79,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6A0BFDFF262D3030006818CB /* Launch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
+		6A0BFE0B262D38BE006818CB /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		6A54AF8D262A8BC60007D021 /* XCTestCase+MemoryLeak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeak.swift"; sourceTree = "<group>"; };
 		6A54AF94262A8EAF0007D021 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		6A54AF9B262ACD750007D021 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
@@ -108,7 +111,6 @@
 		6AB74993262C7D4200C8F56A /* XRocketiOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XRocketiOS.h; sourceTree = "<group>"; };
 		6AB74994262C7D4200C8F56A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AB74999262C7D4200C8F56A /* XRocketiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XRocketiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6AB7499E262C7D4200C8F56A /* XRocketiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XRocketiOSTests.swift; sourceTree = "<group>"; };
 		6AB749A0262C7D4200C8F56A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AB749AC262C7E3B00C8F56A /* LaunchViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewControllerTests.swift; sourceTree = "<group>"; };
 		6AB749C1262C823600C8F56A /* XCTestCase+MemoryLeak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeak.swift"; sourceTree = "<group>"; };
@@ -149,6 +151,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A0BFDF5262D2FE8006818CB /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				6A0BFE04262D3899006818CB /* Controllers */,
+				6A0BFDF6262D2FF1006818CB /* UI */,
+			);
+			path = Launch;
+			sourceTree = "<group>";
+		};
+		6A0BFDF6262D2FF1006818CB /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				6A0BFDFF262D3030006818CB /* Launch.storyboard */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		6A0BFE04262D3899006818CB /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				6A0BFE0B262D38BE006818CB /* LaunchViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		6A54AF93262A8E9E0007D021 /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
@@ -317,6 +344,7 @@
 		6AB74992262C7D4200C8F56A /* XRocketiOS */ = {
 			isa = PBXGroup;
 			children = (
+				6A0BFDF5262D2FE8006818CB /* Launch */,
 				6AB74993262C7D4200C8F56A /* XRocketiOS.h */,
 				6AB74994262C7D4200C8F56A /* Info.plist */,
 			);
@@ -327,7 +355,6 @@
 			isa = PBXGroup;
 			children = (
 				6AB749C0262C821900C8F56A /* Helpers */,
-				6AB7499E262C7D4200C8F56A /* XRocketiOSTests.swift */,
 				6AB749A0262C7D4200C8F56A /* Info.plist */,
 				6AB749AC262C7E3B00C8F56A /* LaunchViewControllerTests.swift */,
 			);
@@ -463,6 +490,7 @@
 					};
 					6AB74990262C7D4100C8F56A = {
 						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
 					};
 					6AB74998262C7D4200C8F56A = {
 						CreatedOnToolsVersion = 12.4;
@@ -510,6 +538,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A0BFE00262D3030006818CB /* Launch.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,6 +590,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A0BFE0C262D38BE006818CB /* LaunchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -568,7 +598,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6AB7499F262C7D4200C8F56A /* XRocketiOSTests.swift in Sources */,
 				6AB749C2262C823600C8F56A /* XCTestCase+MemoryLeak.swift in Sources */,
 				6AB749AD262C7E3B00C8F56A /* LaunchViewControllerTests.swift in Sources */,
 			);
@@ -806,6 +835,7 @@
 		6AB749A3262C7D4200C8F56A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -823,6 +853,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -831,6 +862,7 @@
 		6AB749A4262C7D4200C8F56A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -857,6 +889,7 @@
 		6AB749A6262C7D4200C8F56A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = XRocketiOSTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
@@ -876,6 +909,7 @@
 		6AB749A7262C7D4200C8F56A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = XRocketiOSTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
