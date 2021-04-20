@@ -13,15 +13,12 @@ public final class LaunchCell: UITableViewCell {
     public let rocketNameLabel = UILabel()
     public let dateLabel = UILabel()
     public let successLabel = UILabel()
-    func configure(launch: Launch) {
-        flightNumberLabel.text = "\(launch.flightNumber)"
+    func configure(launch: PresentableLaunch) {
+        flightNumberLabel.text = launch.flightNumber
         rocketNameLabel.text = launch.name
-        dateLabel.text = LaunchDateFormatter.format(from: launch.dateUTC)
-        if launch.success {
-            successLabel.text = "Success"
-        } else {
-            successLabel.text = "Failure"
-        }
+        dateLabel.text = launch.launchDate
+        successLabel.text = launch.status
+        
     }
 }
 

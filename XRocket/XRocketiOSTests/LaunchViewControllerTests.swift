@@ -57,15 +57,12 @@ class LaunchViewControllerTests: XCTestCase {
         let launch2 = Launch(id: "", name: "name 3", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date3().date)
         let launch3 = Launch(id: "", name: "name 4", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date4().date)
         let launches = [launch0, launch1, launch2, launch3]
+        
         sut.loadViewIfNeeded()
         XCTAssertEqual(sut.numberOfRenderedCell, 0)
         
         loader.completeLoading(with: LaunchPaginationFactory.single(with: launches), at: 0)
-        XCTAssertEqual(sut.numberOfRenderedCell, launches.count)
-        assertThat(sut, hasCellConfiguredFor: launch0, date: LaunchDateFactory.date1().string, at: 0)
-        assertThat(sut, hasCellConfiguredFor: launch1, date: LaunchDateFactory.date2().string, at: 1)
-        assertThat(sut, hasCellConfiguredFor: launch2, date: LaunchDateFactory.date3().string, at: 2)
-        assertThat(sut, hasCellConfiguredFor: launch3, date: LaunchDateFactory.date4().string, at: 3)
+        assertThat(sut, isRendering: LaunchViewModel(launches: launches).presentableLaunches)
     }
     
     // MARK: - Helpers
@@ -108,14 +105,22 @@ class LaunchViewControllerTests: XCTestCase {
         return value
     }
     
-    private func assertThat(_ sut: LaunchViewController, hasCellConfiguredFor launch: Launch, date: String, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+    private func assertThat(_ sut: LaunchViewController, isRendering launches: [PresentableLaunch], file: StaticString = #filePath, line: UInt = #line) {
+        XCTAssertEqual(sut.numberOfRenderedCell, launches.count, file: file, line: line)
+        
+        launches.enumerated().forEach { index, launch in
+            assertThat(sut, hasCellConfiguredFor: launch, at: index, file: file, line: line)
+        }
+    }
+    
+    private func assertThat(_ sut: LaunchViewController, hasCellConfiguredFor launch: PresentableLaunch, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         guard let  cell = sut.getCell(at: index) as? LaunchCell else {
             return XCTFail("Can't parse cell as LaunchCell", file: file, line: line)
         }
-        XCTAssertEqual(cell.flightNumberLabel.text, "\(launch.flightNumber)")
+        XCTAssertEqual(cell.flightNumberLabel.text, launch.flightNumber)
         XCTAssertEqual(cell.rocketNameLabel.text, launch.name)
-        XCTAssertEqual(cell.dateLabel.text, date)
-        XCTAssertEqual(cell.successLabel.text, launch.success ? "Success" : "Failure")
+        XCTAssertEqual(cell.dateLabel.text, launch.launchDate)
+        XCTAssertEqual(cell.successLabel.text, launch.status)
     }
 }
 

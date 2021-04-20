@@ -11,7 +11,7 @@ import XRocket
 public final class LaunchViewController: UITableViewController {
     
     public var loader: LaunchLoader?
-    private(set) var launches: [Launch] = [] {
+    private(set) var launches: [PresentableLaunch] = [] {
         didSet {
             tableView.reloadData()
         }
@@ -29,7 +29,7 @@ public final class LaunchViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             switch result {
             case let .success(launchPagination):
-                self.launches = launchPagination.docs
+                self.launches = LaunchViewModel(launches: launchPagination.docs).presentableLaunches
             case .failure: break
             }
         }
