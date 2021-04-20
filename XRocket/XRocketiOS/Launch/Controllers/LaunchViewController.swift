@@ -11,6 +11,11 @@ import XRocket
 public final class LaunchViewController: UITableViewController {
     
     public var loader: LaunchLoader?
+    private(set) var launches: [Launch] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,8 +25,24 @@ public final class LaunchViewController: UITableViewController {
     
     @IBAction private func loadLaunches() {
         refreshControl?.beginRefreshing()
-        loader?.load { [unowned self] _ in
+        loader?.load { [unowned self] result in
             self.refreshControl?.endRefreshing()
+            switch result {
+            case let .success(launchPagination):
+                self.launches = launchPagination.docs
+            case .failure: break
+            }
         }
+    }
+    
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return launches.count
+    }
+    
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = LaunchCell()
+        cell.configure(launch: launches[indexPath.row])
+        
+        return cell
     }
 }

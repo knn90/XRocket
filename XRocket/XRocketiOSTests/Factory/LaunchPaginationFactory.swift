@@ -9,6 +9,26 @@ import Foundation
 import XRocket
 
 class LaunchPaginationFactory {
+    
+    static func single(with launches: [Launch] = [
+        LaunchFactory.any(),
+        LaunchFactory.emptyName(),
+        LaunchFactory.launchFailed(),
+    ]) -> LaunchPagination {
+        LaunchPagination(
+            docs: launches,
+            totalDocs: 3,
+            offset: 0,
+            limit: 3,
+            totalPages: 1,
+            page: 1,
+            pagingCounter: 1,
+            hasPrevPage: false,
+            hasNextPage: false,
+            prevPage: nil,
+            nextPage: nil)
+    }
+    
     static func empty() -> LaunchPagination {
         LaunchPagination(
             docs: [],
@@ -18,25 +38,6 @@ class LaunchPaginationFactory {
             totalPages: 0,
             page: 0,
             pagingCounter: 0,
-            hasPrevPage: false,
-            hasNextPage: false,
-            prevPage: nil,
-            nextPage: nil)
-    }
-    
-    static func single() -> LaunchPagination {
-        LaunchPagination(
-            docs: [
-                LaunchFactory.any(),
-                LaunchFactory.emptyName(),
-                LaunchFactory.launchFailed(),
-            ],
-            totalDocs: 3,
-            offset: 0,
-            limit: 3,
-            totalPages: 1,
-            page: 1,
-            pagingCounter: 1,
             hasPrevPage: false,
             hasNextPage: false,
             prevPage: nil,
