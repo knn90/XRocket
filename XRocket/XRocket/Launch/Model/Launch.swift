@@ -8,13 +8,17 @@
 import Foundation
 
 public struct Launch: Codable, Equatable {
-    public init(id: String, name: String, details: String) {
-        self.id = id
-        self.name = name
-        self.details = details
-    }
-    
     let id: String
     let name: String
-    let details: String
+    let flightNumber: Int
+    let success: Bool
+    let dateUTC: Date
+    
+    public init(id: String, name: String, flightNumber: Int, success: Bool, dateUTC: Date) {
+        self.id = id
+        self.name = name
+        self.flightNumber = flightNumber
+        self.success = success
+        self.dateUTC = dateUTC
+    }
 }

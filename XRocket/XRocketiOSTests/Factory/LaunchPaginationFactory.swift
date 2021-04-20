@@ -29,7 +29,7 @@ class LaunchPaginationFactory {
             docs: [
                 LaunchFactory.any(),
                 LaunchFactory.emptyName(),
-                LaunchFactory.emptyDetails(),
+                LaunchFactory.launchFailed(),
             ],
             totalDocs: 3,
             offset: 0,

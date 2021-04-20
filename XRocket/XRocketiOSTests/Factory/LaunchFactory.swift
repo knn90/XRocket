@@ -10,14 +10,14 @@ import XRocket
 
 class LaunchFactory {
     static func any() -> Launch {
-        return Launch(id: "any Id", name: "any name", details: "any details")
+        return Launch(id: "any Id", name: "any name", flightNumber: 3, success: true, dateUTC: Date(timeIntervalSince1970: 1617813240))
     }
     
     static func emptyName() -> Launch {
-        return Launch(id: "any Id", name: "", details: "any details")
+        return Launch(id: "any Id", name: "", flightNumber: 3, success: true, dateUTC: Date(timeIntervalSince1970: 1617813240))
     }
     
-    static func emptyDetails() -> Launch {
-        return Launch(id: "any Id", name: "name", details: "")
+    static func launchFailed() -> Launch {
+        return Launch(id: "any Id", name: "", flightNumber: 3, success: false, dateUTC: Date(timeIntervalSince1970: 1616574480))
     }
 }
