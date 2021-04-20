@@ -43,7 +43,6 @@
 		6AB749A1262C7D4200C8F56A /* XRocketiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AB74993262C7D4200C8F56A /* XRocketiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6AB749AD262C7E3B00C8F56A /* LaunchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB749AC262C7E3B00C8F56A /* LaunchViewControllerTests.swift */; };
 		6AB749B7262C813500C8F56A /* XRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AAB50C92629312E0089DC3C /* XRocket.framework */; };
-		6AB749B8262C813500C8F56A /* XRocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6AAB50C92629312E0089DC3C /* XRocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6AB749C2262C823600C8F56A /* XCTestCase+MemoryLeak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB749C1262C823600C8F56A /* XCTestCase+MemoryLeak.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,20 +69,6 @@
 			remoteInfo = XRocket;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		6AB749BB262C813500C8F56A /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				6AB749B8262C813500C8F56A /* XRocket.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		6A0BFDFF262D3030006818CB /* Launch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
@@ -479,7 +464,6 @@
 				6AB7498D262C7D4100C8F56A /* Sources */,
 				6AB7498E262C7D4100C8F56A /* Frameworks */,
 				6AB7498F262C7D4100C8F56A /* Resources */,
-				6AB749BB262C813500C8F56A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -801,6 +785,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = XRocket/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -809,7 +794,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kndev.XRocket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -827,6 +812,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = XRocket/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -835,7 +821,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kndev.XRocket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -854,6 +840,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kndev.XRocketTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -872,6 +859,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kndev.XRocketTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
