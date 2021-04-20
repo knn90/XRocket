@@ -62,11 +62,10 @@ class LaunchViewControllerTests: XCTestCase {
         
         loader.completeLoading(with: LaunchPaginationFactory.single(with: launches), at: 0)
         XCTAssertEqual(sut.numberOfRenderedCell, launches.count)
-        let cell = sut.getCell(at: 0) as! LaunchCell
-        XCTAssertEqual(cell.flightNumberLabel.text, "\(launch0.flightNumber)")
-        XCTAssertEqual(cell.rocketNameLabel.text, "\(launch0.name)")
-        XCTAssertEqual(cell.dateLabel.text, "\(LaunchDateFactory.date1().string)")
-        XCTAssertEqual(cell.successLabel.text, "Success")
+        assertThat(sut, hasCellConfiguredFor: launch0, date: LaunchDateFactory.date1().string, at: 0)
+        assertThat(sut, hasCellConfiguredFor: launch1, date: LaunchDateFactory.date2().string, at: 1)
+        assertThat(sut, hasCellConfiguredFor: launch2, date: LaunchDateFactory.date3().string, at: 2)
+        assertThat(sut, hasCellConfiguredFor: launch3, date: LaunchDateFactory.date4().string, at: 3)
     }
     
     // MARK: - Helpers
@@ -107,6 +106,16 @@ class LaunchViewControllerTests: XCTestCase {
             XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
         }
         return value
+    }
+    
+    private func assertThat(_ sut: LaunchViewController, hasCellConfiguredFor launch: Launch, date: String, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+        guard let  cell = sut.getCell(at: index) as? LaunchCell else {
+            return XCTFail("Can't parse cell as LaunchCell", file: file, line: line)
+        }
+        XCTAssertEqual(cell.flightNumberLabel.text, "\(launch.flightNumber)")
+        XCTAssertEqual(cell.rocketNameLabel.text, launch.name)
+        XCTAssertEqual(cell.dateLabel.text, date)
+        XCTAssertEqual(cell.successLabel.text, launch.success ? "Success" : "Failure")
     }
 }
 
