@@ -7,12 +7,6 @@
 
 import Foundation
 
-
-
-
-
-
-
 public protocol LaunchLoadingView {
     func display(_ viewModel: LaunchLoadingViewModel)
 }
@@ -27,20 +21,14 @@ public protocol LaunchView {
 
 public final class LaunchPresenter {
     public static var title: String {
-        NSLocalizedString("launch_view_title",
-                          tableName: "Launch",
-                          bundle: Bundle(for: LaunchPresenter.self),
-                          comment: "Title for the launch view")
+        LaunchString.localize(for: "launch_view_title")
     }
     
     private let loadingView: LaunchLoadingView
     private let errorView: LaunchErrorView
     private let launchView: LaunchView
     private var loadErrorMessage: String {
-        NSLocalizedString("launch_view_connection_error",
-                          tableName: "Launch",
-                          bundle: Bundle(for: LaunchPresenter.self),
-                          comment: "Error message when loading launches")
+        LaunchString.localize(for: "launch_view_connection_error")
     }
     
     public init(loadingView: LaunchLoadingView, errorView: LaunchErrorView, launchView: LaunchView) {
