@@ -8,10 +8,14 @@
 import UIKit
 import XRocket
 
-public final class LaunchViewController: UITableViewController {
-    @IBOutlet private(set) public var errorView: ErrorView?
+public protocol LaunchViewControllerDelegate {
+    func didRequestForLaunches()
+}
+
+public final class LaunchViewController: UITableViewController, LaunchView, LaunchLoadingView, LaunchErrorView {
     
-    public var loader: LaunchLoader?
+    @IBOutlet private(set) public var errorView: ErrorView?
+    public var delegate: LaunchViewControllerDelegate?
     private(set) var launches: [PresentableLaunch] = [] {
         didSet {
             tableView.reloadData()
@@ -25,19 +29,24 @@ public final class LaunchViewController: UITableViewController {
     }
     
     @IBAction private func loadLaunches() {
-        refreshControl?.beginRefreshing()
-        self.errorView?.message = nil
-        loader?.load { [unowned self] result in
-            self.refreshControl?.endRefreshing()
-            switch result {
-            case let .success(launchPagination):
-                self.launches = LaunchViewModel(launches: launchPagination.docs).presentableLaunches
-            case .failure:
-                self.errorView?.message = "Couldn't connect to server"
-            }
+        delegate?.didRequestForLaunches()
+    }
+    
+    public func display(_ viewModel: LaunchViewModel) {
+        self.launches = viewModel.presentableLaunches
+    }
+    
+    public func display(_ viewModel: LaunchLoadingViewModel) {
+        if viewModel.isLoading {
+            refreshControl?.beginRefreshing()
+        } else {
+            refreshControl?.endRefreshing()
         }
     }
     
+    public func display(_ viewModel: LaunchErrorViewModel) {
+        errorView?.message = viewModel.message
+    }
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return launches.count
     }

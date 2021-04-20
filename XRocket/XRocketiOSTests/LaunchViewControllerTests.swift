@@ -108,13 +108,11 @@ class LaunchViewControllerTests: XCTestCase {
         sut.simulateUserInitiatedReload()
         XCTAssertEqual(sut.errorMessage, nil)
     }
-    
+
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
-        let loader = LoaderSpy()
-        let storyboard = UIStoryboard(name: "Launch", bundle: Bundle(for: LaunchViewController.self))
-        let sut = storyboard.instantiateInitialViewController() as! LaunchViewController
-        sut.loader = loader
+        let loader = LoaderSpy()        
+        let sut = LaunchUIComposer.composeWith(loader: loader)
         
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(loader, file: file, line: line)
