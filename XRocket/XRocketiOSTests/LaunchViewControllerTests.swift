@@ -65,6 +65,22 @@ class LaunchViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: LaunchViewModel(launches: launches).presentableLaunches)
     }
     
+    func test_loadCompletion_renderSuccessfullyEmptyAfterNonEmptyLaunches() {
+        let (sut, loader) = makeSUT()
+        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date)
+        let launches = [launch0]
+        
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(sut.numberOfRenderedCell, 0)
+        
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: launches), at: 0)
+        assertThat(sut, isRendering: LaunchViewModel(launches: launches).presentableLaunches)
+        
+        sut.simulateUserInitiatedReload()
+        loader.completeLoading(with: LaunchPaginationFactory.empty(), at: 1)
+        assertThat(sut, isRendering: [])
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
         let loader = LoaderSpy()
