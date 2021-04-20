@@ -8,11 +8,19 @@
 import Foundation
 
 public struct Launch: Codable, Equatable {
-    let id: String
-    let name: String
-    let flightNumber: Int
-    let success: Bool
-    let dateUTC: Date
+    public let id: String
+    public let name: String
+    public let flightNumber: Int
+    public let success: Bool
+    public let dateUTC: Date
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case name = "name"
+        case flightNumber = "flight_number"
+        case success = "success"
+        case dateUTC = "date_utc"
+    }
     
     public init(id: String, name: String, flightNumber: Int, success: Bool, dateUTC: Date) {
         self.id = id

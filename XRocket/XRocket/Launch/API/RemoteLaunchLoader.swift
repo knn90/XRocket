@@ -45,7 +45,9 @@ public class RemoteLaunchLoader: LaunchLoader {
     private static func map(from data: Data, response: HTTPURLResponse) -> LaunchLoader.Result {
         if response.statusCode == success {
             do {
-                let launchPagination = try JSONDecoder().decode(LaunchPagination.self, from: data)
+                let jsonDecoder = JSONDecoder()
+                jsonDecoder.dateDecodingStrategy = .iso8601
+                let launchPagination = try jsonDecoder.decode(LaunchPagination.self, from: data)
                 return .success(launchPagination)
             } catch {
                 return .failure(Error.invalidData)

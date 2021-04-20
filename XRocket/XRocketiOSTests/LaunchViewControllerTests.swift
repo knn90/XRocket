@@ -50,6 +50,25 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator after loading failed")
     }
     
+    func test_loadCompletion_renderSuccessfullyLoadedLaunches() {
+        let (sut, loader) = makeSUT()
+        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date)
+        let launch1 = Launch(id: "", name: "name 2", flightNumber: 23, success: false, dateUTC: LaunchDateFactory.date2().date)
+        let launch2 = Launch(id: "", name: "name 3", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date3().date)
+        let launch3 = Launch(id: "", name: "name 4", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date4().date)
+        let launches = [launch0, launch1, launch2, launch3]
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(sut.numberOfRenderedCell, 0)
+        
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: launches), at: 0)
+        XCTAssertEqual(sut.numberOfRenderedCell, launches.count)
+        let cell = sut.getCell(at: 0) as! LaunchCell
+        XCTAssertEqual(cell.flightNumberLabel.text, "\(launch0.flightNumber)")
+        XCTAssertEqual(cell.rocketNameLabel.text, "\(launch0.name)")
+        XCTAssertEqual(cell.dateLabel.text, "\(LaunchDateFactory.date1().string)")
+        XCTAssertEqual(cell.successLabel.text, "Success")
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
         let loader = LoaderSpy()
@@ -112,7 +131,37 @@ extension LaunchViewController {
         refreshControl?.simulatePullToRefresh()
     }
     
+    func getCell(at row: Int) -> UITableViewCell? {
+        return tableView.cellForRow(at: IndexPath(row: row, section: launchSection))
+    }
+    
     var isShowingLoadingIndicator: Bool {
         return refreshControl?.isRefreshing == true
+    }
+    
+    var numberOfRenderedCell: Int {
+        return tableView.numberOfRows(inSection: launchSection)
+    }
+    
+    private var launchSection: Int {
+        return 0
+    }
+}
+
+class LaunchDateFactory {
+    static func date1() -> (date: Date, string: String) {
+        return (Date(timeIntervalSince1970: 1614846240), "2021-03-04")
+    }
+    
+    static func date2() -> (date: Date, string: String) {
+        return (Date(timeIntervalSince1970: 1612419540), "2021-02-04")
+    }
+    
+    static func date3() -> (date: Date, string: String) {
+        return (Date(timeIntervalSince1970: 1611500400), "2021-01-24")
+    }
+    
+    static func date4() -> (date: Date, string: String) {
+        return (Date(timeIntervalSince1970: 1610072100), "2021-01-08")
     }
 }
