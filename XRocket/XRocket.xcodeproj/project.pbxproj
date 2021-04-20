@@ -15,6 +15,7 @@
 		6A0BFE21262DDB2A006818CB /* LaunchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BFE20262DDB2A006818CB /* LaunchCell.swift */; };
 		6A4597C2262EB10500313EAB /* PresentableLaunch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4597C1262EB10500313EAB /* PresentableLaunch.swift */; };
 		6A4597C8262EB12E00313EAB /* LaunchString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4597C7262EB12E00313EAB /* LaunchString.swift */; };
+		6A4597CD262EF2B000313EAB /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4597CC262EF2B000313EAB /* ErrorView.swift */; };
 		6A54AF8E262A8BC60007D021 /* XCTestCase+MemoryLeak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A54AF8D262A8BC60007D021 /* XCTestCase+MemoryLeak.swift */; };
 		6A54AF95262A8EAF0007D021 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A54AF94262A8EAF0007D021 /* URLSessionHTTPClientTests.swift */; };
 		6A54AF9C262ACD750007D021 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A54AF9B262ACD750007D021 /* URLSessionHTTPClient.swift */; };
@@ -93,6 +94,7 @@
 		6A0BFE20262DDB2A006818CB /* LaunchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCell.swift; sourceTree = "<group>"; };
 		6A4597C1262EB10500313EAB /* PresentableLaunch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentableLaunch.swift; sourceTree = "<group>"; };
 		6A4597C7262EB12E00313EAB /* LaunchString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchString.swift; sourceTree = "<group>"; };
+		6A4597CC262EF2B000313EAB /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		6A54AF8D262A8BC60007D021 /* XCTestCase+MemoryLeak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeak.swift"; sourceTree = "<group>"; };
 		6A54AF94262A8EAF0007D021 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		6A54AF9B262ACD750007D021 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 			children = (
 				6A0BFDFF262D3030006818CB /* Launch.storyboard */,
 				6A0BFE20262DDB2A006818CB /* LaunchCell.swift */,
+				6A4597CC262EF2B000313EAB /* ErrorView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -627,6 +630,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A0BFE21262DDB2A006818CB /* LaunchCell.swift in Sources */,
+				6A4597CD262EF2B000313EAB /* ErrorView.swift in Sources */,
 				6A0BFE0C262D38BE006818CB /* LaunchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

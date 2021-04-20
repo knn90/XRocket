@@ -96,6 +96,19 @@ class LaunchViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: presentableLaunches)
     }
     
+    func test_loadCompletion_rendersErrorMessageOnErrorUntilNextReload() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(sut.errorMessage, nil)
+        
+        loader.completeLoading(with: anyNSError(), at: 0)
+        XCTAssertEqual(sut.errorMessage, localized("launch_view_connection_error"))
+        
+        sut.simulateUserInitiatedReload()
+        XCTAssertEqual(sut.errorMessage, nil)
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
         let loader = LoaderSpy()
@@ -186,6 +199,10 @@ extension LaunchViewController {
     
     var numberOfRenderedCell: Int {
         return tableView.numberOfRows(inSection: launchSection)
+    }
+    
+    var errorMessage: String? {
+        return errorView?.message
     }
     
     private var launchSection: Int {

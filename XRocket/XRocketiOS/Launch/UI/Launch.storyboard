@@ -15,9 +15,31 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="EYL-ox-KqY" customClass="ErrorView" customModule="XRocketiOS" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X9t-bX-5XD">
+                                    <rect key="frame" x="15" y="8" width="384" height="28"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="X9t-bX-5XD" firstAttribute="leading" secondItem="EYL-ox-KqY" secondAttribute="leading" constant="15" id="LBP-dv-RXe"/>
+                                <constraint firstItem="X9t-bX-5XD" firstAttribute="top" secondItem="EYL-ox-KqY" secondAttribute="top" constant="8" id="P3X-13-sd2"/>
+                                <constraint firstAttribute="bottom" secondItem="X9t-bX-5XD" secondAttribute="bottom" constant="8" id="UG5-RY-OXS"/>
+                                <constraint firstAttribute="trailing" secondItem="X9t-bX-5XD" secondAttribute="trailing" constant="15" id="myC-x4-ySA"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="label" destination="X9t-bX-5XD" id="c4Y-ay-bPE"/>
+                            </connections>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LaunchCell" rowHeight="149" id="v0Z-cR-j1R" customClass="LaunchCell" customModule="XRocketiOS" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="149"/>
+                                <rect key="frame" x="0.0" y="72" width="414" height="149"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="v0Z-cR-j1R" id="keU-vg-JpN">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="149"/>
@@ -109,6 +131,9 @@
                             <action selector="loadLaunches" destination="ieM-8b-LBN" eventType="valueChanged" id="1YT-93-bwc"/>
                         </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="errorView" destination="EYL-ox-KqY" id="40K-Dx-Ubf"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yVl-5B-ual" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

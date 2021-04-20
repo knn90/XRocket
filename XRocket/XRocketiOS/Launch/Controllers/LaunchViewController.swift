@@ -9,6 +9,7 @@ import UIKit
 import XRocket
 
 public final class LaunchViewController: UITableViewController {
+    @IBOutlet private(set) public var errorView: ErrorView?
     
     public var loader: LaunchLoader?
     private(set) var launches: [PresentableLaunch] = [] {
@@ -25,12 +26,14 @@ public final class LaunchViewController: UITableViewController {
     
     @IBAction private func loadLaunches() {
         refreshControl?.beginRefreshing()
+        self.errorView?.message = nil
         loader?.load { [unowned self] result in
             self.refreshControl?.endRefreshing()
             switch result {
             case let .success(launchPagination):
                 self.launches = LaunchViewModel(launches: launchPagination.docs).presentableLaunches
-            case .failure: break
+            case .failure:
+                self.errorView?.message = "Couldn't connect to server"
             }
         }
     }
