@@ -29,7 +29,7 @@ class LaunchPaginationFactory {
             docs: [
                 LaunchFactory.any(),
                 LaunchFactory.emptyName(),
-                LaunchFactory.emptyDetails(),
+                LaunchFactory.launchFailed(),
             ],
             totalDocs: 3,
             offset: 0,
@@ -46,6 +46,8 @@ class LaunchPaginationFactory {
 
 extension LaunchPagination {
     func toJSONData() -> Data {
-        return try! JSONEncoder().encode(self)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        return try! encoder.encode(self)
     }
 }

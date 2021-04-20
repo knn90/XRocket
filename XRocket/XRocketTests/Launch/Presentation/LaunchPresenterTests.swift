@@ -44,10 +44,11 @@ class LaunchPresenterTests: XCTestCase {
     func test_didFinishLoadingWithLaunches_displaysLaunchesAndStopLoading() {
         let (sut, view) = makeSUT()
         let launchPagination = LaunchPaginationFactory.single()
+        let viewModel = LaunchViewModel(launches: launchPagination.docs)
         sut.didFinishLoading(with: launchPagination)
         
         XCTAssertEqual(view.messages, [
-            .display(launches: launchPagination.docs),
+            .display(launches: viewModel.presentableLaunches),
             .display(isLoading: false)
         ])
     }
@@ -67,7 +68,7 @@ class LaunchPresenterTests: XCTestCase {
         enum Message: Equatable {
             case display(isLoading: Bool)
             case display(errorMessage: String?)
-            case display(launches: [Launch])
+            case display(launches: [PresentableLaunch])
         }
         
         private(set) var messages = [Message]()
@@ -81,7 +82,7 @@ class LaunchPresenterTests: XCTestCase {
         }
         
         func display(_ viewModel: LaunchViewModel) {
-            messages.append(.display(launches: viewModel.launches))
+            messages.append(.display(launches: viewModel.presentableLaunches))
         }
       
     }

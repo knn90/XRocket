@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct PresentableLaunch {
+public struct PresentableLaunch: Equatable {
     public let id: String
     public let name: String
     public let flightNumber: String
