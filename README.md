@@ -1,2 +1,2 @@
 # XRocket
-[![XRocket Frameworks](https://github.com/knn90/XRocket/actions/workflows/macOS.yml/badge.svg)](https://github.com/knn90/XRocket/actions/workflows/macOS.yml)
+[![XRocket Frameworks](https://github.com/knn90/XRocket/actions/workflows/macOS.yml/badge.svg)](https://github.com/knn90/XRocket/actions/workflows/macOS.yml) [![CI-iOS](https://github.com/knn90/XRocket/actions/workflows/CI_iOS.yml/badge.svg)](https://github.com/knn90/XRocket/actions/workflows/CI_iOS.yml)
