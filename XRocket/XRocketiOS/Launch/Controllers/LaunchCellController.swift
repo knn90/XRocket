@@ -41,7 +41,7 @@ final class LaunchCellController {
         }
     }
     
-    deinit {
+    func cancelLoad() {
         task?.cancel()
     }
 }

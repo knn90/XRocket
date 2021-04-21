@@ -9,17 +9,19 @@ import UIKit
 import XRocket
 
 public final class LaunchUIComposer {
+    private init() {}
     
     public static func composeWith(loader: LaunchLoader, imageLoader: ImageDataLoader) -> LaunchViewController {
         let presentationAdapter = LaunchPresentationAdapter(loader: loader)
         
         let launchController = makeLaunchViewController(delegate: presentationAdapter)
-        launchController.imageLoader = imageLoader
         
         let presenter = LaunchPresenter(
             loadingView: WeakRefVirtualProxy(launchController),
             errorView: WeakRefVirtualProxy(launchController),
-            launchView: WeakRefVirtualProxy(launchController))
+            launchView: LaunchViewAdapter(
+                launchViewController: launchController,
+                imageLoader: imageLoader))
         presentationAdapter.presenter = presenter
         
         return launchController
@@ -33,3 +35,4 @@ public final class LaunchUIComposer {
         return viewController
     }
 }
+

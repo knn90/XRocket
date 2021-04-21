@@ -12,14 +12,11 @@ public protocol LaunchViewControllerDelegate {
     func didRequestForLaunches()
 }
 
-public final class LaunchViewController: UITableViewController, UITableViewDataSourcePrefetching, LaunchView, LaunchLoadingView, LaunchErrorView {
+public final class LaunchViewController: UITableViewController, UITableViewDataSourcePrefetching, LaunchLoadingView, LaunchErrorView {
     
     @IBOutlet private(set) public var errorView: ErrorView?
     public var delegate: LaunchViewControllerDelegate?
-    public var imageLoader: ImageDataLoader?
-    private var tasks = [IndexPath: ImageDataLoaderTask]()
-    private var cellControllers = [IndexPath: LaunchCellController]()
-    private(set) var launches: [PresentableLaunch] = [] {
+    var tableModel: [LaunchCellController] = [] {
         didSet {
             tableView.reloadData()
         }
@@ -36,8 +33,8 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
         delegate?.didRequestForLaunches()
     }
     
-    public func display(_ viewModel: LaunchViewModel) {
-        self.launches = viewModel.presentableLaunches
+    func display(_ cellControllers: [LaunchCellController]) {
+        tableModel = cellControllers
     }
     
     public func display(_ viewModel: LaunchLoadingViewModel) {
@@ -51,8 +48,9 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
     public func display(_ viewModel: LaunchErrorViewModel) {
         errorView?.message = viewModel.message
     }
+    
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return launches.count
+        return tableModel.count
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -60,7 +58,7 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        removeCellController(forRowAt: indexPath)
+        cancelCellControllerLoad(forRowAt: indexPath)
     }
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
@@ -70,18 +68,15 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
     }
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(removeCellController)
+        indexPaths.forEach(cancelCellControllerLoad)
     }
     
     private func cellController(forRowAt indexPath: IndexPath) -> LaunchCellController {
-        let model = launches[indexPath.row]
-        let cellController = LaunchCellController(model: model, imageLoader: imageLoader!)
-        cellControllers[indexPath] = cellController
+        return tableModel[indexPath.row]
         
-        return cellController
     }
     
-    private func removeCellController(forRowAt indexPath: IndexPath) {
-        cellControllers[indexPath] = nil
+    private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
+        cellController(forRowAt: indexPath).cancelLoad()
     }
 }
