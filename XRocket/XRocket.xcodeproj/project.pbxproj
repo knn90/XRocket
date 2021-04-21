@@ -14,6 +14,7 @@
 		6A0BFE1C262DCC83006818CB /* LaunchPaginationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BFE1A262DCC83006818CB /* LaunchPaginationFactory.swift */; };
 		6A0BFE21262DDB2A006818CB /* LaunchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BFE20262DDB2A006818CB /* LaunchCell.swift */; };
 		6A34BC99262FC47D005B6E60 /* LaunchCellPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A34BC98262FC47D005B6E60 /* LaunchCellPresenterTests.swift */; };
+		6A34BCA326304FA9005B6E60 /* UIView+Shimmering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A34BCA226304FA9005B6E60 /* UIView+Shimmering.swift */; };
 		6A4597C2262EB10500313EAB /* PresentableLaunch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4597C1262EB10500313EAB /* PresentableLaunch.swift */; };
 		6A4597C8262EB12E00313EAB /* LaunchString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4597C7262EB12E00313EAB /* LaunchString.swift */; };
 		6A4597CD262EF2B000313EAB /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4597CC262EF2B000313EAB /* ErrorView.swift */; };
@@ -82,6 +83,7 @@
 		6A0BFE1A262DCC83006818CB /* LaunchPaginationFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchPaginationFactory.swift; sourceTree = "<group>"; };
 		6A0BFE20262DDB2A006818CB /* LaunchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCell.swift; sourceTree = "<group>"; };
 		6A34BC98262FC47D005B6E60 /* LaunchCellPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCellPresenterTests.swift; sourceTree = "<group>"; };
+		6A34BCA226304FA9005B6E60 /* UIView+Shimmering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shimmering.swift"; sourceTree = "<group>"; };
 		6A4597C1262EB10500313EAB /* PresentableLaunch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentableLaunch.swift; sourceTree = "<group>"; };
 		6A4597C7262EB12E00313EAB /* LaunchString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchString.swift; sourceTree = "<group>"; };
 		6A4597CC262EF2B000313EAB /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				6A459809262F27AC00313EAB /* WeakRefVirtualProxy.swift */,
+				6A34BCA226304FA9005B6E60 /* UIView+Shimmering.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -645,6 +648,7 @@
 				6A4597F1262F277400313EAB /* LaunchPresentationAdapter.swift in Sources */,
 				6A0BFE21262DDB2A006818CB /* LaunchCell.swift in Sources */,
 				6A4597E6262F1F8300313EAB /* LaunchUIComposer.swift in Sources */,
+				6A34BCA326304FA9005B6E60 /* UIView+Shimmering.swift in Sources */,
 				6A4597CD262EF2B000313EAB /* ErrorView.swift in Sources */,
 				6A45980A262F27AC00313EAB /* WeakRefVirtualProxy.swift in Sources */,
 				6A0BFE0C262D38BE006818CB /* LaunchViewController.swift in Sources */,

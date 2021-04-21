@@ -59,8 +59,11 @@ public final class LaunchViewController: UITableViewController, LaunchView, Laun
         let model = launches[indexPath.row]
         cell.configure(launch: model)
         if let url = model.imageURL {
+            cell.imageContainer.isShimmering = true
             let request = URLRequest(url: url)
-            tasks[indexPath] = imageLoader?.load(from: request) { _ in }
+            tasks[indexPath] = imageLoader?.load(from: request) { [weak cell] _ in
+                cell?.imageContainer.isShimmering = false
+            }
         }
         return cell
     }

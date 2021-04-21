@@ -13,6 +13,8 @@ public final class LaunchCell: UITableViewCell {
     public let rocketNameLabel = UILabel()
     public let dateLabel = UILabel()
     public let successLabel = UILabel()
+    public let imageContainer = UIView()
+    
     func configure(launch: PresentableLaunch) {
         flightNumberLabel.text = launch.flightNumber
         rocketNameLabel.text = launch.name

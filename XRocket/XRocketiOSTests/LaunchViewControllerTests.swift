@@ -146,6 +146,31 @@ class LaunchViewControllerTests: XCTestCase {
         sut.simulateLaunchCellNotVisible(at: 1)
         XCTAssertEqual(loader.cancelledImageURLs, [url0, url1])
     }
+    
+    func test_launchCellLoadingIndicator_isVisibleWhileLoadingImage() {
+        let url0 = URL(string: "http:url-0.com")!
+        let url1 = URL(string: "http:url-1.com")!
+        let launch0 = LaunchFactory.any(urls: [url0])
+        let launch1 = LaunchFactory.any(urls: [url1])
+        
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0, launch1]), at: 0)
+        
+        let cell0 = sut.simulateLaunchCellVisible(at: 0)
+        let cell1 = sut.simulateLaunchCellVisible(at: 1)
+        
+        XCTAssertEqual(cell0?.isShowingImageLoadingIndicator, true)
+        XCTAssertEqual(cell1?.isShowingImageLoadingIndicator, true)
+        
+        loader.completeImageLoading(at: 0)
+        XCTAssertEqual(cell0?.isShowingImageLoadingIndicator, false)
+        XCTAssertEqual(cell1?.isShowingImageLoadingIndicator, true)
+        
+        loader.completeImageLoading(at: 1)
+        XCTAssertEqual(cell0?.isShowingImageLoadingIndicator, false)
+        XCTAssertEqual(cell1?.isShowingImageLoadingIndicator, false)
+    }
 
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
@@ -178,7 +203,7 @@ class LaunchViewControllerTests: XCTestCase {
         // Image Loader
         private(set) var requestedImageURLs = [URL]()
         private(set) var cancelledImageURLs = [URL]()
-        
+        private(set) var imageCompletions = [(ImageDataLoader.Result) -> Void]()
         private struct TaskSpy: ImageDataLoaderTask {
             let cancelCallback: () -> Void
             func cancel() {
@@ -187,9 +212,18 @@ class LaunchViewControllerTests: XCTestCase {
         }
         func load(from request: URLRequest, completion: @escaping (ImageDataLoader.Result) -> Void) -> ImageDataLoaderTask {
             requestedImageURLs.append(request.url!)
+            imageCompletions.append(completion)
             return TaskSpy { [weak self] in
                 self?.cancelledImageURLs.append(request.url!)
             }
+        }
+        
+        func completeImageLoading(with data: Data = Data(), at index: Int) {
+            imageCompletions[index](.success(data))
+        }
+        
+        func completeImageLoading(with error: Error, at index: Int) {
+            imageCompletions[index](.failure(error))
         }
     }
     
@@ -277,6 +311,12 @@ extension LaunchViewController {
     
     private var launchSection: Int {
         return 0
+    }
+}
+
+extension LaunchCell {
+    var isShowingImageLoadingIndicator: Bool {
+        return imageContainer.isShimmering
     }
 }
 
