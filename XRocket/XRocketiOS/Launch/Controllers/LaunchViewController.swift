@@ -58,10 +58,13 @@ public final class LaunchViewController: UITableViewController, LaunchView, Laun
         let cell = LaunchCell()
         let model = launches[indexPath.row]
         cell.configure(launch: model)
+        cell.rocketImageView.image = nil
         if let url = model.imageURL {
             cell.imageContainer.isShimmering = true
             let request = URLRequest(url: url)
-            tasks[indexPath] = imageLoader?.load(from: request) { [weak cell] _ in
+            tasks[indexPath] = imageLoader?.load(from: request) { [weak cell] result in
+                let data = try? result.get()
+                cell?.rocketImageView.image = data.map(UIImage.init) ?? nil
                 cell?.imageContainer.isShimmering = false
             }
         }

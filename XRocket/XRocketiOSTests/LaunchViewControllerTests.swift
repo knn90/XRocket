@@ -171,6 +171,34 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(cell0?.isShowingImageLoadingIndicator, false)
         XCTAssertEqual(cell1?.isShowingImageLoadingIndicator, false)
     }
+    
+    func test_launchCell_rendersImageLoadedFromURL() {
+        let url0 = URL(string: "http:url-0.com")!
+        let url1 = URL(string: "http:url-1.com")!
+        let launch0 = LaunchFactory.any(urls: [url0])
+        let launch1 = LaunchFactory.any(urls: [url1])
+        
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0, launch1]), at: 0)
+        
+        let cell0 = sut.simulateLaunchCellVisible(at: 0)
+        let cell1 = sut.simulateLaunchCellVisible(at: 1)
+        
+        XCTAssertEqual(cell0?.renderedImage, nil)
+        XCTAssertEqual(cell1?.renderedImage, nil)
+        
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        loader.completeImageLoading(with: imageData0, at: 0)
+        XCTAssertEqual(cell0?.renderedImage, imageData0)
+        XCTAssertEqual(cell1?.renderedImage, nil)
+        
+        let imageData1 = UIImage.make(withColor: .blue).pngData()!
+        loader.completeImageLoading(with: imageData1, at: 1)
+        XCTAssertEqual(cell0?.renderedImage, imageData0)
+        XCTAssertEqual(cell1?.renderedImage, imageData1)
+        
+    }
 
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
@@ -272,6 +300,19 @@ extension UIControl {
     }
 }
 
+private extension UIImage {
+    static func make(withColor color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(color.cgColor)
+        context.fill(rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img!
+    }
+}
+
 extension LaunchViewController {
     func simulateUserInitiatedReload() {
         refreshControl?.simulatePullToRefresh()
@@ -317,6 +358,10 @@ extension LaunchViewController {
 extension LaunchCell {
     var isShowingImageLoadingIndicator: Bool {
         return imageContainer.isShimmering
+    }
+    
+    var renderedImage: Data? {
+        return rocketImageView.image?.pngData()
     }
 }
 
