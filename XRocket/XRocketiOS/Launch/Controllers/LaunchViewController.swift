@@ -12,7 +12,7 @@ public protocol LaunchViewControllerDelegate {
     func didRequestForLaunches()
 }
 
-public final class LaunchViewController: UITableViewController, LaunchView, LaunchLoadingView, LaunchErrorView {
+public final class LaunchViewController: UITableViewController, UITableViewDataSourcePrefetching, LaunchView, LaunchLoadingView, LaunchErrorView {
     
     @IBOutlet private(set) public var errorView: ErrorView?
     public var delegate: LaunchViewControllerDelegate?
@@ -28,6 +28,7 @@ public final class LaunchViewController: UITableViewController, LaunchView, Laun
     public override func viewDidLoad() {
         super.viewDidLoad()
         title = LaunchPresenter.title
+        tableView.prefetchDataSource = self
         loadLaunches()
     }
     
@@ -74,5 +75,14 @@ public final class LaunchViewController: UITableViewController, LaunchView, Laun
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         tasks[indexPath]?.cancel()
         tasks[indexPath] = nil
+    }
+    
+    public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach { indexPath in
+            let model = launches[indexPath.row]
+            guard let url = model.imageURL else { return }
+            let request = URLRequest(url: url)
+            _ = imageLoader?.load(from: request, completion: { _ in })
+        }
     }
 }
