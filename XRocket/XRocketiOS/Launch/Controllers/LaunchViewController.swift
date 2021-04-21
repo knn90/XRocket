@@ -17,6 +17,7 @@ public final class LaunchViewController: UITableViewController, LaunchView, Laun
     @IBOutlet private(set) public var errorView: ErrorView?
     public var delegate: LaunchViewControllerDelegate?
     public var imageLoader: ImageDataLoader?
+    private var tasks = [IndexPath: ImageDataLoaderTask]()
     
     private(set) var launches: [PresentableLaunch] = [] {
         didSet {
@@ -59,8 +60,13 @@ public final class LaunchViewController: UITableViewController, LaunchView, Laun
         cell.configure(launch: model)
         if let url = model.imageURL {
             let request = URLRequest(url: url)
-            imageLoader?.load(from: request) { _ in } 
+            tasks[indexPath] = imageLoader?.load(from: request) { _ in }
         }
         return cell
+    }
+    
+    public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        tasks[indexPath]?.cancel()
+        tasks[indexPath] = nil
     }
 }

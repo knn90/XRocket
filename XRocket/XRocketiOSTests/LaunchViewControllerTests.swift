@@ -127,6 +127,25 @@ class LaunchViewControllerTests: XCTestCase {
         sut.simulateLaunchCellVisible(at: 1)
         XCTAssertEqual(loader.requestedImageURLs, [url0, url1])
     }
+    
+    func test_launchCell_cancelsImageLoadingWhenNotVisibleAnymore() {
+        let url0 = URL(string: "http:url-0.com")!
+        let url1 = URL(string: "http:url-1.com")!
+        let launch0 = LaunchFactory.any(urls: [url0])
+        let launch1 = LaunchFactory.any(urls: [url1])
+        
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0, launch1]), at: 0)
+        XCTAssertEqual(loader.requestedImageURLs, [])
+        
+        sut.simulateLaunchCellNotVisible(at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [url0])
+        
+        sut.simulateLaunchCellNotVisible(at: 1)
+        XCTAssertEqual(loader.cancelledImageURLs, [url0, url1])
+    }
 
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
@@ -142,7 +161,6 @@ class LaunchViewControllerTests: XCTestCase {
     private class LoaderSpy: LaunchLoader, ImageDataLoader {
         private(set) var loadLaunchCallCount = 0
         private(set) var completions = [(LaunchLoader.Result) -> Void]()
-        private(set) var requestedImageURLs = [URL]()
         
         func load(completion: @escaping (Result<LaunchPagination, Error>) -> Void) {
             loadLaunchCallCount += 1
@@ -158,13 +176,20 @@ class LaunchViewControllerTests: XCTestCase {
         }
         
         // Image Loader
+        private(set) var requestedImageURLs = [URL]()
+        private(set) var cancelledImageURLs = [URL]()
+        
         private struct TaskSpy: ImageDataLoaderTask {
+            let cancelCallback: () -> Void
             func cancel() {
+                cancelCallback()
             }
         }
         func load(from request: URLRequest, completion: @escaping (ImageDataLoader.Result) -> Void) -> ImageDataLoaderTask {
             requestedImageURLs.append(request.url!)
-            return TaskSpy()
+            return TaskSpy { [weak self] in
+                self?.cancelledImageURLs.append(request.url!)
+            }
         }
     }
     
@@ -218,8 +243,18 @@ extension LaunchViewController {
         refreshControl?.simulatePullToRefresh()
     }
     
-    func simulateLaunchCellVisible(at row: Int) {
-        _ = getCell(at: row)
+    @discardableResult
+    func simulateLaunchCellVisible(at row: Int) -> LaunchCell? {
+        return getCell(at: row) as? LaunchCell
+    }
+    
+    func simulateLaunchCellNotVisible(at row: Int) {
+        let cell = simulateLaunchCellVisible(at: row)!
+        
+        let delegate = tableView.delegate
+        let index = IndexPath(row: row, section: launchSection)
+        
+        delegate?.tableView?(tableView, didEndDisplaying: cell, forRowAt: index)
     }
     
     func getCell(at row: Int) -> UITableViewCell? {
