@@ -18,7 +18,7 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
     public var delegate: LaunchViewControllerDelegate?
     public var imageLoader: ImageDataLoader?
     private var tasks = [IndexPath: ImageDataLoaderTask]()
-    
+    private var cellControllers = [IndexPath: LaunchCellController]()
     private(set) var launches: [PresentableLaunch] = [] {
         didSet {
             tableView.reloadData()
@@ -56,41 +56,32 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = LaunchCell()
-        let model = launches[indexPath.row]
-        cell.configure(launch: model)
-        cell.rocketImageView.image = nil
-        if let url = model.imageURL {
-            cell.imageContainer.isShimmering = true
-            let request = URLRequest(url: url)
-            tasks[indexPath] = imageLoader?.load(from: request) { [weak cell] result in
-                let data = try? result.get()
-                cell?.rocketImageView.image = data.map(UIImage.init) ?? nil
-                cell?.imageContainer.isShimmering = false
-            }
-        }
-        return cell
+        return cellController(forRowAt: indexPath).cell()
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cancelTask(forRowAt: indexPath)
+        removeCellController(forRowAt: indexPath)
     }
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let model = launches[indexPath.row]
-            guard let url = model.imageURL else { return }
-            let request = URLRequest(url: url)
-            tasks[indexPath] = imageLoader?.load(from: request, completion: { _ in })
+            cellController(forRowAt: indexPath).preload()
         }
     }
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(cancelTask)
+        indexPaths.forEach(removeCellController)
     }
     
-    private func cancelTask(forRowAt indexPath: IndexPath) {
-        tasks[indexPath]?.cancel()
-        tasks[indexPath] = nil
+    private func cellController(forRowAt indexPath: IndexPath) -> LaunchCellController {
+        let model = launches[indexPath.row]
+        let cellController = LaunchCellController(model: model, imageLoader: imageLoader!)
+        cellControllers[indexPath] = cellController
+        
+        return cellController
+    }
+    
+    private func removeCellController(forRowAt indexPath: IndexPath) {
+        cellControllers[indexPath] = nil
     }
 }
