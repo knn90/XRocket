@@ -73,8 +73,7 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        tasks[indexPath]?.cancel()
-        tasks[indexPath] = nil
+        cancelTask(forRowAt: indexPath)
     }
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
@@ -82,7 +81,16 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
             let model = launches[indexPath.row]
             guard let url = model.imageURL else { return }
             let request = URLRequest(url: url)
-            _ = imageLoader?.load(from: request, completion: { _ in })
+            tasks[indexPath] = imageLoader?.load(from: request, completion: { _ in })
         }
+    }
+    
+    public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach(cancelTask)
+    }
+    
+    private func cancelTask(forRowAt indexPath: IndexPath) {
+        tasks[indexPath]?.cancel()
+        tasks[indexPath] = nil
     }
 }

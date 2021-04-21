@@ -218,6 +218,24 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.requestedImageURLs, [url0, url1])
     }
     
+    func test_feedImageView_cancelsImageLoadingWhenNotNearVisibleAnymore() {
+        let url0 = URL(string: "http:url-0.com")!
+        let url1 = URL(string: "http:url-1.com")!
+        let launch0 = LaunchFactory.any(urls: [url0])
+        let launch1 = LaunchFactory.any(urls: [url1])
+        
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0, launch1]), at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [])
+        
+        sut.simulateLauncCellIsNotNearVisible(at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [url0])
+        
+        sut.simulateLauncCellIsNotNearVisible(at: 1)
+        XCTAssertEqual(loader.cancelledImageURLs, [url0, url1])
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
         let loader = LoaderSpy()        
@@ -352,6 +370,14 @@ extension LaunchViewController {
         let ds = tableView.prefetchDataSource
         let index = IndexPath(row: row, section: launchSection)
         ds?.tableView(tableView, prefetchRowsAt: [index])
+    }
+    
+    func simulateLauncCellIsNotNearVisible(at row: Int) {
+        simulateLauncCellIsNearVisible(at: row)
+        
+        let ds = tableView.prefetchDataSource
+        let index = IndexPath(row: row, section: launchSection)
+        ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
     
     func getCell(at row: Int) -> UITableViewCell? {
