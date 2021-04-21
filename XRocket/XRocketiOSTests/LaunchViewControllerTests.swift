@@ -52,10 +52,10 @@ class LaunchViewControllerTests: XCTestCase {
     
     func test_loadCompletion_renderSuccessfullyLoadedLaunches() {
         let (sut, loader) = makeSUT()
-        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date)
-        let launch1 = Launch(id: "", name: "name 2", flightNumber: 23, success: false, dateUTC: LaunchDateFactory.date2().date)
-        let launch2 = Launch(id: "", name: "name 3", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date3().date)
-        let launch3 = Launch(id: "", name: "name 4", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date4().date)
+        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: Link(flickr: Flickr(original: [anyURL()])))
+        let launch1 = Launch(id: "", name: "name 2", flightNumber: 23, success: false, dateUTC: LaunchDateFactory.date2().date, links: Link(flickr: Flickr(original: [anyURL()])))
+        let launch2 = Launch(id: "", name: "name 3", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date3().date, links: Link(flickr: Flickr(original: [anyURL()])))
+        let launch3 = Launch(id: "", name: "name 4", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date4().date, links: Link(flickr: Flickr(original: [anyURL()])))
         let launches = [launch0, launch1, launch2, launch3]
         
         sut.loadViewIfNeeded()
@@ -67,7 +67,7 @@ class LaunchViewControllerTests: XCTestCase {
     
     func test_loadCompletion_renderSuccessfullyEmptyAfterNonEmptyLaunches() {
         let (sut, loader) = makeSUT()
-        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date)
+        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: Link(flickr: Flickr(original: [anyURL()])))
         let launches = [launch0]
         
         sut.loadViewIfNeeded()
@@ -83,7 +83,7 @@ class LaunchViewControllerTests: XCTestCase {
     
     func test_loadCompletion_doesNotAlterCurrentRenderingStateOnError() {
         let (sut, loader) = makeSUT()
-        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date)
+        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: Link(flickr: Flickr(original: [anyURL()])))
         let launches = [launch0]
         let presentableLaunches = LaunchViewModel(launches: launches).presentableLaunches
         sut.loadViewIfNeeded()
