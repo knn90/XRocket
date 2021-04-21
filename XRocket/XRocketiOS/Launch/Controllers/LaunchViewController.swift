@@ -16,6 +16,8 @@ public final class LaunchViewController: UITableViewController, LaunchView, Laun
     
     @IBOutlet private(set) public var errorView: ErrorView?
     public var delegate: LaunchViewControllerDelegate?
+    public var imageLoader: ImageDataLoader?
+    
     private(set) var launches: [PresentableLaunch] = [] {
         didSet {
             tableView.reloadData()
@@ -53,8 +55,12 @@ public final class LaunchViewController: UITableViewController, LaunchView, Laun
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = LaunchCell()
-        cell.configure(launch: launches[indexPath.row])
-        
+        let model = launches[indexPath.row]
+        cell.configure(launch: model)
+        if let url = model.imageURL {
+            let request = URLRequest(url: url)
+            imageLoader?.load(from: request) { _ in } 
+        }
         return cell
     }
 }

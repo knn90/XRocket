@@ -13,4 +13,5 @@ public struct PresentableLaunch: Equatable {
     public let flightNumber: String
     public let status: String
     public let launchDate: String
+    public let imageURL: URL?
 }

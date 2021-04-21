@@ -108,11 +108,30 @@ class LaunchViewControllerTests: XCTestCase {
         sut.simulateUserInitiatedReload()
         XCTAssertEqual(sut.errorMessage, nil)
     }
+    
+    func test_launchCell_loadsImageWhenVisible() {
+        let url0 = URL(string: "http:url-0.com")!
+        let url1 = URL(string: "http:url-1.com")!
+        let launch0 = LaunchFactory.any(urls: [url0])
+        let launch1 = LaunchFactory.any(urls: [url1])
+        
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0, launch1]), at: 0)
+        XCTAssertEqual(loader.requestedImageURLs, [])
+        
+        sut.simulateLaunchCellVisible(at: 0)
+        XCTAssertEqual(loader.requestedImageURLs, [url0])
+        
+        sut.simulateLaunchCellVisible(at: 1)
+        XCTAssertEqual(loader.requestedImageURLs, [url0, url1])
+    }
 
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
         let loader = LoaderSpy()        
-        let sut = LaunchUIComposer.composeWith(loader: loader)
+        let sut = LaunchUIComposer.composeWith(loader: loader, imageLoader: loader)
         
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(loader, file: file, line: line)
@@ -120,9 +139,11 @@ class LaunchViewControllerTests: XCTestCase {
         return (sut, loader)
     }
     
-    private class LoaderSpy: LaunchLoader {
+    private class LoaderSpy: LaunchLoader, ImageDataLoader {
         private(set) var loadLaunchCallCount = 0
-        private(set) var completions = [(Result) -> Void]()
+        private(set) var completions = [(LaunchLoader.Result) -> Void]()
+        private(set) var requestedImageURLs = [URL]()
+        
         func load(completion: @escaping (Result<LaunchPagination, Error>) -> Void) {
             loadLaunchCallCount += 1
             completions.append(completion)
@@ -134,6 +155,16 @@ class LaunchViewControllerTests: XCTestCase {
         
         func completeLoading(with error: Error, at index: Int) {
             completions[index](.failure(error))
+        }
+        
+        // Image Loader
+        private struct TaskSpy: ImageDataLoaderTask {
+            func cancel() {
+            }
+        }
+        func load(from request: URLRequest, completion: @escaping (ImageDataLoader.Result) -> Void) -> ImageDataLoaderTask {
+            requestedImageURLs.append(request.url!)
+            return TaskSpy()
         }
     }
     
@@ -187,8 +218,14 @@ extension LaunchViewController {
         refreshControl?.simulatePullToRefresh()
     }
     
+    func simulateLaunchCellVisible(at row: Int) {
+        _ = getCell(at: row)
+    }
+    
     func getCell(at row: Int) -> UITableViewCell? {
-        return tableView.cellForRow(at: IndexPath(row: row, section: launchSection))
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: launchSection)
+        return ds?.tableView(tableView, cellForRowAt: index)
     }
     
     var isShowingLoadingIndicator: Bool {

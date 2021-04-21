@@ -17,7 +17,8 @@ public struct LaunchViewModel {
                 name: $0.name,
                 flightNumber: "\($0.flightNumber)",
                 status: LaunchString.localize(for: statusKey),
-                launchDate: LaunchDateFormatter.format(from: $0.dateUTC))
+                launchDate: LaunchDateFormatter.format(from: $0.dateUTC),
+                imageURL: $0.links.flickr.original.first)
         }
     }
     public init(launches: [Launch]) {

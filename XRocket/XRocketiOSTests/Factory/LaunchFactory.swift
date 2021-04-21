@@ -9,8 +9,14 @@ import Foundation
 import XRocket
 
 class LaunchFactory {
-    static func any() -> Launch {
-        return Launch(id: "any Id", name: "any name", flightNumber: 3, success: true, dateUTC: Date(timeIntervalSince1970: 1617813240), links: Link(flickr: Flickr(original: [anyURL()])))
+    static func any(id: String = "any Id", name: String = "any name", flightNumber: Int = 1, success: Bool = true, dateUTC: Date = Date(timeIntervalSince1970: 1617813240), urls: [URL] = []) -> Launch {
+        return Launch(
+            id: id,
+            name: name,
+            flightNumber: flightNumber,
+            success: success,
+            dateUTC: dateUTC,
+            links: Link(flickr: Flickr(original: urls)))
     }
     
     static func emptyName() -> Launch {

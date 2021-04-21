@@ -10,10 +10,11 @@ import XRocket
 
 public final class LaunchUIComposer {
     
-    public static func composeWith(loader: LaunchLoader) -> LaunchViewController {
+    public static func composeWith(loader: LaunchLoader, imageLoader: ImageDataLoader) -> LaunchViewController {
         let presentationAdapter = LaunchPresentationAdapter(loader: loader)
         
         let launchController = makeLaunchViewController(delegate: presentationAdapter)
+        launchController.imageLoader = imageLoader
         
         let presenter = LaunchPresenter(
             loadingView: WeakRefVirtualProxy(launchController),
