@@ -51,12 +51,24 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="B79-i0-4QP">
                                                     <rect key="frame" x="5" y="5" width="384" height="119"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KI3-XU-8pR">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Je-gv-bgu">
                                                             <rect key="frame" x="0.0" y="0.0" width="119" height="119"/>
+                                                            <subviews>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KI3-XU-8pR">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="119" height="119"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" secondItem="KI3-XU-8pR" secondAttribute="height" id="cFr-6G-Ffd"/>
+                                                                    </constraints>
+                                                                </imageView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" secondItem="KI3-XU-8pR" secondAttribute="height" id="cFr-6G-Ffd"/>
+                                                                <constraint firstItem="KI3-XU-8pR" firstAttribute="top" secondItem="1Je-gv-bgu" secondAttribute="top" id="38l-86-Thi"/>
+                                                                <constraint firstAttribute="trailing" secondItem="KI3-XU-8pR" secondAttribute="trailing" id="KJO-zw-BkX"/>
+                                                                <constraint firstAttribute="bottom" secondItem="KI3-XU-8pR" secondAttribute="bottom" id="OJq-v8-WZ3"/>
+                                                                <constraint firstItem="KI3-XU-8pR" firstAttribute="leading" secondItem="1Je-gv-bgu" secondAttribute="leading" id="bfw-1A-mRj"/>
                                                             </constraints>
-                                                        </imageView>
+                                                        </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5ei-7Z-krO">
                                                             <rect key="frame" x="124" y="0.0" width="260" height="119"/>
                                                             <subviews>
@@ -117,6 +129,14 @@
                                         <constraint firstAttribute="bottom" secondItem="Cqn-vo-ExS" secondAttribute="bottom" constant="10" id="eT4-tg-Cyr"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="dateLabel" destination="lr4-RU-m7y" id="uxf-ZB-j05"/>
+                                    <outlet property="flightNumberLabel" destination="V8N-H7-phL" id="dbA-gW-00B"/>
+                                    <outlet property="imageContainer" destination="1Je-gv-bgu" id="hrz-Oq-SJu"/>
+                                    <outlet property="rocketImageView" destination="KI3-XU-8pR" id="H7u-hV-P6H"/>
+                                    <outlet property="rocketNameLabel" destination="ldt-Ub-hCS" id="pYj-0f-yN9"/>
+                                    <outlet property="statusLabel" destination="yMg-eE-RRi" id="aQv-Fa-N04"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

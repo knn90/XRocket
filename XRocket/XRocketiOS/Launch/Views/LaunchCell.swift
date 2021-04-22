@@ -9,12 +9,12 @@ import UIKit
 import XRocket
 
 public final class LaunchCell: UITableViewCell {
-    public let flightNumberLabel = UILabel()
-    public let rocketNameLabel = UILabel()
-    public let dateLabel = UILabel()
-    public let successLabel = UILabel()
-    public let imageContainer = UIView()
-    public let rocketImageView = UIImageView()
+    @IBOutlet private(set) public var flightNumberLabel: UILabel!
+    @IBOutlet private(set) public var rocketNameLabel: UILabel!
+    @IBOutlet private(set) public var dateLabel: UILabel!
+    @IBOutlet private(set) public var statusLabel: UILabel!
+    @IBOutlet private(set) public var imageContainer: UIView!
+    @IBOutlet private(set) public var rocketImageView: UIImageView!
 }
 
 private class LaunchDateFormatter {

@@ -329,7 +329,7 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(cell.flightNumberLabel.text, launch.flightNumber)
         XCTAssertEqual(cell.rocketNameLabel.text, launch.name)
         XCTAssertEqual(cell.dateLabel.text, launch.launchDate)
-        XCTAssertEqual(cell.successLabel.text, launch.status)
+        XCTAssertEqual(cell.statusLabel.text, launch.status)
     }
 }
 

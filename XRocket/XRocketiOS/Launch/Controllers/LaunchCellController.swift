@@ -25,7 +25,7 @@ final class LaunchCellController: LaunchCellView {
         cell?.flightNumberLabel.text = viewModel.flightNumber
         cell?.rocketNameLabel.text = viewModel.name
         cell?.dateLabel.text = viewModel.launchDate
-        cell?.successLabel.text = viewModel.status
+        cell?.statusLabel.text = viewModel.status
         cell?.rocketImageView.image = nil
         cell?.imageContainer.isShimmering = viewModel.isLoading
         cell?.rocketImageView.image = viewModel.image
