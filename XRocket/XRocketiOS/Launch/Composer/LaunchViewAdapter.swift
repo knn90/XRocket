@@ -19,7 +19,11 @@ class LaunchViewAdapter: LaunchView {
     
     func display(_ viewModel: LaunchViewModel) {
         launchViewController?.display(viewModel.presentableLaunches.map { model in
-            LaunchCellController(model: model, imageLoader: imageLoader)
+            let adapter = LaunchImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<LaunchCellController>, UIImage>(model: model, imageLoader: imageLoader)
+            let view = LaunchCellController(delegate: adapter)
+            adapter.presenter = LaunchCellPresenter(view: WeakRefVirtualProxy(view), imageTransformer: UIImage.init)
+            
+            return view
         })
     }
 }

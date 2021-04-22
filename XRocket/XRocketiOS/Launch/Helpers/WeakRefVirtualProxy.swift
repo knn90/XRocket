@@ -5,7 +5,7 @@
 //  Created by Khoi Nguyen on 20/4/21.
 //
 
-import Foundation
+import UIKit
 import XRocket
 
 final class WeakRefVirtualProxy<T: AnyObject> {
@@ -31,5 +31,11 @@ extension WeakRefVirtualProxy: LaunchErrorView where T: LaunchErrorView {
 extension WeakRefVirtualProxy: LaunchLoadingView where T: LaunchLoadingView {
     func display(_ viewModel: LaunchLoadingViewModel) {
         object?.display(viewModel)
+    }
+}
+
+extension WeakRefVirtualProxy: LaunchCellView where T: LaunchCellView, T.Image == UIImage {
+    func display(viewModel: LaunchCellViewModel<UIImage>) {
+        object?.display(viewModel: viewModel)
     }
 }

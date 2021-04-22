@@ -15,14 +15,6 @@ public final class LaunchCell: UITableViewCell {
     public let successLabel = UILabel()
     public let imageContainer = UIView()
     public let rocketImageView = UIImageView()
-    
-    func configure(launch: PresentableLaunch) {
-        flightNumberLabel.text = launch.flightNumber
-        rocketNameLabel.text = launch.name
-        dateLabel.text = launch.launchDate
-        successLabel.text = launch.status
-        
-    }
 }
 
 private class LaunchDateFormatter {

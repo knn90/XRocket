@@ -8,40 +8,46 @@
 import UIKit
 import XRocket
 
-final class LaunchCellController {
-    private var task: ImageDataLoaderTask?
-    private let model: PresentableLaunch
-    private let imageLoader: ImageDataLoader
+public protocol LaunchCellControllerDelegate {
+    func didRequestImage()
+    func didCancelImageRequest()
+}
+
+final class LaunchCellController: LaunchCellView {
+    private var cell: LaunchCell?
+    private let delegate: LaunchCellControllerDelegate
     
-    init(model: PresentableLaunch, imageLoader: ImageDataLoader) {
-        self.model = model
-        self.imageLoader = imageLoader
+    init(delegate: LaunchCellControllerDelegate) {
+        self.delegate = delegate
     }
     
-    func cell() -> UITableViewCell {
-        let cell = LaunchCell()
-        cell.configure(launch: model)
-        cell.rocketImageView.image = nil
-        if let url = model.imageURL {
-            cell.imageContainer.isShimmering = true
-            let request = URLRequest(url: url)
-            task = imageLoader.load(from: request) { [weak cell] result in
-                let data = try? result.get()
-                cell?.rocketImageView.image = data.map(UIImage.init) ?? nil
-                cell?.imageContainer.isShimmering = false
-            }
-        }
+    func display(viewModel: LaunchCellViewModel<UIImage>) {
+        cell?.flightNumberLabel.text = viewModel.flightNumber
+        cell?.rocketNameLabel.text = viewModel.name
+        cell?.dateLabel.text = viewModel.launchDate
+        cell?.successLabel.text = viewModel.status
+        cell?.rocketImageView.image = nil
+        cell?.imageContainer.isShimmering = viewModel.isLoading
+        cell?.rocketImageView.image = viewModel.image
+    }
+    
+    func view(in tableView: UITableView) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LaunchCell") as! LaunchCell
+        self.cell = cell
+        delegate.didRequestImage()
         return cell
     }
     
     func preload() {
-        if let url = model.imageURL {
-            let request = URLRequest(url: url)
-            task = imageLoader.load(from: request) { _ in }
-        }
+        delegate.didRequestImage()
     }
     
     func cancelLoad() {
-        task?.cancel()
+        releaseCellForReuse()
+        delegate.didCancelImageRequest()
+    }
+    
+    private func releaseCellForReuse() {
+        cell = nil
     }
 }

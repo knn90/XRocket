@@ -236,6 +236,19 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.cancelledImageURLs, [url0, url1])
     }
     
+    func test_launchCell_doesNotRenderLoadedImageWhenNotVisibleAnyMore() {
+        let url0 = URL(string: "http:url-0.com")!
+        let launch0 = LaunchFactory.any(urls: [url0])
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0]), at: 0)
+        
+        let cell = sut.simulateLaunchCellNotVisible(at: 0)
+        loader.completeImageLoading(with: UIImage.make(withColor: .red).pngData()!, at: 0)
+        
+        XCTAssertNil(cell?.renderedImage)
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
         let loader = LoaderSpy()        
@@ -359,11 +372,14 @@ extension LaunchViewController {
         return getCell(at: row) as? LaunchCell
     }
     
-    func simulateLaunchCellNotVisible(at row: Int) {
+    @discardableResult
+    func simulateLaunchCellNotVisible(at row: Int) -> LaunchCell? {
         let cell = simulateLaunchCellVisible(at: row)!
         let delegate = tableView.delegate
         let index = IndexPath(row: row, section: launchSection)
         delegate?.tableView?(tableView, didEndDisplaying: cell, forRowAt: index)
+        
+        return cell
     }
     
     func simulateLauncCellIsNearVisible(at row: Int) {
