@@ -46,7 +46,7 @@ public class RemoteLaunchLoader: LaunchLoader {
         if response.statusCode == success {
             do {
                 let jsonDecoder = JSONDecoder()
-                jsonDecoder.dateDecodingStrategy = .iso8601
+                jsonDecoder.dateDecodingStrategy = .secondsSince1970
                 let launchPagination = try jsonDecoder.decode(LaunchPagination.self, from: data)
                 return .success(launchPagination)
             } catch {

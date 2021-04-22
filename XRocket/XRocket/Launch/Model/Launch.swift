@@ -12,7 +12,7 @@ public struct Launch: Codable, Equatable {
     public let name: String
     public let flightNumber: Int
     public let success: Bool
-    public let dateUTC: Date
+    public let dateUnix: Date
     public let links: Link
     
     enum CodingKeys: String, CodingKey {
@@ -20,7 +20,7 @@ public struct Launch: Codable, Equatable {
         case name = "name"
         case flightNumber = "flight_number"
         case success = "success"
-        case dateUTC = "date_utc"
+        case dateUnix = "date_unix"
         case links = "links"
     }
     
@@ -29,18 +29,20 @@ public struct Launch: Codable, Equatable {
         self.name = name
         self.flightNumber = flightNumber
         self.success = success
-        self.dateUTC = dateUTC
+        self.dateUnix = dateUTC
         self.links = links
     }
 }
 
 
 public struct Link: Codable, Equatable {
-    public init(flickr: Flickr) {
-        self.flickr = flickr
-    }
-    
     public let flickr: Flickr
+    public let patch: Patch
+    
+    public init(flickr: Flickr, patch: Patch) {
+        self.flickr = flickr
+        self.patch = patch
+    }
 }
 
 public struct Flickr: Codable, Equatable {
@@ -49,4 +51,9 @@ public struct Flickr: Codable, Equatable {
     }
     
     public let original: [URL]
+}
+
+public struct Patch: Codable, Equatable {
+    public let small: URL
+    public let large: URL
 }
