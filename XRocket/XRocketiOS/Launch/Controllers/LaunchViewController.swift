@@ -24,7 +24,6 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        title = LaunchPresenter.title
         tableView.prefetchDataSource = self
         loadLaunches()
     }

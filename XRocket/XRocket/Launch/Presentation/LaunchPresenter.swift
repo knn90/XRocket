@@ -27,6 +27,7 @@ public final class LaunchPresenter {
     private let loadingView: LaunchLoadingView
     private let errorView: LaunchErrorView
     private let launchView: LaunchView
+    
     private var loadErrorMessage: String {
         LaunchString.localize(for: "launch_view_connection_error")
     }

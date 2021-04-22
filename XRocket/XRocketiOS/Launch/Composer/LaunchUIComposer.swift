@@ -30,6 +30,7 @@ public final class LaunchUIComposer {
     private static func makeLaunchViewController(delegate: LaunchViewControllerDelegate) -> LaunchViewController {
         let storyboard = UIStoryboard(name: "Launch", bundle: Bundle(for: LaunchViewController.self))
         let viewController = storyboard.instantiateInitialViewController() as! LaunchViewController
+        viewController.title = LaunchPresenter.title
         viewController.delegate = delegate
         
         return viewController
