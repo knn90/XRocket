@@ -64,7 +64,7 @@ class LaunchCellPresenterTests: XCTestCase {
         XCTAssertEqual(message?.image, transformedData)
     }
     
-    func test_didFinishLoadingImageDataWithError_displaysRetry() {
+    func test_didFinishLoadingImageDataWithError_displaysNoImage() {
         let launch = makeLaunch()
         let (sut, view) = makeSUT()
         

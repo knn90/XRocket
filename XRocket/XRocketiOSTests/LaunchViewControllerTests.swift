@@ -128,6 +128,19 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.requestedImageURLs, [url0, url1])
     }
     
+    func test_launchCellWithoutURL_doesNotLoadImage() {
+        let launch0 = LaunchFactory.any()
+        let launch1 = LaunchFactory.any()
+        
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0, launch1]), at: 0)
+        sut.simulateLaunchCellVisible(at: 0)
+        sut.simulateLaunchCellVisible(at: 1)
+        XCTAssertEqual(loader.requestedImageURLs, [])
+    }
+    
     func test_launchCell_cancelsImageLoadingWhenNotVisibleAnymore() {
         let url0 = URL(string: "http:url-0.com")!
         let url1 = URL(string: "http:url-1.com")!
@@ -198,6 +211,21 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(cell0?.renderedImage, imageData0)
         XCTAssertEqual(cell1?.renderedImage, imageData1)
         
+    }
+    
+    func test_launchCell_stopsLoadingIndicatorOnLoadImageError() {
+        let url0 = URL(string: "http:url-0.com")!
+        let launch0 = LaunchFactory.any(urls: [url0])
+        
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0]), at: 0)
+        
+        let cell0 = sut.simulateLaunchCellVisible(at: 0)
+        loader.completeImageLoading(with: anyNSError(), at: 0)
+        
+        XCTAssertEqual(cell0?.isShowingImageLoadingIndicator, false)
+        XCTAssertEqual(cell0?.renderedImage, nil)
     }
 
     func test_feedImageView_preloadsImageWhenNearVisible() {
