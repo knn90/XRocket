@@ -12,7 +12,7 @@ import XRocketiOS
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    private var navigationController: UINavigationController?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
@@ -36,11 +36,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let launchLoader = RemoteLaunchLoader(client: client, request: launchRequest)
         let imageLoader = RemoteImageDataLoader(client: client)
-        let navigationController =  UINavigationController(
-            rootViewController: LaunchUIComposer.composeWith(loader: launchLoader, imageLoader: imageLoader))
+        navigationController =  UINavigationController(
+            rootViewController: LaunchUIComposer.composeWith(loader: launchLoader, imageLoader: imageLoader, didSelectLaunch: didSelectLaunch))
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+    }
+    
+    func didSelectLaunch(_ presentableLaunch: PresentableLaunch) {
     }
 }
 
