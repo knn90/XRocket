@@ -10,6 +10,7 @@ import XRocket
 
 
 class LaunchImageCellPresenterTests: XCTestCase {
+    
     func test_init_doesNotSendMessageToView() {
         let (_, view) = makeSUT()
         
@@ -85,4 +86,5 @@ class LaunchImageCellPresenterTests: XCTestCase {
             messages.append(viewModel)
         }
     }
+    
 }
