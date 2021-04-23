@@ -16,25 +16,6 @@ class URLSessionHTTPClientTests: XCTestCase {
         URLProtocolStub.removeStub()
     }
     
-    func test_load_performsRequestFromURL() {
-        let url = URL(string: "http://a-specific-url.com")!
-        let request = anyURLRequest(url: url, httpMethod: "POST")
-        
-        let exp = expectation(description: "Wait for request")
-
-        URLProtocolStub.observeRequests { request in
-            XCTAssertEqual(request.url, url)
-            XCTAssertEqual(request.httpMethod, "POST")
-            
-            exp.fulfill()
-        }
-        
-        makeSUT().load(from: request) { _ in }
-        
-        wait(for: [exp], timeout: 1.0)
-        
-    }
-    
     func test_cancelLoad_cancelsClientURLRequest() {
         let sut = makeSUT()
         let exp = expectation(description: "Wait for load completion")
