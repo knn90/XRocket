@@ -52,10 +52,10 @@ class LaunchViewControllerTests: XCTestCase {
     
     func test_loadCompletion_renderSuccessfullyLoadedLaunches() {
         let (sut, loader) = makeSUT()
-        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: Link(flickr: Flickr(original: [anyURL()])))
-        let launch1 = Launch(id: "", name: "name 2", flightNumber: 23, success: false, dateUTC: LaunchDateFactory.date2().date, links: Link(flickr: Flickr(original: [anyURL()])))
-        let launch2 = Launch(id: "", name: "name 3", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date3().date, links: Link(flickr: Flickr(original: [anyURL()])))
-        let launch3 = Launch(id: "", name: "name 4", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date4().date, links: Link(flickr: Flickr(original: [anyURL()])))
+        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: anyLink())
+        let launch1 = Launch(id: "", name: "name 2", flightNumber: 23, success: false, dateUTC: LaunchDateFactory.date2().date, links: anyLink())
+        let launch2 = Launch(id: "", name: "name 3", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date3().date, links: anyLink())
+        let launch3 = Launch(id: "", name: "name 4", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date4().date, links: anyLink())
         let launches = [launch0, launch1, launch2, launch3]
         
         sut.loadViewIfNeeded()
@@ -67,7 +67,7 @@ class LaunchViewControllerTests: XCTestCase {
     
     func test_loadCompletion_renderSuccessfullyEmptyAfterNonEmptyLaunches() {
         let (sut, loader) = makeSUT()
-        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: Link(flickr: Flickr(original: [anyURL()])))
+        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: anyLink())
         let launches = [launch0]
         
         sut.loadViewIfNeeded()
@@ -83,7 +83,7 @@ class LaunchViewControllerTests: XCTestCase {
     
     func test_loadCompletion_doesNotAlterCurrentRenderingStateOnError() {
         let (sut, loader) = makeSUT()
-        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: Link(flickr: Flickr(original: [anyURL()])))
+        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: anyLink())
         let launches = [launch0]
         let presentableLaunches = LaunchViewModel(launches: launches).presentableLaunches
         sut.loadViewIfNeeded()
@@ -112,8 +112,8 @@ class LaunchViewControllerTests: XCTestCase {
     func test_launchCell_loadsImageWhenVisible() {
         let url0 = URL(string: "http:url-0.com")!
         let url1 = URL(string: "http:url-1.com")!
-        let launch0 = LaunchFactory.any(urls: [url0])
-        let launch1 = LaunchFactory.any(urls: [url1])
+        let launch0 = LaunchFactory.any(smallImageURL: url0)
+        let launch1 = LaunchFactory.any(smallImageURL: url1)
         
         let (sut, loader) = makeSUT()
         
@@ -128,24 +128,11 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.requestedImageURLs, [url0, url1])
     }
     
-    func test_launchCellWithoutURL_doesNotLoadImage() {
-        let launch0 = LaunchFactory.any()
-        let launch1 = LaunchFactory.any()
-        
-        let (sut, loader) = makeSUT()
-        
-        sut.loadViewIfNeeded()
-        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0, launch1]), at: 0)
-        sut.simulateLaunchCellVisible(at: 0)
-        sut.simulateLaunchCellVisible(at: 1)
-        XCTAssertEqual(loader.requestedImageURLs, [])
-    }
-    
     func test_launchCell_cancelsImageLoadingWhenNotVisibleAnymore() {
         let url0 = URL(string: "http:url-0.com")!
         let url1 = URL(string: "http:url-1.com")!
-        let launch0 = LaunchFactory.any(urls: [url0])
-        let launch1 = LaunchFactory.any(urls: [url1])
+        let launch0 = LaunchFactory.any(smallImageURL: url0)
+        let launch1 = LaunchFactory.any(smallImageURL: url1)
         
         let (sut, loader) = makeSUT()
         
@@ -231,8 +218,8 @@ class LaunchViewControllerTests: XCTestCase {
     func test_feedImageView_preloadsImageWhenNearVisible() {
         let url0 = URL(string: "http:url-0.com")!
         let url1 = URL(string: "http:url-1.com")!
-        let launch0 = LaunchFactory.any(urls: [url0])
-        let launch1 = LaunchFactory.any(urls: [url1])
+        let launch0 = LaunchFactory.any(smallImageURL: url0)
+        let launch1 = LaunchFactory.any(smallImageURL: url1)
         
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
@@ -249,8 +236,8 @@ class LaunchViewControllerTests: XCTestCase {
     func test_feedImageView_cancelsImageLoadingWhenNotNearVisibleAnymore() {
         let url0 = URL(string: "http:url-0.com")!
         let url1 = URL(string: "http:url-1.com")!
-        let launch0 = LaunchFactory.any(urls: [url0])
-        let launch1 = LaunchFactory.any(urls: [url1])
+        let launch0 = LaunchFactory.any(smallImageURL: url0)
+        let launch1 = LaunchFactory.any(smallImageURL: url1)
         
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
@@ -305,10 +292,28 @@ class LaunchViewControllerTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_selectCell_notifiesWithSelectedLaunch() {
+        let url0 = URL(string: "http:url-0.com")!
+        let url1 = URL(string: "http:url-1.com")!
+        let launch0 = LaunchFactory.any(urls: [url0])
+        let launch1 = LaunchFactory.any(urls: [url1])
+        let viewModel = LaunchViewModel(launches: [launch0, launch1])
+        var selectedLaunches = [PresentableLaunch]()
+        let (sut, loader) = makeSUT(didSelectLaunch: { selectedLaunches.append($0) })
+        sut.loadViewIfNeeded()
+        loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0, launch1]), at: 0)
+        
+        sut.simulateUserSelectedLaunch(at: 0)
+        XCTAssertEqual(selectedLaunches, [viewModel.presentableLaunches[0]])
+        
+        sut.simulateUserSelectedLaunch(at: 1)
+        XCTAssertEqual(selectedLaunches, viewModel.presentableLaunches)
+    }
+    
     // MARK: - Helpers
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
+    private func makeSUT(didSelectLaunch: @escaping (PresentableLaunch) -> Void = { _ in }, file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
         let loader = LoaderSpy()        
-        let sut = LaunchUIComposer.composeWith(loader: loader, imageLoader: loader)
+        let sut = LaunchUIComposer.composeWith(loader: loader, imageLoader: loader, didSelectLaunch: didSelectLaunch)
         
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(loader, file: file, line: line)
@@ -387,6 +392,14 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(cell.dateLabel.text, launch.launchDate)
         XCTAssertEqual(cell.statusLabel.text, launch.status)
     }
+    
+    private func anyLink() -> Link {
+        Link(flickr: Flickr(original: [anyURL()]), patch: anyPatch())
+    }
+    
+    private func anyPatch() -> Patch {
+        Patch(small: anyURL(), large: anyURL())
+    }
 }
 
 extension UIRefreshControl {
@@ -421,6 +434,12 @@ private extension UIImage {
 extension LaunchViewController {
     func simulateUserInitiatedReload() {
         refreshControl?.simulatePullToRefresh()
+    }
+    
+    func simulateUserSelectedLaunch(at row: Int) {
+        let delegate = tableView.delegate
+        let index = IndexPath(row: row, section: launchSection)
+        delegate?.tableView?(tableView, didSelectRowAt: index)
     }
     
     @discardableResult

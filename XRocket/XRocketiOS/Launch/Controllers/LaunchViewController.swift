@@ -56,6 +56,10 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
         return cellController(forRowAt: indexPath).view(in: tableView)
     }
     
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        return cellController(forRowAt: indexPath).selectCell()
+    }
+    
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cancelCellControllerLoad(forRowAt: indexPath)
     }

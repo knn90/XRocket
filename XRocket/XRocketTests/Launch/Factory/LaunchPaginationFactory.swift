@@ -47,7 +47,7 @@ class LaunchPaginationFactory {
 extension LaunchPagination {
     func toJSONData() -> Data {
         let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
+        encoder.dateEncodingStrategy = .secondsSince1970
         return try! encoder.encode(self)
     }
 }

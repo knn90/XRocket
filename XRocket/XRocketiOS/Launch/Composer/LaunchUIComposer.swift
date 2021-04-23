@@ -11,7 +11,7 @@ import XRocket
 public final class LaunchUIComposer {
     private init() {}
     
-    public static func composeWith(loader: LaunchLoader, imageLoader: ImageDataLoader) -> LaunchViewController {
+    public static func composeWith(loader: LaunchLoader, imageLoader: ImageDataLoader, didSelectLaunch: @escaping (PresentableLaunch) -> Void) -> LaunchViewController {
         let presentationAdapter = LaunchPresentationAdapter(loader: MainQueueDispatchDecorator(decoratee: loader))
         
         let launchController = makeLaunchViewController(delegate: presentationAdapter)
@@ -21,7 +21,8 @@ public final class LaunchUIComposer {
             errorView: WeakRefVirtualProxy(launchController),
             launchView: LaunchViewAdapter(
                 launchViewController: launchController,
-                imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)))
+                imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader),
+                didSelectLaunch: didSelectLaunch))
         presentationAdapter.presenter = presenter
         
         return launchController

@@ -295,6 +295,20 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		6A98AE362631C23B0063B87C /* LaunchDetails */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = LaunchDetails;
+			sourceTree = "<group>";
+		};
+		6A98AE372631C4590063B87C /* LaunchDetails */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = LaunchDetails;
+			sourceTree = "<group>";
+		};
 		6AAB50BF2629312E0089DC3C = {
 			isa = PBXGroup;
 			children = (
@@ -321,11 +335,12 @@
 		6AAB50CB2629312E0089DC3C /* XRocket */ = {
 			isa = PBXGroup;
 			children = (
-				6AB74969262BF9AC00C8F56A /* Shared */,
+				6AAB50CD2629312E0089DC3C /* Info.plist */,
 				6A54AF9A262ACD670007D021 /* Infrastructure */,
 				6AAB50E526293D900089DC3C /* Launch */,
+				6A98AE362631C23B0063B87C /* LaunchDetails */,
+				6AB74969262BF9AC00C8F56A /* Shared */,
 				6AAB50CC2629312E0089DC3C /* XRocket.h */,
-				6AAB50CD2629312E0089DC3C /* Info.plist */,
 			);
 			path = XRocket;
 			sourceTree = "<group>";
@@ -337,6 +352,7 @@
 				6AAB50D92629312E0089DC3C /* Info.plist */,
 				6A54AF93262A8E9E0007D021 /* Infrastructure */,
 				6AAB50E726293DC40089DC3C /* Launch */,
+				6A98AE372631C4590063B87C /* LaunchDetails */,
 				6A54AF9F262AE1A60007D021 /* Shared */,
 			);
 			path = XRocketTests;

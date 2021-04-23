@@ -16,9 +16,11 @@ public protocol LaunchCellControllerDelegate {
 final class LaunchCellController: LaunchCellView {
     private var cell: LaunchCell?
     private let delegate: LaunchCellControllerDelegate
+    private let didSelectCell: () -> Void
     
-    init(delegate: LaunchCellControllerDelegate) {
+    init(delegate: LaunchCellControllerDelegate, didSelectCell: @escaping () -> Void) {
         self.delegate = delegate
+        self.didSelectCell = didSelectCell
     }
     
     func display(viewModel: LaunchCellViewModel<UIImage>) {
@@ -36,6 +38,10 @@ final class LaunchCellController: LaunchCellView {
         self.cell = cell
         delegate.didRequestImage()
         return cell
+    }
+    
+    func selectCell() {
+        didSelectCell()
     }
     
     func preload() {

@@ -54,6 +54,11 @@ public struct Flickr: Codable, Equatable {
 }
 
 public struct Patch: Codable, Equatable {
+    public init(small: URL, large: URL) {
+        self.small = small
+        self.large = large
+    }
+    
     public let small: URL
     public let large: URL
 }
