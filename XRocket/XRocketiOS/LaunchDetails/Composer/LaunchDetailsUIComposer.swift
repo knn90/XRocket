@@ -70,6 +70,7 @@ class LaunchDetailsImageCellPresentationAdapter<View: LaunchImageView, Image>: L
     private let url: URL
     private let imageLoader: ImageDataLoader
     var presenter: LaunchImageCellPresenter<View, Image>?
+    var task: ImageDataLoaderTask?
     
     init(url: URL, imageLoader: ImageDataLoader) {
         self.url = url
@@ -77,7 +78,7 @@ class LaunchDetailsImageCellPresentationAdapter<View: LaunchImageView, Image>: L
     }
     func didRequestImage() {
         presenter?.didStartLoadingImage()
-        imageLoader.load(from: URLRequest(url: url)) { [weak self] result in
+        task = imageLoader.load(from: URLRequest(url: url)) { [weak self] result in
             switch result {
             case let .success(data):
                 self?.presenter?.didFinishLoadingImage(with: data)
@@ -86,5 +87,8 @@ class LaunchDetailsImageCellPresentationAdapter<View: LaunchImageView, Image>: L
             }
         }
     }
-       
+    
+    func didCancelImageRequest() {
+        task?.cancel()
+    }
 }

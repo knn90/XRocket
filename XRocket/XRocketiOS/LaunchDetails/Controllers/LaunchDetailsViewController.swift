@@ -44,11 +44,18 @@ public final class LaunchDetailsViewController: UIViewController, UICollectionVi
             cellControllers[indexPath.item].preload()
         }
     }
+    
+    public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach { indexPath in
+            cellControllers[indexPath.item].cancelLoad()
+        }
+    }
 }
 
 
 public protocol LaunchDetailsImageCellControllerDelegate {
     func didRequestImage()
+    func didCancelImageRequest()
 }
 
 public final class LaunchDetailsImageCellController: LaunchImageView {
@@ -78,6 +85,10 @@ public final class LaunchDetailsImageCellController: LaunchImageView {
     
     func preload() {
         delegate.didRequestImage()
+    }
+    
+    func cancelLoad() {
+        delegate.didCancelImageRequest()
     }
 }
 

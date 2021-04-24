@@ -131,12 +131,26 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         
         XCTAssertEqual(loader.requestedImageURLs, [])
         
-        sut.siumulateCellNearVisible(at: 0)
+        sut.simulateCellNearVisible(at: 0)
         XCTAssertEqual(loader.requestedImageURLs, [url0])
         
-        sut.siumulateCellNearVisible(at: 1)
+        sut.simulateCellNearVisible(at: 1)
         XCTAssertEqual(loader.requestedImageURLs, [url0, url1])
     }
+    
+    func test_imageCell_cancelImageRequestWhenCellIsNotNearVisibleAnymore() {
+        let url0 = URL(string: "http://url-0.com")!
+        let url1 = URL(string: "http://url-1.com")!
+        let (sut, loader) = makeSUT(urls: [url0, url1])
+        sut.loadViewIfNeeded()
+        
+        sut.simulateLauncCellIsNotNearVisible(at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [url0])
+        
+        sut.simulateLauncCellIsNotNearVisible(at: 1)
+        XCTAssertEqual(loader.cancelledImageURLs, [url0, url1])
+    }
+    
     
     // MARK: - Helpers
     private func makeSUT(urls: [URL] = [], file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsViewController, LoaderSpy) {
@@ -169,10 +183,18 @@ extension LaunchDetailsViewController {
         return getCell(at: index) as! LaunchDetailsImageCell
     }
     
-    func siumulateCellNearVisible(at index: Int) {
+    func simulateCellNearVisible(at index: Int) {
         let ds = collectionView.prefetchDataSource
         let indexPath = IndexPath(item: index, section: launchImageSection)
         ds?.collectionView(collectionView, prefetchItemsAt: [indexPath])
+    }
+    
+    func simulateLauncCellIsNotNearVisible(at index: Int) {
+        simulateCellNearVisible(at: index)
+        
+        let ds = collectionView.prefetchDataSource
+        let indexPath = IndexPath(row: index, section: launchImageSection)
+        ds?.collectionView?(collectionView, cancelPrefetchingForItemsAt: [indexPath])
     }
     
     private func getCell(at item: Int) -> UICollectionViewCell? {
