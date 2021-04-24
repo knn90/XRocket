@@ -7,9 +7,6 @@
 
 import Foundation
 
-public struct LaunchDetailsViewModel: Equatable {
-    public let urls: [URL]
-}
 
 public protocol LaunchDetailsView {
     func display(_ viewModel: LaunchDetailsViewModel)
