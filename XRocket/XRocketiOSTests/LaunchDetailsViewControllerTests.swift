@@ -17,11 +17,9 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         let url1 = URL(string: "http://url-1.com")!
         let url2 = URL(string: "http://url-2.com")!
         let url3 = URL(string: "http://url-3.com")!
-        let urls = [url0, url1, url2, url3]
-        let (sut, _) = makeSUT(urls: urls)
+        let (sut, _) = makeSUT(urls: [url0, url1, url2, url3])
         
         sut.loadViewIfNeeded()
-        
         
         XCTAssertEqual(sut.numberOfRenderedCells, 4)
     }
@@ -30,11 +28,9 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
         let url2 = URL(string: "http://url-2.com")!
-        let urls = [url0, url1, url2]
-        let (sut, loader) = makeSUT(urls: urls)
+        let (sut, loader) = makeSUT(urls: [url0, url1, url2])
         
         sut.loadViewIfNeeded()
-        
         
         let cell0 = sut.simulateCellVisible(at: 0)
         XCTAssertEqual(loader.requestedImageURLs, [url0])
@@ -48,8 +44,7 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     func test_loadImage_showsLoadingIndicatorWhileLoadingImage() {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
-        let urls = [url0, url1]
-        let (sut, loader) = makeSUT(urls: urls)
+        let (sut, loader) = makeSUT(urls: [url0, url1])
         sut.loadViewIfNeeded()
         
         let cell0 = sut.simulateCellVisible(at: 0)
@@ -69,8 +64,7 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     func test_loadImage_rendersLoadedImage() {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
-        let urls = [url0, url1]
-        let (sut, loader) = makeSUT(urls: urls)
+        let (sut, loader) = makeSUT(urls: [url0, url1])
         sut.loadViewIfNeeded()
         
         let cell0 = sut.simulateCellVisible(at: 0)
@@ -87,6 +81,27 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         loader.completeImageLoading(with: imageData1, at: 1)
         XCTAssertEqual(cell0.renderedImage, imageData0)
         XCTAssertEqual(cell1.renderedImage, imageData1)
+    }
+    
+    func test_loadImage_showsRetryButtonOnLoadImageFailed() {
+        let url0 = URL(string: "http://url-0.com")!
+        let url1 = URL(string: "http://url-1.com")!
+        let urls = [url0, url1]
+        let (sut, loader) = makeSUT(urls: urls)
+        sut.loadViewIfNeeded()
+        
+        let cell0 = sut.simulateCellVisible(at: 0)
+        let cell1 = sut.simulateCellVisible(at: 1)
+        XCTAssertEqual(cell0.isShowingRetryButton, false)
+        XCTAssertEqual(cell0.isShowingRetryButton, false)
+        
+        loader.completeImageLoading(with: anyNSError(), at: 0)
+        XCTAssertEqual(cell0.isShowingRetryButton, true)
+        XCTAssertEqual(cell1.isShowingRetryButton, false)
+        
+        loader.completeImageLoading(with: anyNSError(), at: 1)
+        XCTAssertEqual(cell0.isShowingRetryButton, true)
+        XCTAssertEqual(cell1.isShowingRetryButton, true)
     }
     
     // MARK: - Helpers
@@ -138,5 +153,9 @@ extension LaunchDetailsImageCell {
     
     var isShowingLoadingIndicator: Bool {
         imageContainer.isShimmering
+    }
+    
+    var isShowingRetryButton: Bool {
+        !retryButton.isHidden
     }
 }

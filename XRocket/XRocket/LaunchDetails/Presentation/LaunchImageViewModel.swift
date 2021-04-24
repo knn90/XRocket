@@ -10,5 +10,5 @@ import Foundation
 public struct LaunchImageViewModel<Image> {
     public let image: Image?
     public let isLoading: Bool
-    public let isRetry: Bool
+    public let shouldRetry: Bool
 }

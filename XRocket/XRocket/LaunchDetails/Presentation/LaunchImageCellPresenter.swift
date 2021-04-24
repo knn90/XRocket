@@ -23,18 +23,18 @@ public final class LaunchImageCellPresenter<View: LaunchImageView, Image> where 
     }
     
     public func didStartLoadingImage() {
-        view.display(viewModel: LaunchImageViewModel(image: nil, isLoading: true, isRetry: false))
+        view.display(viewModel: LaunchImageViewModel(image: nil, isLoading: true, shouldRetry: false))
     }
     
     public func didFinishLoadingImage(with data: Data) {
         if let image = imageTransformer(data) {
-            view.display(viewModel: LaunchImageViewModel(image: image, isLoading: false, isRetry: false))
+            view.display(viewModel: LaunchImageViewModel(image: image, isLoading: false, shouldRetry: false))
         } else {
-            view.display(viewModel: LaunchImageViewModel(image: nil, isLoading: false, isRetry: true))
+            view.display(viewModel: LaunchImageViewModel(image: nil, isLoading: false, shouldRetry: true))
         }
     }
     
     public func didFinishLoadingImage(with error: Error) {
-        view.display(viewModel: LaunchImageViewModel(image: nil, isLoading: false, isRetry: true))
+        view.display(viewModel: LaunchImageViewModel(image: nil, isLoading: false, shouldRetry: true))
     }
 }

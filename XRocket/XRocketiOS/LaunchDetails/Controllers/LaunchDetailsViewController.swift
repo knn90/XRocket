@@ -64,6 +64,7 @@ public final class LaunchDetailsImageCellController: LaunchImageView {
     public func display(viewModel: LaunchImageViewModel<UIImage>) {
         cell?.imageContainer.isShimmering = viewModel.isLoading
         cell?.imageView.image = viewModel.image
+        cell?.retryButton.isHidden = !viewModel.shouldRetry
     }
 }
 

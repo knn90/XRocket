@@ -35,7 +35,7 @@ class LaunchImageCellPresenterTests: XCTestCase {
         let message = view.messages.first
         XCTAssertEqual(view.messages.count, 1)
         XCTAssertEqual(message?.isLoading, false)
-        XCTAssertEqual(message?.isRetry, true)
+        XCTAssertEqual(message?.shouldRetry, true)
         XCTAssertNil(message?.image)
     }
 
@@ -48,7 +48,7 @@ class LaunchImageCellPresenterTests: XCTestCase {
         let message = view.messages.first
         XCTAssertEqual(view.messages.count, 1)
         XCTAssertEqual(message?.isLoading, false)
-        XCTAssertEqual(message?.isRetry, false)
+        XCTAssertEqual(message?.shouldRetry, false)
         XCTAssertEqual(message?.image, transformedData)
     }
 
@@ -60,7 +60,7 @@ class LaunchImageCellPresenterTests: XCTestCase {
         let message = view.messages.first
         XCTAssertEqual(view.messages.count, 1)
         XCTAssertEqual(message?.isLoading, false)
-        XCTAssertEqual(message?.isRetry, true)
+        XCTAssertEqual(message?.shouldRetry, true)
         XCTAssertEqual(message?.image, nil)
     }
 
