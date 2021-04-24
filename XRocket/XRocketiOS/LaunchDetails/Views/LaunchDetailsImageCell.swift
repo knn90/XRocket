@@ -11,4 +11,10 @@ public final class LaunchDetailsImageCell: UICollectionViewCell {
     public let imageView = UIImageView()
     public let imageContainer = UIView()
     public let retryButton = UIButton()
+    
+    var onRetry: (() -> Void)?
+    
+    @objc func retry() {
+        onRetry?()
+    }
 }

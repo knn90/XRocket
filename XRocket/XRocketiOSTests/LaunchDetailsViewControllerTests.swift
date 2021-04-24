@@ -86,8 +86,7 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     func test_loadImage_showsRetryButtonOnLoadImageFailed() {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
-        let urls = [url0, url1]
-        let (sut, loader) = makeSUT(urls: urls)
+        let (sut, loader) = makeSUT(urls: [url0, url1])
         sut.loadViewIfNeeded()
         
         let cell0 = sut.simulateCellVisible(at: 0)
@@ -102,6 +101,26 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         loader.completeImageLoading(with: anyNSError(), at: 1)
         XCTAssertEqual(cell0.isShowingRetryButton, true)
         XCTAssertEqual(cell1.isShowingRetryButton, true)
+    }
+    
+    func test_onRetry_requestsImageDataFromURL() {
+        let url0 = URL(string: "http://url-0.com")!
+        let url1 = URL(string: "http://url-1.com")!
+        let (sut, loader) = makeSUT(urls: [url0, url1])
+        sut.loadViewIfNeeded()
+        
+        let cell0 = sut.simulateCellVisible(at: 0)
+        let cell1 = sut.simulateCellVisible(at: 1)
+        loader.completeImageLoading(with: anyNSError(), at: 0)
+        loader.completeImageLoading(with: anyNSError(), at: 1)
+        
+        XCTAssertEqual(loader.requestedImageURLs, [url0, url1])
+        
+        cell0.simulateRetryButtonTap()
+        XCTAssertEqual(loader.requestedImageURLs, [url0, url1, url0])
+        
+        cell1.simulateRetryButtonTap()
+        XCTAssertEqual(loader.requestedImageURLs, [url0, url1, url0, url1])
     }
     
     // MARK: - Helpers
@@ -157,5 +176,9 @@ extension LaunchDetailsImageCell {
     
     var isShowingRetryButton: Bool {
         !retryButton.isHidden
+    }
+    
+    func simulateRetryButtonTap() {
+        retryButton.simulate(event: .touchUpInside)
     }
 }

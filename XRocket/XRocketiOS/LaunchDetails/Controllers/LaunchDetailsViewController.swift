@@ -65,6 +65,9 @@ public final class LaunchDetailsImageCellController: LaunchImageView {
         cell?.imageContainer.isShimmering = viewModel.isLoading
         cell?.imageView.image = viewModel.image
         cell?.retryButton.isHidden = !viewModel.shouldRetry
+        cell?.onRetry = delegate.didRequestImage
+        
+        cell?.retryButton.addTarget(cell, action: #selector(cell?.retry), for: .touchUpInside)
     }
 }
 
