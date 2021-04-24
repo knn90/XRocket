@@ -12,8 +12,6 @@ import XRocket
 class LaunchDetailsPresenterTests: XCTestCase {
     
     func test_title_isLocalized() {
-        
-        
         XCTAssertEqual(LaunchDetailsPresenter.title, localized("launch_details_view_title"))
     }
     
@@ -21,6 +19,16 @@ class LaunchDetailsPresenterTests: XCTestCase {
         let (_, view) = makeSUT()
         
         XCTAssertTrue(view.messages.isEmpty)
+    }
+    
+    func test_displayURL_sendDisplayMessageToView() {
+        let (sut, view) = makeSUT()
+        let url = anyURL()
+        sut.display(urls: [url])
+        
+        let message = view.messages.first
+        XCTAssertEqual(view.messages.count, 1)
+        XCTAssertEqual(message?.urls, [url])
     }
     
     // MARK: - Helpers
@@ -38,7 +46,7 @@ class LaunchDetailsPresenterTests: XCTestCase {
         var messages = [LaunchDetailsViewModel]()
         
         func display(_ viewModel: LaunchDetailsViewModel) {
-            
+            messages.append(viewModel)
         }
     }
     
