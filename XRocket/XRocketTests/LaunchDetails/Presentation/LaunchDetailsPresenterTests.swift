@@ -6,20 +6,17 @@
 //
 
 import XCTest
+import XRocket
 
-protocol LaunchDetailsView {
-    
-}
 
-final class LaunchImageCellPresenter {
-    private let view: LaunchDetailsView
+class LaunchDetailsPresenterTests: XCTestCase {
     
-    init(view: LaunchDetailsView) {
-        self.view = view
+    func test_title_isLocalized() {
+        
+        
+        XCTAssertEqual(LaunchDetailsPresenter.title, localized("launch_details_view_title"))
     }
-}
-
-class LaunchImageCellPresenterTests: XCTestCase {
+    
     func test_init_doesNotSendMessageToView() {
         let (_, view) = makeSUT()
         
@@ -27,9 +24,9 @@ class LaunchImageCellPresenterTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchImageCellPresenter, ViewSpy) {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsPresenter, ViewSpy) {
         let view = ViewSpy()
-        let sut = LaunchImageCellPresenter(view: view)
+        let sut = LaunchDetailsPresenter(launchDetailsView: view)
         
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(view, file: file, line: line)
@@ -38,6 +35,20 @@ class LaunchImageCellPresenterTests: XCTestCase {
     }
     
     private class ViewSpy: LaunchDetailsView {
-        var messages = [Any]()
+        var messages = [LaunchDetailsViewModel]()
+        
+        func display(_ viewModel: LaunchDetailsViewModel) {
+            
+        }
+    }
+    
+    private func localized(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {
+        let table = "LaunchDetails"
+        let bundle = Bundle(for: LaunchDetailsPresenter.self)
+        let value = bundle.localizedString(forKey: key, value: nil, table: table)
+        if value == key {
+            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
+        }
+        return value
     }
 }

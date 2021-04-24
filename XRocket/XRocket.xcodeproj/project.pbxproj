@@ -43,6 +43,7 @@
 		6A93F2B22632F2240048BA06 /* LoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A93F2B12632F2240048BA06 /* LoaderSpy.swift */; };
 		6A93F2BA26330C8E0048BA06 /* LaunchDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A93F2B926330C8E0048BA06 /* LaunchDetailsViewController.swift */; };
 		6A93F2C026330C9D0048BA06 /* LaunchDetailsUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A93F2BF26330C9D0048BA06 /* LaunchDetailsUIComposer.swift */; };
+		6A93F2C7263315BA0048BA06 /* LaunchDetailsImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A93F2C6263315BA0048BA06 /* LaunchDetailsImageCell.swift */; };
 		6A942C1B26307DC000B83564 /* LaunchCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A942C1A26307DC000B83564 /* LaunchCellController.swift */; };
 		6A942C21263082C700B83564 /* LaunchViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A942C20263082C700B83564 /* LaunchViewAdapter.swift */; };
 		6A98ADBA2631308E0063B87C /* LaunchCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A98ADB92631308E0063B87C /* LaunchCellPresenter.swift */; };
@@ -65,6 +66,8 @@
 		6AB749AD262C7E3B00C8F56A /* LaunchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB749AC262C7E3B00C8F56A /* LaunchViewControllerTests.swift */; };
 		6AB749B7262C813500C8F56A /* XRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AAB50C92629312E0089DC3C /* XRocket.framework */; };
 		6AB749C2262C823600C8F56A /* XCTestCase+MemoryLeak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB749C1262C823600C8F56A /* XCTestCase+MemoryLeak.swift */; };
+		6AE649742633B70900E50B82 /* LaunchDetailsPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE649732633B70900E50B82 /* LaunchDetailsPresenterTests.swift */; };
+		6AE6497E2633B80900E50B82 /* LaunchDetailsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE6497D2633B80900E50B82 /* LaunchDetailsPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +131,7 @@
 		6A93F2B12632F2240048BA06 /* LoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoaderSpy.swift; sourceTree = "<group>"; };
 		6A93F2B926330C8E0048BA06 /* LaunchDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailsViewController.swift; sourceTree = "<group>"; };
 		6A93F2BF26330C9D0048BA06 /* LaunchDetailsUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailsUIComposer.swift; sourceTree = "<group>"; };
+		6A93F2C6263315BA0048BA06 /* LaunchDetailsImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailsImageCell.swift; sourceTree = "<group>"; };
 		6A942C1A26307DC000B83564 /* LaunchCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCellController.swift; sourceTree = "<group>"; };
 		6A942C20263082C700B83564 /* LaunchViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewAdapter.swift; sourceTree = "<group>"; };
 		6A98ADB92631308E0063B87C /* LaunchCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCellPresenter.swift; sourceTree = "<group>"; };
@@ -155,6 +159,8 @@
 		6AB749A0262C7D4200C8F56A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AB749AC262C7E3B00C8F56A /* LaunchViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewControllerTests.swift; sourceTree = "<group>"; };
 		6AB749C1262C823600C8F56A /* XCTestCase+MemoryLeak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeak.swift"; sourceTree = "<group>"; };
+		6AE649732633B70900E50B82 /* LaunchDetailsPresenterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchDetailsPresenterTests.swift; sourceTree = "<group>"; };
+		6AE6497D2633B80900E50B82 /* LaunchDetailsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailsPresenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,9 +324,9 @@
 		6A93F276263282260048BA06 /* LaunchDetails */ = {
 			isa = PBXGroup;
 			children = (
+				6A93F2C5263315B00048BA06 /* Views */,
 				6A93F2B826330C7E0048BA06 /* Controllers */,
 				6A93F2B726330C780048BA06 /* Composer */,
-				6A93F277263282440048BA06 /* LaunchDetails.storyboard */,
 			);
 			path = LaunchDetails;
 			sourceTree = "<group>";
@@ -328,6 +334,7 @@
 		6A93F27D263293220048BA06 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				6AE649732633B70900E50B82 /* LaunchDetailsPresenterTests.swift */,
 				6A93F27E263293350048BA06 /* LaunchImageCellPresenterTests.swift */,
 			);
 			path = Presentation;
@@ -338,6 +345,7 @@
 			children = (
 				6A93F28D2632C5930048BA06 /* LaunchImageCellPresenter.swift */,
 				6A93F2972632C5BF0048BA06 /* LaunchImageViewModel.swift */,
+				6AE6497D2633B80900E50B82 /* LaunchDetailsPresenter.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -365,6 +373,15 @@
 				6A93F2B926330C8E0048BA06 /* LaunchDetailsViewController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		6A93F2C5263315B00048BA06 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6A93F277263282440048BA06 /* LaunchDetails.storyboard */,
+				6A93F2C6263315BA0048BA06 /* LaunchDetailsImageCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		6A98AE362631C23B0063B87C /* LaunchDetails */ = {
@@ -732,6 +749,7 @@
 				6AB74981262C2E9200C8F56A /* LaunchLoadingViewModel.swift in Sources */,
 				6A98ADBA2631308E0063B87C /* LaunchCellPresenter.swift in Sources */,
 				6A59B03F2629E8F6007D75E9 /* Launch.swift in Sources */,
+				6AE6497E2633B80900E50B82 /* LaunchDetailsPresenter.swift in Sources */,
 				6A4597C8262EB12E00313EAB /* LaunchString.swift in Sources */,
 				6AB74985262C2EA000C8F56A /* LaunchErrorViewModel.swift in Sources */,
 				6AB74979262C0C1900C8F56A /* LaunchPresenter.swift in Sources */,
@@ -755,6 +773,7 @@
 				6AB74966262BE3C200C8F56A /* URLProtocolStub.swift in Sources */,
 				6AAB50E9262943F30089DC3C /* LaunchLoaderTests.swift in Sources */,
 				6A59B0382629E254007D75E9 /* LaunchPaginationFactory.swift in Sources */,
+				6AE649742633B70900E50B82 /* LaunchDetailsPresenterTests.swift in Sources */,
 				6A59B0322629E193007D75E9 /* LaunchFactory.swift in Sources */,
 				6A54AFA1262AE1B90007D021 /* ImageDataLoaderTests.swift in Sources */,
 				6A34BC99262FC47D005B6E60 /* LaunchCellPresenterTests.swift in Sources */,
@@ -772,6 +791,7 @@
 				6A4597E6262F1F8300313EAB /* LaunchUIComposer.swift in Sources */,
 				6A93F2BA26330C8E0048BA06 /* LaunchDetailsViewController.swift in Sources */,
 				6A34BCA326304FA9005B6E60 /* UIView+Shimmering.swift in Sources */,
+				6A93F2C7263315BA0048BA06 /* LaunchDetailsImageCell.swift in Sources */,
 				6A942C21263082C700B83564 /* LaunchViewAdapter.swift in Sources */,
 				6A942C1B26307DC000B83564 /* LaunchCellController.swift in Sources */,
 				6A4597CD262EF2B000313EAB /* ErrorView.swift in Sources */,
