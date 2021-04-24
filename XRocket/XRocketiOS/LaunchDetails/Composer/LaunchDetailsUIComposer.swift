@@ -77,8 +77,13 @@ class LaunchDetailsImageCellPresentationAdapter<View: LaunchImageView, Image>: L
     }
     func didRequestImage() {
         presenter?.didStartLoadingImage()
-        imageLoader.load(from: URLRequest(url: url)) { _ in
-            
+        imageLoader.load(from: URLRequest(url: url)) { [weak self] result in
+            switch result {
+            case let .success(data):
+                self?.presenter?.didFinishLoadingImage(with: data)
+            case let .failure(error):
+                self?.presenter?.didFinishLoadingImage(with: error)
+            }
         }
     }
        

@@ -69,6 +69,7 @@
 		6AE649742633B70900E50B82 /* LaunchDetailsPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE649732633B70900E50B82 /* LaunchDetailsPresenterTests.swift */; };
 		6AE6497E2633B80900E50B82 /* LaunchDetailsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE6497D2633B80900E50B82 /* LaunchDetailsPresenter.swift */; };
 		6AE649842633B98F00E50B82 /* LaunchDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE649832633B98F00E50B82 /* LaunchDetailsViewModel.swift */; };
+		6AE649B4263453FD00E50B82 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE649B3263453FD00E50B82 /* UIImage+TestHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +164,7 @@
 		6AE649732633B70900E50B82 /* LaunchDetailsPresenterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchDetailsPresenterTests.swift; sourceTree = "<group>"; };
 		6AE6497D2633B80900E50B82 /* LaunchDetailsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailsPresenter.swift; sourceTree = "<group>"; };
 		6AE649832633B98F00E50B82 /* LaunchDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailsViewModel.swift; sourceTree = "<group>"; };
+		6AE649B3263453FD00E50B82 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -557,6 +559,7 @@
 				6AB749C1262C823600C8F56A /* XCTestCase+MemoryLeak.swift */,
 				6A0BFE10262DCBF3006818CB /* TestHelpers.swift */,
 				6A93F2B12632F2240048BA06 /* LoaderSpy.swift */,
+				6AE649B3263453FD00E50B82 /* UIImage+TestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -812,6 +815,7 @@
 				6AB749C2262C823600C8F56A /* XCTestCase+MemoryLeak.swift in Sources */,
 				6A0BFE1B262DCC83006818CB /* LaunchFactory.swift in Sources */,
 				6A93F29E2632CB5F0048BA06 /* LaunchDetailsViewControllerTests.swift in Sources */,
+				6AE649B4263453FD00E50B82 /* UIImage+TestHelpers.swift in Sources */,
 				6AB749AD262C7E3B00C8F56A /* LaunchViewControllerTests.swift in Sources */,
 				6A93F2B22632F2240048BA06 /* LoaderSpy.swift in Sources */,
 				6A0BFE11262DCBF3006818CB /* TestHelpers.swift in Sources */,

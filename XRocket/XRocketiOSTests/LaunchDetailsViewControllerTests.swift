@@ -49,13 +49,21 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
         let urls = [url0, url1]
-        let (sut, _) = makeSUT(urls: urls)
+        let (sut, loader) = makeSUT(urls: urls)
         sut.loadViewIfNeeded()
         
         let cell0 = sut.simulateCellVisible(at: 0)
         let cell1 = sut.simulateCellVisible(at: 1)
         XCTAssertEqual(cell0.isShowingLoadingIndicator, true)
         XCTAssertEqual(cell1.isShowingLoadingIndicator, true)
+        
+        loader.completeImageLoading(with: UIImage.make(withColor: .red).pngData()!, at: 0)
+        XCTAssertEqual(cell0.isShowingLoadingIndicator, false)
+        XCTAssertEqual(cell1.isShowingLoadingIndicator, true)
+        
+        loader.completeImageLoading(with: anyNSError(), at: 1)
+        XCTAssertEqual(cell0.isShowingLoadingIndicator, false)
+        XCTAssertEqual(cell1.isShowingLoadingIndicator, false)
     }
     
     // MARK: - Helpers
