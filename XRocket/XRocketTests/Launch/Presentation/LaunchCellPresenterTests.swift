@@ -25,8 +25,8 @@ class LaunchCellPresenterTests: XCTestCase {
         XCTAssertEqual(view.messages.count, 1)
         XCTAssertEqual(message?.name, launch.name)
         XCTAssertEqual(message?.flightNumber, launch.flightNumber)
-        XCTAssertEqual(message?.status, launch.status)
-        XCTAssertEqual(message?.launchDate, launch.launchDate)
+        XCTAssertEqual(message?.success, launch.success)
+        XCTAssertEqual(message?.launchDate, launch.dateUnix)
         XCTAssertEqual(message?.isLoading, true)
         XCTAssertNil(message?.image)
     }
@@ -41,8 +41,8 @@ class LaunchCellPresenterTests: XCTestCase {
         XCTAssertEqual(view.messages.count, 1)
         XCTAssertEqual(message?.name, launch.name)
         XCTAssertEqual(message?.flightNumber, launch.flightNumber)
-        XCTAssertEqual(message?.status, launch.status)
-        XCTAssertEqual(message?.launchDate, launch.launchDate)
+        XCTAssertEqual(message?.success, launch.success)
+        XCTAssertEqual(message?.launchDate, launch.dateUnix)
         XCTAssertEqual(message?.isLoading, false)
         XCTAssertNil(message?.image)
     }
@@ -58,8 +58,8 @@ class LaunchCellPresenterTests: XCTestCase {
         XCTAssertEqual(view.messages.count, 1)
         XCTAssertEqual(message?.name, launch.name)
         XCTAssertEqual(message?.flightNumber, launch.flightNumber)
-        XCTAssertEqual(message?.status, launch.status)
-        XCTAssertEqual(message?.launchDate, launch.launchDate)
+        XCTAssertEqual(message?.success, launch.success)
+        XCTAssertEqual(message?.launchDate, launch.dateUnix)
         XCTAssertEqual(message?.isLoading, false)
         XCTAssertEqual(message?.image, transformedData)
     }
@@ -74,8 +74,8 @@ class LaunchCellPresenterTests: XCTestCase {
         XCTAssertEqual(view.messages.count, 1)
         XCTAssertEqual(message?.name, launch.name)
         XCTAssertEqual(message?.flightNumber, launch.flightNumber)
-        XCTAssertEqual(message?.status, launch.status)
-        XCTAssertEqual(message?.launchDate, launch.launchDate)
+        XCTAssertEqual(message?.success, launch.success)
+        XCTAssertEqual(message?.launchDate, launch.dateUnix)
         XCTAssertEqual(message?.isLoading, false)
         XCTAssertEqual(message?.image, nil)
     }
@@ -101,7 +101,7 @@ class LaunchCellPresenterTests: XCTestCase {
         }
     }
     
-    private func makeLaunch() -> PresentableLaunch {
-        PresentableLaunch(id: "id", name: "name", flightNumber: "4", status: "success", launchDate: "2021-02-01", imageURL: URL(string: "http://url.com")!)
+    private func makeLaunch() -> Launch {
+        LaunchFactory.any()
     }
 }

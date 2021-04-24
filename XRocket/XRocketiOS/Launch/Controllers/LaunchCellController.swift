@@ -24,9 +24,9 @@ final class LaunchCellController: LaunchCellView {
     }
     
     func display(viewModel: LaunchCellViewModel<UIImage>) {
-        cell?.flightNumberLabel.text = viewModel.flightNumber
+        cell?.flightNumberLabel.text = "\(viewModel.flightNumber)"
         cell?.rocketNameLabel.text = viewModel.name
-        cell?.dateLabel.text = viewModel.launchDate
+        cell?.dateLabel.text = viewModel.launchDateString
         cell?.statusLabel.text = viewModel.status
         cell?.rocketImageView.image = nil
         cell?.imageContainer.isShimmering = viewModel.isLoading

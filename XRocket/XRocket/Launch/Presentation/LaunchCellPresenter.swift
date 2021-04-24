@@ -21,16 +21,16 @@ public class LaunchCellPresenter<View: LaunchCellView, Image> where View.Image =
         self.imageTransformer = imageTransformer
     }
     
-    public func didStartLoadingImage(for launch: PresentableLaunch) {
-        view.display(viewModel: LaunchCellViewModel(name: launch.name, flightNumber: launch.flightNumber, status: launch.status, launchDate: launch.launchDate, isLoading: true, image: nil))
+    public func didStartLoadingImage(for launch: Launch) {
+        view.display(viewModel: LaunchCellViewModel(launch: launch, isLoading: true, image: nil))
     }
     
-    public func didFinishLoadingImage(with data: Data, for launch: PresentableLaunch) {
+    public func didFinishLoadingImage(with data: Data, for launch: Launch) {
         let image = imageTransformer(data)
-        view.display(viewModel: LaunchCellViewModel(name: launch.name, flightNumber: launch.flightNumber, status: launch.status, launchDate: launch.launchDate, isLoading: false, image: image))
+        view.display(viewModel: LaunchCellViewModel(launch: launch, isLoading: false, image: image))
     }
     
-    public func didFinishLoadingImage(with error: Error, for launch: PresentableLaunch) {
-        view.display(viewModel: LaunchCellViewModel(name: launch.name, flightNumber: launch.flightNumber, status: launch.status, launchDate: launch.launchDate, isLoading: false, image: nil))
+    public func didFinishLoadingImage(with error: Error, for launch: Launch) {
+        view.display(viewModel: LaunchCellViewModel(launch: launch, isLoading: false, image: nil))
     }
 }

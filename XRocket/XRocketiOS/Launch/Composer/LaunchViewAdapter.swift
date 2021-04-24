@@ -11,16 +11,16 @@ import XRocket
 class LaunchViewAdapter: LaunchView {
     private weak var launchViewController: LaunchViewController?
     private let imageLoader: ImageDataLoader
-    private let didSelectLaunch: (PresentableLaunch) -> Void
+    private let didSelectLaunch: (Launch) -> Void
     
-    init(launchViewController: LaunchViewController, imageLoader: ImageDataLoader, didSelectLaunch: @escaping (PresentableLaunch) -> Void) {
+    init(launchViewController: LaunchViewController, imageLoader: ImageDataLoader, didSelectLaunch: @escaping (Launch) -> Void) {
         self.launchViewController = launchViewController
         self.imageLoader = imageLoader
         self.didSelectLaunch = didSelectLaunch
     }
     
     func display(_ viewModel: LaunchViewModel) {
-        launchViewController?.display(viewModel.presentableLaunches.map { model in
+        launchViewController?.display(viewModel.launches.map { model in
             let adapter = LaunchImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<LaunchCellController>, UIImage>(model: model, imageLoader: imageLoader)
             let view = LaunchCellController(
                 delegate: adapter,

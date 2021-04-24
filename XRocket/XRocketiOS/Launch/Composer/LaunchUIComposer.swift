@@ -11,7 +11,7 @@ import XRocket
 public final class LaunchUIComposer {
     private init() {}
     
-    public static func composeWith(loader: LaunchLoader, imageLoader: ImageDataLoader, didSelectLaunch: @escaping (PresentableLaunch) -> Void) -> LaunchViewController {
+    public static func composeWith(loader: LaunchLoader, imageLoader: ImageDataLoader, didSelectLaunch: @escaping (Launch) -> Void) -> LaunchViewController {
         let presentationAdapter = LaunchPresentationAdapter(loader: MainQueueDispatchDecorator(decoratee: loader))
         
         let launchController = makeLaunchViewController(delegate: presentationAdapter)

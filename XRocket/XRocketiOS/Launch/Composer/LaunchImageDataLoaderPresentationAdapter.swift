@@ -9,12 +9,12 @@ import Foundation
 import XRocket
 
 class LaunchImageDataLoaderPresentationAdapter<View: LaunchCellView, Image>: LaunchCellControllerDelegate where View.Image == Image {
-    private let model: PresentableLaunch
+    private let model: Launch
     private let imageLoader: ImageDataLoader
     private var task: ImageDataLoaderTask?
     var presenter: LaunchCellPresenter<View, Image>?
  
-    init(model: PresentableLaunch, imageLoader: ImageDataLoader) {
+    init(model: Launch, imageLoader: ImageDataLoader) {
         self.model = model
         self.imageLoader = imageLoader
     }
@@ -22,10 +22,7 @@ class LaunchImageDataLoaderPresentationAdapter<View: LaunchCellView, Image>: Lau
     func didRequestImage() {
         presenter?.didStartLoadingImage(for: model)
         let model = self.model
-        guard let url = model.imageURL else {
-            presenter?.didFinishLoadingImage(with: ImageURLNotFound(), for: model)
-            return
-        }
+        let url = model.links.patch.small
         
         task = imageLoader.load(from: URLRequest(url: url)) { [weak self] result in
             switch result {
@@ -40,6 +37,4 @@ class LaunchImageDataLoaderPresentationAdapter<View: LaunchCellView, Image>: Lau
     func didCancelImageRequest() {
         task?.cancel()
     }
-    
-    private struct ImageURLNotFound: Error {}
 }

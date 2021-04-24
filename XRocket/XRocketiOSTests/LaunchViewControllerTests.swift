@@ -62,7 +62,7 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.numberOfRenderedCell, 0)
         
         loader.completeLoading(with: LaunchPaginationFactory.single(with: launches), at: 0)
-        assertThat(sut, isRendering: LaunchViewModel(launches: launches).presentableLaunches)
+        assertThat(sut, isRendering: launches)
     }
     
     func test_loadCompletion_renderSuccessfullyEmptyAfterNonEmptyLaunches() {
@@ -74,7 +74,7 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.numberOfRenderedCell, 0)
         
         loader.completeLoading(with: LaunchPaginationFactory.single(with: launches), at: 0)
-        assertThat(sut, isRendering: LaunchViewModel(launches: launches).presentableLaunches)
+        assertThat(sut, isRendering: launches)
         
         sut.simulateUserInitiatedReload()
         loader.completeLoading(with: LaunchPaginationFactory.empty(), at: 1)
@@ -85,15 +85,14 @@ class LaunchViewControllerTests: XCTestCase {
         let (sut, loader) = makeSUT()
         let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: anyLink())
         let launches = [launch0]
-        let presentableLaunches = LaunchViewModel(launches: launches).presentableLaunches
         sut.loadViewIfNeeded()
         
         loader.completeLoading(with: LaunchPaginationFactory.single(with: launches), at: 0)
-        assertThat(sut, isRendering: presentableLaunches)
+        assertThat(sut, isRendering: launches)
         
         sut.simulateUserInitiatedReload()
         loader.completeLoading(with: anyNSError(), at: 1)
-        assertThat(sut, isRendering: presentableLaunches)
+        assertThat(sut, isRendering: launches)
     }
     
     func test_loadCompletion_rendersErrorMessageOnErrorUntilNextReload() {
@@ -298,20 +297,20 @@ class LaunchViewControllerTests: XCTestCase {
         let launch0 = LaunchFactory.any(urls: [url0])
         let launch1 = LaunchFactory.any(urls: [url1])
         let viewModel = LaunchViewModel(launches: [launch0, launch1])
-        var selectedLaunches = [PresentableLaunch]()
+        var selectedLaunches = [Launch]()
         let (sut, loader) = makeSUT(didSelectLaunch: { selectedLaunches.append($0) })
         sut.loadViewIfNeeded()
         loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0, launch1]), at: 0)
         
         sut.simulateUserSelectedLaunch(at: 0)
-        XCTAssertEqual(selectedLaunches, [viewModel.presentableLaunches[0]])
+        XCTAssertEqual(selectedLaunches, [launch0])
         
         sut.simulateUserSelectedLaunch(at: 1)
-        XCTAssertEqual(selectedLaunches, viewModel.presentableLaunches)
+        XCTAssertEqual(selectedLaunches, [launch0, launch1])
     }
     
     // MARK: - Helpers
-    private func makeSUT(didSelectLaunch: @escaping (PresentableLaunch) -> Void = { _ in }, file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
+    private func makeSUT(didSelectLaunch: @escaping (Launch) -> Void = { _ in }, file: StaticString = #file, line: UInt = #line) -> (LaunchViewController, LoaderSpy) {
         let loader = LoaderSpy()        
         let sut = LaunchUIComposer.composeWith(loader: loader, imageLoader: loader, didSelectLaunch: didSelectLaunch)
         
@@ -333,7 +332,7 @@ class LaunchViewControllerTests: XCTestCase {
         return value
     }
     
-    private func assertThat(_ sut: LaunchViewController, isRendering launches: [PresentableLaunch], file: StaticString = #filePath, line: UInt = #line) {
+    private func assertThat(_ sut: LaunchViewController, isRendering launches: [Launch], file: StaticString = #filePath, line: UInt = #line) {
         XCTAssertEqual(sut.numberOfRenderedCell, launches.count, file: file, line: line)
         
         launches.enumerated().forEach { index, launch in
@@ -341,14 +340,15 @@ class LaunchViewControllerTests: XCTestCase {
         }
     }
     
-    private func assertThat(_ sut: LaunchViewController, hasCellConfiguredFor launch: PresentableLaunch, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+    private func assertThat(_ sut: LaunchViewController, hasCellConfiguredFor launch: Launch, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         guard let  cell = sut.getCell(at: index) as? LaunchCell else {
             return XCTFail("Can't parse cell as LaunchCell", file: file, line: line)
         }
-        XCTAssertEqual(cell.flightNumberLabel.text, launch.flightNumber)
+        let cellModel = LaunchCellViewModel<Any>(launch: launch, isLoading: false, image: nil)
+        XCTAssertEqual(cell.flightNumberLabel.text, "\(launch.flightNumber)")
         XCTAssertEqual(cell.rocketNameLabel.text, launch.name)
-        XCTAssertEqual(cell.dateLabel.text, launch.launchDate)
-        XCTAssertEqual(cell.statusLabel.text, launch.status)
+        XCTAssertEqual(cell.dateLabel.text, cellModel.launchDateString)
+        XCTAssertEqual(cell.statusLabel.text, cellModel.status)
     }
     
     private func anyLink() -> Link {
