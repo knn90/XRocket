@@ -39,3 +39,9 @@ extension WeakRefVirtualProxy: LaunchCellView where T: LaunchCellView, T.Image =
         object?.display(viewModel: viewModel)
     }
 }
+
+extension WeakRefVirtualProxy: LaunchImageView where T: LaunchImageView, T.Image == UIImage {
+    func display(viewModel: LaunchImageViewModel<UIImage>) {
+        object?.display(viewModel: viewModel)
+    }
+}

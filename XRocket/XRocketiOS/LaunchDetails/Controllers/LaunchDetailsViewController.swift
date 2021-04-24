@@ -8,13 +8,15 @@
 import UIKit
 import XRocket
 
+public protocol LaunchDetailsViewControllerDelegate {
+    func requestForImageURLs()
+}
+
 public final class LaunchDetailsViewController: UIViewController, UICollectionViewDataSource {
     
     @IBOutlet private(set) public var collectionView: UICollectionView!
-    
-    var imageloader: ImageDataLoader?
-    
-    public var urls = [URL]() {
+    var delegate: LaunchDetailsViewControllerDelegate?
+    private var cellControllers = [LaunchDetailsImageCellController]() {
         didSet {
             collectionView.reloadData()
         }
@@ -22,18 +24,45 @@ public final class LaunchDetailsViewController: UIViewController, UICollectionVi
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        delegate?.requestForImageURLs()
     }
     
-    public func display(_ urls: [URL]) {
-        self.urls = urls
+    public func display(_ cellControllers: [LaunchDetailsImageCellController]) {
+        self.cellControllers = cellControllers
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return urls.count
+        return cellControllers.count
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        UICollectionViewCell()
+        return cellControllers[indexPath.item].view(in: collectionView, at: indexPath)
+    }
+}
+
+
+public protocol LaunchDetailsImageCellControllerDelegate {
+    func didRequestImage()
+}
+
+public final class LaunchDetailsImageCellController: LaunchImageView {
+    
+    private var cell: LaunchDetailsImageCell?
+    private let delegate: LaunchDetailsImageCellControllerDelegate
+    
+    init(delegate: LaunchDetailsImageCellControllerDelegate) {
+        self.delegate = delegate
+    }
+    
+    func view(in collectionView: UICollectionView, at indexPath: IndexPath) -> LaunchDetailsImageCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LaunchDetailsImageCell", for: indexPath) as! LaunchDetailsImageCell
+        self.cell = cell
+        delegate.didRequestImage()
+        return cell
+    }
+    
+    public func display(viewModel: LaunchImageViewModel<UIImage>) {
+        cell?.imageContainer.isShimmering = viewModel.isLoading
     }
 }
 
