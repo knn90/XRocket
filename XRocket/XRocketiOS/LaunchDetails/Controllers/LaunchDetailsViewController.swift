@@ -12,7 +12,7 @@ public protocol LaunchDetailsViewControllerDelegate {
     func requestForImageURLs()
 }
 
-public final class LaunchDetailsViewController: UIViewController, UICollectionViewDataSource {
+public final class LaunchDetailsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
     
     @IBOutlet private(set) public var collectionView: UICollectionView!
     var delegate: LaunchDetailsViewControllerDelegate?
@@ -37,6 +37,12 @@ public final class LaunchDetailsViewController: UIViewController, UICollectionVi
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return cellControllers[indexPath.item].view(in: collectionView, at: indexPath)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach { indexPath in
+            cellControllers[indexPath.item].preload()
+        }
     }
 }
 
@@ -68,6 +74,10 @@ public final class LaunchDetailsImageCellController: LaunchImageView {
         cell?.onRetry = delegate.didRequestImage
         
         cell?.retryButton.addTarget(cell, action: #selector(cell?.retry), for: .touchUpInside)
+    }
+    
+    func preload() {
+        delegate.didRequestImage()
     }
 }
 

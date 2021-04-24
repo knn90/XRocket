@@ -123,6 +123,21 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.requestedImageURLs, [url0, url1, url0, url1])
     }
     
+    func test_imageCell_preloadsImageWhenCellIsNearVisible() {
+        let url0 = URL(string: "http://url-0.com")!
+        let url1 = URL(string: "http://url-1.com")!
+        let (sut, loader) = makeSUT(urls: [url0, url1])
+        sut.loadViewIfNeeded()
+        
+        XCTAssertEqual(loader.requestedImageURLs, [])
+        
+        sut.siumulateCellNearVisible(at: 0)
+        XCTAssertEqual(loader.requestedImageURLs, [url0])
+        
+        sut.siumulateCellNearVisible(at: 1)
+        XCTAssertEqual(loader.requestedImageURLs, [url0, url1])
+    }
+    
     // MARK: - Helpers
     private func makeSUT(urls: [URL] = [], file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsViewController, LoaderSpy) {
         let loader = LoaderSpy()
@@ -152,6 +167,12 @@ extension LaunchDetailsViewController {
     
     func simulateCellVisible(at index: Int) -> LaunchDetailsImageCell {
         return getCell(at: index) as! LaunchDetailsImageCell
+    }
+    
+    func siumulateCellNearVisible(at index: Int) {
+        let ds = collectionView.prefetchDataSource
+        let indexPath = IndexPath(item: index, section: launchImageSection)
+        ds?.collectionView(collectionView, prefetchItemsAt: [indexPath])
     }
     
     private func getCell(at item: Int) -> UICollectionViewCell? {

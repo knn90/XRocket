@@ -42,6 +42,7 @@
                                 <connections>
                                     <outlet property="dataSource" destination="aig-H8-NgI" id="mxL-Eo-jCs"/>
                                     <outlet property="delegate" destination="aig-H8-NgI" id="Ufw-od-FiZ"/>
+                                    <outlet property="prefetchDataSource" destination="aig-H8-NgI" id="8dC-JA-gLM"/>
                                 </connections>
                             </collectionView>
                         </subviews>
