@@ -151,6 +151,17 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.cancelledImageURLs, [url0, url1])
     }
     
+    func test_imageCell_doesNotRenderLoadedImageWhenNotVisibleAnyMore() {
+        let url0 = URL(string: "http:url-0.com")!
+        let (sut, loader) = makeSUT(urls: [url0])
+        sut.loadViewIfNeeded()
+        
+        let cell = sut.simulateCellNotVisible(at: 0)
+        loader.completeImageLoading(with: UIImage.make(withColor: .red).pngData()!, at: 0)
+        
+        XCTAssertNil(cell?.renderedImage)
+    }
+    
     
     // MARK: - Helpers
     private func makeSUT(urls: [URL] = [], file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsViewController, LoaderSpy) {
@@ -195,6 +206,16 @@ extension LaunchDetailsViewController {
         let ds = collectionView.prefetchDataSource
         let indexPath = IndexPath(row: index, section: launchImageSection)
         ds?.collectionView?(collectionView, cancelPrefetchingForItemsAt: [indexPath])
+    }
+    
+    @discardableResult
+    func simulateCellNotVisible(at index: Int) -> LaunchDetailsImageCell? {
+        let cell = simulateCellVisible(at: index)
+        let delegate = collectionView.delegate
+        let indexPath = IndexPath(row: index, section: launchImageSection)
+        delegate?.collectionView?(collectionView, didEndDisplaying: cell, forItemAt: indexPath)
+        
+        return cell
     }
     
     private func getCell(at item: Int) -> UICollectionViewCell? {

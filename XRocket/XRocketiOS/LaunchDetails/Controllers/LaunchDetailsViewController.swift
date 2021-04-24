@@ -12,7 +12,7 @@ public protocol LaunchDetailsViewControllerDelegate {
     func requestForImageURLs()
 }
 
-public final class LaunchDetailsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
+public final class LaunchDetailsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDataSourcePrefetching {
     
     @IBOutlet private(set) public var collectionView: UICollectionView!
     var delegate: LaunchDetailsViewControllerDelegate?
@@ -37,6 +37,10 @@ public final class LaunchDetailsViewController: UIViewController, UICollectionVi
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return cellControllers[indexPath.item].view(in: collectionView, at: indexPath)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cellControllers[indexPath.item].cancelLoad()
     }
     
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
@@ -79,7 +83,6 @@ public final class LaunchDetailsImageCellController: LaunchImageView {
         cell?.imageView.image = viewModel.image
         cell?.retryButton.isHidden = !viewModel.shouldRetry
         cell?.onRetry = delegate.didRequestImage
-        
         cell?.retryButton.addTarget(cell, action: #selector(cell?.retry), for: .touchUpInside)
     }
     
@@ -88,7 +91,12 @@ public final class LaunchDetailsImageCellController: LaunchImageView {
     }
     
     func cancelLoad() {
+        releaseCellForReuse()
         delegate.didCancelImageRequest()
+    }
+    
+    func releaseCellForReuse() {
+        cell = nil
     }
 }
 
