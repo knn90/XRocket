@@ -19,7 +19,7 @@ public final class LaunchDetailsUIComposer {
         let presenter = LaunchDetailsPresenter(
             launchDetailsView: LaunchDetailsViewAdapter(
                 viewController: viewController,
-                imageLoader: imageLoader))
+                imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)))
         presentationAdapter.presenter = presenter
         return viewController
     }

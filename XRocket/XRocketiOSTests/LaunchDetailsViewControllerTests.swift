@@ -162,6 +162,20 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         XCTAssertNil(cell?.renderedImage)
     }
     
+    func test_loadImageCompletion_dispatchFromBackgroundToMainThread() {
+        let url0 = URL(string: "http:url-0.com")!
+        let (sut, loader) = makeSUT(urls: [url0])
+        sut.loadViewIfNeeded()
+        
+        _ = sut.simulateCellVisible(at: 0)
+        
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completeImageLoading(with: UIImage.make(withColor: .blue).pngData()!, at: 0)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
     
     // MARK: - Helpers
     private func makeSUT(urls: [URL] = [], file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsViewController, LoaderSpy) {
