@@ -66,6 +66,29 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         XCTAssertEqual(cell1.isShowingLoadingIndicator, false)
     }
     
+    func test_loadImage_rendersLoadedImage() {
+        let url0 = URL(string: "http://url-0.com")!
+        let url1 = URL(string: "http://url-1.com")!
+        let urls = [url0, url1]
+        let (sut, loader) = makeSUT(urls: urls)
+        sut.loadViewIfNeeded()
+        
+        let cell0 = sut.simulateCellVisible(at: 0)
+        let cell1 = sut.simulateCellVisible(at: 1)
+        XCTAssertEqual(cell0.renderedImage, nil)
+        XCTAssertEqual(cell0.renderedImage, nil)
+        
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        loader.completeImageLoading(with: imageData0, at: 0)
+        XCTAssertEqual(cell0.renderedImage, imageData0)
+        XCTAssertEqual(cell1.renderedImage, nil)
+        
+        let imageData1 = UIImage.make(withColor: .blue).pngData()!
+        loader.completeImageLoading(with: imageData1, at: 1)
+        XCTAssertEqual(cell0.renderedImage, imageData0)
+        XCTAssertEqual(cell1.renderedImage, imageData1)
+    }
+    
     // MARK: - Helpers
     private func makeSUT(urls: [URL] = [], file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsViewController, LoaderSpy) {
         let loader = LoaderSpy()
