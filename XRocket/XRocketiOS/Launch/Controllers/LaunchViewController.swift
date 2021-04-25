@@ -12,7 +12,7 @@ public protocol LaunchViewControllerDelegate {
     func didRequestForLaunches()
 }
 
-public final class LaunchViewController: UITableViewController, UITableViewDataSourcePrefetching, LaunchLoadingView, LaunchErrorView {
+public final class LaunchViewController: UITableViewController, LaunchLoadingView, LaunchErrorView {
     
     @IBOutlet private(set) public var errorView: ErrorView?
     public var delegate: LaunchViewControllerDelegate?
@@ -70,6 +70,16 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
         cancelCellControllerLoad(forRowAt: indexPath)
     }
     
+    private func cellController(forRowAt indexPath: IndexPath) -> LaunchCellController {
+        return tableModel[indexPath.row]
+    }
+    
+    private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
+        cellController(forRowAt: indexPath).cancelLoad()
+    }
+}
+
+extension LaunchViewController: UITableViewDataSourcePrefetching {
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
             cellController(forRowAt: indexPath).preload()
@@ -78,14 +88,5 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach(cancelCellControllerLoad)
-    }
-    
-    private func cellController(forRowAt indexPath: IndexPath) -> LaunchCellController {
-        return tableModel[indexPath.row]
-        
-    }
-    
-    private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
-        cellController(forRowAt: indexPath).cancelLoad()
     }
 }
