@@ -36,6 +36,7 @@
 		6A71FA532635529900ED2900 /* LaunchDetailsImageCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A71FA522635529900ED2900 /* LaunchDetailsImageCellController.swift */; };
 		6A71FA59263554CD00ED2900 /* LaunchDetailsPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A71FA58263554CD00ED2900 /* LaunchDetailsPresentationAdapter.swift */; };
 		6A71FA5F263554F000ED2900 /* LaunchDetailsImageCellPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A71FA5E263554F000ED2900 /* LaunchDetailsImageCellPresentationAdapter.swift */; };
+		6A71FA652635C0B700ED2900 /* CellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A71FA642635C0B700ED2900 /* CellController.swift */; };
 		6A93F278263282440048BA06 /* LaunchDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A93F277263282440048BA06 /* LaunchDetails.storyboard */; };
 		6A93F27F263293350048BA06 /* LaunchImageCellPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A93F27E263293350048BA06 /* LaunchImageCellPresenterTests.swift */; };
 		6A93F28E2632C5930048BA06 /* LaunchImageCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A93F28D2632C5930048BA06 /* LaunchImageCellPresenter.swift */; };
@@ -130,6 +131,7 @@
 		6A71FA522635529900ED2900 /* LaunchDetailsImageCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailsImageCellController.swift; sourceTree = "<group>"; };
 		6A71FA58263554CD00ED2900 /* LaunchDetailsPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailsPresentationAdapter.swift; sourceTree = "<group>"; };
 		6A71FA5E263554F000ED2900 /* LaunchDetailsImageCellPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDetailsImageCellPresentationAdapter.swift; sourceTree = "<group>"; };
+		6A71FA642635C0B700ED2900 /* CellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellController.swift; sourceTree = "<group>"; };
 		6A93F277263282440048BA06 /* LaunchDetails.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchDetails.storyboard; sourceTree = "<group>"; };
 		6A93F27E263293350048BA06 /* LaunchImageCellPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchImageCellPresenterTests.swift; sourceTree = "<group>"; };
 		6A93F28D2632C5930048BA06 /* LaunchImageCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchImageCellPresenter.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 			children = (
 				6A0BFE0B262D38BE006818CB /* LaunchViewController.swift */,
 				6A942C1A26307DC000B83564 /* LaunchCellController.swift */,
+				6A71FA642635C0B700ED2900 /* CellController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -819,6 +822,7 @@
 				6A4597CD262EF2B000313EAB /* ErrorView.swift in Sources */,
 				6A45980A262F27AC00313EAB /* WeakRefVirtualProxy.swift in Sources */,
 				6A0BFE0C262D38BE006818CB /* LaunchViewController.swift in Sources */,
+				6A71FA652635C0B700ED2900 /* CellController.swift in Sources */,
 				6A98ADC626315B4E0063B87C /* LaunchImageDataLoaderPresentationAdapter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

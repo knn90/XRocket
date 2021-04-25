@@ -256,7 +256,6 @@ class LaunchViewControllerTests: XCTestCase {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
         loader.completeLoading(with: LaunchPaginationFactory.single(with: [launch0]), at: 0)
-        
         let cell = sut.simulateLaunchCellNotVisible(at: 0)
         loader.completeImageLoading(with: UIImage.make(withColor: .red).pngData()!, at: 0)
         
@@ -366,6 +365,13 @@ extension UIRefreshControl {
 }
 
 extension LaunchViewController {
+    
+    public override func loadViewIfNeeded() {
+        super.loadViewIfNeeded()
+        
+        tableView.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+    }
+    
     func simulateUserInitiatedReload() {
         refreshControl?.simulatePullToRefresh()
     }
@@ -406,6 +412,10 @@ extension LaunchViewController {
     }
     
     func getCell(at row: Int) -> UITableViewCell? {
+        guard numberOfRenderedCell > row else {
+            return nil
+        }
+        
         let ds = tableView.dataSource
         let index = IndexPath(row: row, section: launchSection)
         return ds?.tableView(tableView, cellForRowAt: index)
@@ -416,7 +426,7 @@ extension LaunchViewController {
     }
     
     var numberOfRenderedCell: Int {
-        return tableView.numberOfRows(inSection: launchSection)
+        return tableView.numberOfSections == 0 ? 0 : tableView.numberOfRows(inSection: launchSection)
     }
     
     var errorMessage: String? {

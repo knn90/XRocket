@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Launch: Codable, Equatable {
+public struct Launch: Codable, Equatable, Hashable {
     public let id: String
     public let name: String
     public let flightNumber: Int
@@ -35,7 +35,7 @@ public struct Launch: Codable, Equatable {
 }
 
 
-public struct Link: Codable, Equatable {
+public struct Link: Codable, Equatable, Hashable {
     public let flickr: Flickr
     public let patch: Patch
     
@@ -45,7 +45,7 @@ public struct Link: Codable, Equatable {
     }
 }
 
-public struct Flickr: Codable, Equatable {
+public struct Flickr: Codable, Equatable, Hashable {
     public init(original: [URL]) {
         self.original = original
     }
@@ -53,7 +53,7 @@ public struct Flickr: Codable, Equatable {
     public let original: [URL]
 }
 
-public struct Patch: Codable, Equatable {
+public struct Patch: Codable, Equatable, Hashable {
     public init(small: URL, large: URL) {
         self.small = small
         self.large = large

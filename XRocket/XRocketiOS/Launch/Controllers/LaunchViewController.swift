@@ -12,35 +12,20 @@ public protocol LaunchViewControllerDelegate {
     func didRequestForLaunches()
 }
 
-public struct CellController {
-    let dataSource: UITableViewDataSource
-    let delegate: UITableViewDelegate?
-    let dataSourcePrefetching: UITableViewDataSourcePrefetching?
-    
-    public init(_ dataSource: UITableViewDataSource & UITableViewDelegate & UITableViewDataSourcePrefetching) {
-        self.dataSource = dataSource
-        self.delegate = dataSource
-        self.dataSourcePrefetching = dataSource
-    }
-}
-
 public final class LaunchViewController: UITableViewController, LaunchLoadingView, LaunchErrorView {
     
     @IBOutlet private(set) public var errorView: ErrorView?
     public var delegate: LaunchViewControllerDelegate?
-    var tableModel: [CellController] = [] {
-        didSet {
-            tableView.reloadData()
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
+        .init(tableView: tableView) { tableView, indexPath, controller -> UITableViewCell? in
+            return controller.dataSource.tableView(tableView, cellForRowAt: indexPath)
         }
-    }
-    
-//    private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
-//
-//    }
+    }()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.prefetchDataSource = self
+        tableView.dataSource = dataSource
+        dataSource.defaultRowAnimation = .fade
         loadLaunches()
     }
     
@@ -55,7 +40,10 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
     }
     
     func display(_ cellControllers: [CellController]) {
-        tableModel = cellControllers
+        var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(cellControllers, toSection: 0)
+        dataSource.apply(snapshot)
     }
     
     public func display(_ viewModel: LaunchLoadingViewModel) {
@@ -70,31 +58,22 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
         errorView?.message = viewModel.message
     }
     
-    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableModel.count
-    }
-    
-    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let ds = cellController(forRowAt: indexPath).dataSource
-        return ds.tableView(tableView, cellForRowAt: indexPath)
-    }
-    
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let dl = cellController(forRowAt: indexPath).delegate
+        let dl = cellController(at: indexPath)?.delegate
         dl?.tableView?(tableView, didSelectRowAt: indexPath)
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let dl = cellController(forRowAt: indexPath).delegate
+        let dl = cellController(at: indexPath)?.delegate
         dl?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
     
-    private func cellController(forRowAt indexPath: IndexPath) -> CellController {
-        return tableModel[indexPath.row]
+    private func cellController(at indexPath: IndexPath) -> CellController? {
+        return dataSource.itemIdentifier(for: indexPath)
     }
     
     private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
-        let dsp = cellController(forRowAt: indexPath).dataSourcePrefetching
+        let dsp = cellController(at: indexPath)?.dataSourcePrefetching
         dsp?.tableView?(tableView, cancelPrefetchingForRowsAt: [indexPath])
     }
 }
@@ -102,7 +81,7 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
 extension LaunchViewController: UITableViewDataSourcePrefetching {
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let dsp = cellController(forRowAt: indexPath).dataSourcePrefetching
+            let dsp = cellController(at: indexPath)?.dataSourcePrefetching
             dsp?.tableView(tableView, prefetchRowsAt: [indexPath])
         }
     }

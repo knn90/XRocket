@@ -11,7 +11,7 @@
         <scene sceneID="xYu-2Y-sr4">
             <objects>
                 <tableViewController id="ieM-8b-LBN" customClass="LaunchViewController" customModule="XRocketiOS" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="QMP-nQ-sxJ">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="150" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="QMP-nQ-sxJ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
@@ -66,7 +66,6 @@
                                                                 <constraint firstAttribute="width" secondItem="1Je-gv-bgu" secondAttribute="height" multiplier="1:1" id="Lfa-Lh-GzA"/>
                                                                 <constraint firstAttribute="bottom" secondItem="KI3-XU-8pR" secondAttribute="bottom" id="OJq-v8-WZ3"/>
                                                                 <constraint firstItem="KI3-XU-8pR" firstAttribute="leading" secondItem="1Je-gv-bgu" secondAttribute="leading" id="bfw-1A-mRj"/>
-                                                                <constraint firstAttribute="height" constant="120" id="d8G-Ob-DOX"/>
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5ei-7Z-krO">
@@ -144,6 +143,7 @@
                         <connections>
                             <outlet property="dataSource" destination="ieM-8b-LBN" id="vkl-sT-C0W"/>
                             <outlet property="delegate" destination="ieM-8b-LBN" id="Xn6-Ge-qIj"/>
+                            <outlet property="prefetchDataSource" destination="ieM-8b-LBN" id="aUi-bv-kJR"/>
                         </connections>
                     </tableView>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="BK0-03-td8">
