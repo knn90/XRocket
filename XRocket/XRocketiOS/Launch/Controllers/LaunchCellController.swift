@@ -13,7 +13,8 @@ public protocol LaunchCellControllerDelegate {
     func didCancelImageRequest()
 }
 
-final class LaunchCellController: LaunchCellView {
+final class LaunchCellController: NSObject, CellController, LaunchCellView {
+    
     private var cell: LaunchCell?
     private let delegate: LaunchCellControllerDelegate
     private let didSelectCell: () -> Void
@@ -33,22 +34,33 @@ final class LaunchCellController: LaunchCellView {
         cell?.rocketImageView.image = viewModel.image
     }
     
-    func view(in tableView: UITableView) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LaunchCell") as! LaunchCell
         self.cell = cell
         delegate.didRequestImage()
         return cell
     }
     
-    func selectCell() {
-        didSelectCell()
-    }
-    
-    func preload() {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         delegate.didRequestImage()
     }
     
-    func cancelLoad() {
+    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        cancelLoad()
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cancelLoad()
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        didSelectCell()
+    }
+    
+    private func cancelLoad() {
         releaseCellForReuse()
         delegate.didCancelImageRequest()
     }

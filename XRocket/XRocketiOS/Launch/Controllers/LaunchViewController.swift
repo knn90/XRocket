@@ -12,11 +12,13 @@ public protocol LaunchViewControllerDelegate {
     func didRequestForLaunches()
 }
 
+public typealias CellController = UITableViewDataSource & UITableViewDelegate & UITableViewDataSourcePrefetching
+
 public final class LaunchViewController: UITableViewController, LaunchLoadingView, LaunchErrorView {
     
     @IBOutlet private(set) public var errorView: ErrorView?
     public var delegate: LaunchViewControllerDelegate?
-    var tableModel: [LaunchCellController] = [] {
+    var tableModel: [CellController] = [] {
         didSet {
             tableView.reloadData()
         }
@@ -38,7 +40,7 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
         delegate?.didRequestForLaunches()
     }
     
-    func display(_ cellControllers: [LaunchCellController]) {
+    func display(_ cellControllers: [CellController]) {
         tableModel = cellControllers
     }
     
@@ -59,30 +61,32 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return cellController(forRowAt: indexPath).view(in: tableView)
+        let controller = cellController(forRowAt: indexPath)
+        return controller.tableView(tableView, cellForRowAt: indexPath)
     }
     
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        return cellController(forRowAt: indexPath).selectCell()
+        let controller = cellController(forRowAt: indexPath)
+        controller.tableView?(tableView, didSelectRowAt: indexPath)
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cancelCellControllerLoad(forRowAt: indexPath)
+        cellController(forRowAt: indexPath).tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
     
-    private func cellController(forRowAt indexPath: IndexPath) -> LaunchCellController {
+    private func cellController(forRowAt indexPath: IndexPath) -> CellController {
         return tableModel[indexPath.row]
     }
     
     private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
-        cellController(forRowAt: indexPath).cancelLoad()
+        cellController(forRowAt: indexPath).tableView?(tableView, cancelPrefetchingForRowsAt: [indexPath])
     }
 }
 
 extension LaunchViewController: UITableViewDataSourcePrefetching {
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            cellController(forRowAt: indexPath).preload()
+            cellController(forRowAt: indexPath).tableView(tableView, prefetchRowsAt: [indexPath])
         }
     }
     

@@ -84,7 +84,6 @@ class LaunchPresenterTests: XCTestCase {
         func display(_ viewModel: LaunchViewModel) {
             messages.append(.display(launches: viewModel.launches))
         }
-      
     }
     
     private func localized(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {

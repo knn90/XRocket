@@ -296,7 +296,6 @@ class LaunchViewControllerTests: XCTestCase {
         let url1 = URL(string: "http:url-1.com")!
         let launch0 = LaunchFactory.any(urls: [url0])
         let launch1 = LaunchFactory.any(urls: [url1])
-        let viewModel = LaunchViewModel(launches: [launch0, launch1])
         var selectedLaunches = [Launch]()
         let (sut, loader) = makeSUT(didSelectLaunch: { selectedLaunches.append($0) })
         sut.loadViewIfNeeded()
