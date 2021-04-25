@@ -29,7 +29,7 @@ class LaunchViewAdapter: LaunchView {
                 })
             adapter.presenter = LaunchCellPresenter(view: WeakRefVirtualProxy(view), imageTransformer: UIImage.init)
             
-            return view
+            return CellController(view)
         })
     }
 }

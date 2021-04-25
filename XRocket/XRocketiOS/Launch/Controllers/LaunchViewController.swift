@@ -12,7 +12,17 @@ public protocol LaunchViewControllerDelegate {
     func didRequestForLaunches()
 }
 
-public typealias CellController = UITableViewDataSource & UITableViewDelegate & UITableViewDataSourcePrefetching
+public struct CellController {
+    let dataSource: UITableViewDataSource
+    let delegate: UITableViewDelegate?
+    let dataSourcePrefetching: UITableViewDataSourcePrefetching?
+    
+    public init(_ dataSource: UITableViewDataSource & UITableViewDelegate & UITableViewDataSourcePrefetching) {
+        self.dataSource = dataSource
+        self.delegate = dataSource
+        self.dataSourcePrefetching = dataSource
+    }
+}
 
 public final class LaunchViewController: UITableViewController, LaunchLoadingView, LaunchErrorView {
     
@@ -23,6 +33,10 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
             tableView.reloadData()
         }
     }
+    
+//    private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
+//
+//    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,17 +75,18 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let controller = cellController(forRowAt: indexPath)
-        return controller.tableView(tableView, cellForRowAt: indexPath)
+        let ds = cellController(forRowAt: indexPath).dataSource
+        return ds.tableView(tableView, cellForRowAt: indexPath)
     }
     
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let controller = cellController(forRowAt: indexPath)
-        controller.tableView?(tableView, didSelectRowAt: indexPath)
+        let dl = cellController(forRowAt: indexPath).delegate
+        dl?.tableView?(tableView, didSelectRowAt: indexPath)
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cellController(forRowAt: indexPath).tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
+        let dl = cellController(forRowAt: indexPath).delegate
+        dl?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
     
     private func cellController(forRowAt indexPath: IndexPath) -> CellController {
@@ -79,14 +94,16 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
     }
     
     private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
-        cellController(forRowAt: indexPath).tableView?(tableView, cancelPrefetchingForRowsAt: [indexPath])
+        let dsp = cellController(forRowAt: indexPath).dataSourcePrefetching
+        dsp?.tableView?(tableView, cancelPrefetchingForRowsAt: [indexPath])
     }
 }
 
 extension LaunchViewController: UITableViewDataSourcePrefetching {
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            cellController(forRowAt: indexPath).tableView(tableView, prefetchRowsAt: [indexPath])
+            let dsp = cellController(forRowAt: indexPath).dataSourcePrefetching
+            dsp?.tableView(tableView, prefetchRowsAt: [indexPath])
         }
     }
     

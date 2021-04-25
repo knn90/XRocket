@@ -13,7 +13,7 @@ public protocol LaunchCellControllerDelegate {
     func didCancelImageRequest()
 }
 
-final class LaunchCellController: NSObject, CellController, LaunchCellView {
+final class LaunchCellController: NSObject, LaunchCellView {
     
     private var cell: LaunchCell?
     private let delegate: LaunchCellControllerDelegate
@@ -33,7 +33,9 @@ final class LaunchCellController: NSObject, CellController, LaunchCellView {
         cell?.imageContainer.isShimmering = viewModel.isLoading
         cell?.rocketImageView.image = viewModel.image
     }
-    
+}
+
+extension LaunchCellController: UITableViewDataSource, UITableViewDelegate, UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         1
     }
