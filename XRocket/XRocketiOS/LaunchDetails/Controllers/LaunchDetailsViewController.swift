@@ -22,8 +22,13 @@ public final class LaunchDetailsViewController: UIViewController, UICollectionVi
         }
     }
     
+    private struct Constants {
+        static let collectionHeight: CGFloat = 300
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.collectionViewLayout = createCollectionViewLayout()
         delegate?.requestForImageURLs()
     }
     
@@ -53,6 +58,23 @@ public final class LaunchDetailsViewController: UIViewController, UICollectionVi
         indexPaths.forEach { indexPath in
             cellControllers[indexPath.item].cancelLoad()
         }
+    }
+    
+    private func createCollectionViewLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(Constants.collectionHeight))
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .paging
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        return layout
     }
 }
 
