@@ -19,7 +19,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="xm9-Zz-pVP">
                                 <rect key="frame" x="0.0" y="44" width="414" height="300"/>
-                                <color key="backgroundColor" red="1" green="0.37115770619999999" blue="0.31594176730000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="Tte-M5-noZ"/>
                                 </constraints>
@@ -44,7 +44,7 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                                         </imageView>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstItem="zlh-tJ-oOG" firstAttribute="leading" secondItem="9Xm-cl-XLX" secondAttribute="leading" id="WMq-dv-bwL"/>
                                                         <constraint firstAttribute="bottom" secondItem="zlh-tJ-oOG" secondAttribute="bottom" id="Y95-il-d4N"/>
@@ -54,8 +54,10 @@
                                                 </view>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3Y-97-XUc">
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <state key="normal" title="↻"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                                    <state key="normal" title="↻">
+                                                        <color key="titleColor" systemColor="labelColor"/>
+                                                    </state>
                                                     <connections>
                                                         <action selector="retry" destination="guh-F7-3Uf" eventType="touchUpInside" id="1uc-wu-M5D"/>
                                                     </connections>
@@ -72,7 +74,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="9Xm-cl-XLX" secondAttribute="trailing" id="sOt-S4-9i1"/>
                                             </constraints>
                                         </collectionViewCellContentView>
-                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <size key="customSize" width="414" height="300"/>
                                         <connections>
                                             <outlet property="imageContainer" destination="9Xm-cl-XLX" id="aEn-UK-faA"/>
@@ -106,14 +108,17 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
