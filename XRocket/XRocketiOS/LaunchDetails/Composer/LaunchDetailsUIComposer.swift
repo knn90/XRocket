@@ -32,18 +32,6 @@ public final class LaunchDetailsUIComposer {
     }
 }
 
-class LaunchDetailsPresentationAdapter: LaunchDetailsViewControllerDelegate {
-    var presenter: LaunchDetailsPresenter?
-    private let urls: [URL]
-    
-    init(urls: [URL]) {
-        self.urls = urls
-    }
-    
-    func requestForImageURLs() {
-        presenter?.display(urls: urls)
-    }
-}
 
 class LaunchDetailsViewAdapter: LaunchDetailsView {
     private weak var viewController: LaunchDetailsViewController?
@@ -63,32 +51,5 @@ class LaunchDetailsViewAdapter: LaunchDetailsView {
             
             return view
         })
-    }
-}
-
-class LaunchDetailsImageCellPresentationAdapter<View: LaunchImageView, Image>: LaunchDetailsImageCellControllerDelegate where View.Image == Image {
-    private let url: URL
-    private let imageLoader: ImageDataLoader
-    var presenter: LaunchImageCellPresenter<View, Image>?
-    var task: ImageDataLoaderTask?
-    
-    init(url: URL, imageLoader: ImageDataLoader) {
-        self.url = url
-        self.imageLoader = imageLoader
-    }
-    func didRequestImage() {
-        presenter?.didStartLoadingImage()
-        task = imageLoader.load(from: URLRequest(url: url)) { [weak self] result in
-            switch result {
-            case let .success(data):
-                self?.presenter?.didFinishLoadingImage(with: data)
-            case let .failure(error):
-                self?.presenter?.didFinishLoadingImage(with: error)
-            }
-        }
-    }
-    
-    func didCancelImageRequest() {
-        task?.cancel()
     }
 }
