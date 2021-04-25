@@ -28,6 +28,12 @@ public final class LaunchViewController: UITableViewController, UITableViewDataS
         loadLaunches()
     }
     
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        tableView.sizeTableHeaderToFit()
+    }
+    
     @IBAction private func loadLaunches() {
         delegate?.didRequestForLaunches()
     }
