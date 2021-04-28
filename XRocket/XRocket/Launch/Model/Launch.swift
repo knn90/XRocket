@@ -13,6 +13,7 @@ public struct Launch: Codable, Equatable, Hashable {
     public let flightNumber: Int
     public let success: Bool
     public let dateUnix: Date
+    public let details: String
     public let links: Link
     
     enum CodingKeys: String, CodingKey {
@@ -22,14 +23,16 @@ public struct Launch: Codable, Equatable, Hashable {
         case success = "success"
         case dateUnix = "date_unix"
         case links = "links"
+        case details = "details"
     }
     
-    public init(id: String, name: String, flightNumber: Int, success: Bool, dateUTC: Date, links: Link) {
+    public init(id: String, name: String, flightNumber: Int, success: Bool, dateUTC: Date, details: String, links: Link) {
         self.id = id
         self.name = name
         self.flightNumber = flightNumber
         self.success = success
         self.dateUnix = dateUTC
+        self.details = details
         self.links = links
     }
 }

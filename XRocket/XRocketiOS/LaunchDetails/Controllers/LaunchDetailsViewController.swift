@@ -10,11 +10,14 @@ import XRocket
 
 public protocol LaunchDetailsViewControllerDelegate {
     func requestForImageURLs()
+    func populateLaunchDetails()
 }
 
 public final class LaunchDetailsViewController: UIViewController {
     
     @IBOutlet private(set) public var collectionView: UICollectionView!
+    @IBOutlet private(set) public var tableView: UITableView!
+    
     var delegate: LaunchDetailsViewControllerDelegate?
     private var cellControllers = [LaunchDetailsImageCellController]() {
         didSet {
@@ -30,6 +33,7 @@ public final class LaunchDetailsViewController: UIViewController {
         super.viewDidLoad()
         collectionView.collectionViewLayout = createCollectionViewLayout()
         delegate?.requestForImageURLs()
+        delegate?.populateLaunchDetails()
     }
     
     public func display(_ cellControllers: [LaunchDetailsImageCellController]) {
@@ -82,4 +86,38 @@ extension LaunchDetailsViewController: UICollectionViewDataSourcePrefetching {
             cellControllers[indexPath.item].cancelLoad()
         }
     }
+}
+
+extension LaunchDetailsViewController: UITableViewDataSource {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        1
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        LaunchDetailsInfoCell()
+    }
+    
+
+}
+
+extension LaunchDetailsViewController: UITableViewDelegate {
+    
+}
+
+class LaunchDetailsInfoCellController: NSObject {
+    private var cell: LaunchDetailsInfoCell?
+}
+
+extension LaunchDetailsInfoCellController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LaunchDetailsInfoCell") as! LaunchDetailsInfoCell
+        self.cell = cell
+        return cell
+    }
+    
+    
 }

@@ -8,20 +8,28 @@
 import Foundation
 
 
+public protocol LaunchDetailsImageView {
+    func display(_ viewModel: LaunchDetailsImageViewModel)
+}
+
 public protocol LaunchDetailsView {
     func display(_ viewModel: LaunchDetailsViewModel)
+}
+
+public struct LaunchDetailsViewModel {
+
 }
 
 public class LaunchDetailsPresenter {
     public static let title = LaunchDetailsString.localize(for: "launch_details_view_title")
     
-    private let launchDetailsView: LaunchDetailsView
+    private let launchDetailsView: LaunchDetailsImageView
     
-    public init(launchDetailsView: LaunchDetailsView) {
+    public init(launchDetailsView: LaunchDetailsImageView) {
         self.launchDetailsView = launchDetailsView
     }
     
     public func display(urls: [URL]) {
-        launchDetailsView.display(LaunchDetailsViewModel(urls: urls))
+        launchDetailsView.display(LaunchDetailsImageViewModel(urls: urls))
     }
 }

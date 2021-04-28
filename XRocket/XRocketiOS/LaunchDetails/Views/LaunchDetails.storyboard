@@ -179,6 +179,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="aig-H8-NgI" id="VnR-i4-hjx"/>
+                                    <outlet property="delegate" destination="aig-H8-NgI" id="kAH-E5-HXk"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="seN-i5-QH1"/>
@@ -195,6 +199,7 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="xm9-Zz-pVP" id="kNx-nw-i7u"/>
+                        <outlet property="tableView" destination="e4j-du-DHU" id="Y5x-9y-0lD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1U1-th-kAk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

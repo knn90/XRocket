@@ -13,7 +13,7 @@ public final class LaunchDetailsUIComposer {
     private init() {}
     
     public static func composeWith(imageLoader: ImageDataLoader, launch: Launch) -> LaunchDetailsViewController {
-        let presentationAdapter = LaunchDetailsPresentationAdapter(urls: launch.links.flickr.original)
+        let presentationAdapter = LaunchDetailsPresentationAdapter(launch: launch)
         let viewController = makeLaunchDetailsViewController(delegate: presentationAdapter)
         
         let presenter = LaunchDetailsPresenter(
@@ -33,7 +33,7 @@ public final class LaunchDetailsUIComposer {
 }
 
 
-class LaunchDetailsViewAdapter: LaunchDetailsView {
+class LaunchDetailsViewAdapter: LaunchDetailsImageView {
     private weak var viewController: LaunchDetailsViewController?
     private let imageLoader: ImageDataLoader
     
@@ -42,7 +42,7 @@ class LaunchDetailsViewAdapter: LaunchDetailsView {
         self.imageLoader = imageLoader
     }
     
-    func display(_ viewModel: LaunchDetailsViewModel) {
+    func display(_ viewModel: LaunchDetailsImageViewModel) {
         viewController?.display(viewModel.urls.map { url in
             let adapter = LaunchDetailsImageCellPresentationAdapter<WeakRefVirtualProxy<LaunchDetailsImageCellController>, UIImage>(url: url, imageLoader: imageLoader)
             let view = LaunchDetailsImageCellController(delegate: adapter)

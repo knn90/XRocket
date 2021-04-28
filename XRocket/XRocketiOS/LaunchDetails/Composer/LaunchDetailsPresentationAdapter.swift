@@ -10,13 +10,17 @@ import XRocket
 
 class LaunchDetailsPresentationAdapter: LaunchDetailsViewControllerDelegate {
     var presenter: LaunchDetailsPresenter?
-    private let urls: [URL]
+    private let launch: Launch
     
-    init(urls: [URL]) {
-        self.urls = urls
+    init(launch: Launch) {
+        self.launch = launch
     }
     
     func requestForImageURLs() {
-        presenter?.display(urls: urls)
+        presenter?.display(urls: launch.links.flickr.original)
+    }
+    
+    func populateLaunchDetails() {
+        
     }
 }

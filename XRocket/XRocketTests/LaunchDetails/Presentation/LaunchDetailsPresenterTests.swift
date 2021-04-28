@@ -31,6 +31,16 @@ class LaunchDetailsPresenterTests: XCTestCase {
         XCTAssertEqual(message?.urls, [url])
     }
     
+//    func test_populateLaunchDetails_sendDisplayLaunchDetailMessageToView() {
+//        let (sut, view) = makeSUT()
+//        let launch = LaunchFactory.any()
+//        sut.display(launch: launch)
+//        
+//        let message = view.messages.first
+//        XCTAssertEqual(view.messages.count, 1)
+//        XCTAssertEqual(message?.urls, [url])
+//    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsPresenter, ViewSpy) {
         let view = ViewSpy()
@@ -42,10 +52,10 @@ class LaunchDetailsPresenterTests: XCTestCase {
         return (sut, view)
     }
     
-    private class ViewSpy: LaunchDetailsView {
-        var messages = [LaunchDetailsViewModel]()
+    private class ViewSpy: LaunchDetailsImageView {
+        var messages = [LaunchDetailsImageViewModel]()
         
-        func display(_ viewModel: LaunchDetailsViewModel) {
+        func display(_ viewModel: LaunchDetailsImageViewModel) {
             messages.append(viewModel)
         }
     }

@@ -17,7 +17,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         let url1 = URL(string: "http://url-1.com")!
         let url2 = URL(string: "http://url-2.com")!
         let url3 = URL(string: "http://url-3.com")!
-        let (sut, _) = makeSUT(urls: [url0, url1, url2, url3])
+        let launch = LaunchFactory.any( urls: [url0, url1, url2, url3])
+        let (sut, _) = makeSUT(launch: launch)
         
         sut.loadViewIfNeeded()
         
@@ -28,7 +29,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
         let url2 = URL(string: "http://url-2.com")!
-        let (sut, loader) = makeSUT(urls: [url0, url1, url2])
+        let launch = LaunchFactory.any(urls: [url0, url1, url2])
+        let (sut, loader) = makeSUT(launch: launch)
         
         sut.loadViewIfNeeded()
         
@@ -44,7 +46,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     func test_loadImage_showsLoadingIndicatorWhileLoadingImage() {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
-        let (sut, loader) = makeSUT(urls: [url0, url1])
+        let launch = LaunchFactory.any(urls: [url0, url1])
+        let (sut, loader) = makeSUT(launch: launch)
         sut.loadViewIfNeeded()
         
         let cell0 = sut.simulateCellVisible(at: 0)
@@ -64,7 +67,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     func test_loadImage_rendersLoadedImage() {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
-        let (sut, loader) = makeSUT(urls: [url0, url1])
+        let launch = LaunchFactory.any(urls: [url0, url1])
+        let (sut, loader) = makeSUT(launch: launch)
         sut.loadViewIfNeeded()
         
         let cell0 = sut.simulateCellVisible(at: 0)
@@ -86,7 +90,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     func test_loadImage_showsRetryButtonOnLoadImageFailed() {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
-        let (sut, loader) = makeSUT(urls: [url0, url1])
+        let launch = LaunchFactory.any(urls: [url0, url1])
+        let (sut, loader) = makeSUT(launch: launch)
         sut.loadViewIfNeeded()
         
         let cell0 = sut.simulateCellVisible(at: 0)
@@ -106,7 +111,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     func test_onRetry_requestsImageDataFromURL() {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
-        let (sut, loader) = makeSUT(urls: [url0, url1])
+        let launch = LaunchFactory.any(urls: [url0, url1])
+        let (sut, loader) = makeSUT(launch: launch)
         sut.loadViewIfNeeded()
         
         let cell0 = sut.simulateCellVisible(at: 0)
@@ -126,7 +132,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     func test_imageCell_preloadsImageWhenCellIsNearVisible() {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
-        let (sut, loader) = makeSUT(urls: [url0, url1])
+        let launch = LaunchFactory.any(urls: [url0, url1])
+        let (sut, loader) = makeSUT(launch: launch)
         sut.loadViewIfNeeded()
         
         XCTAssertEqual(loader.requestedImageURLs, [])
@@ -141,7 +148,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     func test_imageCell_cancelImageRequestWhenCellIsNotNearVisibleAnymore() {
         let url0 = URL(string: "http://url-0.com")!
         let url1 = URL(string: "http://url-1.com")!
-        let (sut, loader) = makeSUT(urls: [url0, url1])
+        let launch = LaunchFactory.any(urls: [url0, url1])
+        let (sut, loader) = makeSUT(launch: launch)
         sut.loadViewIfNeeded()
         
         sut.simulateLauncCellIsNotNearVisible(at: 0)
@@ -153,7 +161,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     
     func test_imageCell_doesNotRenderLoadedImageWhenNotVisibleAnyMore() {
         let url0 = URL(string: "http:url-0.com")!
-        let (sut, loader) = makeSUT(urls: [url0])
+        let launch = LaunchFactory.any(urls: [url0])
+        let (sut, loader) = makeSUT(launch: launch)
         sut.loadViewIfNeeded()
         
         let cell = sut.simulateCellNotVisible(at: 0)
@@ -164,7 +173,8 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     
     func test_loadImageCompletion_dispatchFromBackgroundToMainThread() {
         let url0 = URL(string: "http:url-0.com")!
-        let (sut, loader) = makeSUT(urls: [url0])
+        let launch = LaunchFactory.any(urls: [url0])
+        let (sut, loader) = makeSUT(launch: launch)
         sut.loadViewIfNeeded()
         
         _ = sut.simulateCellVisible(at: 0)
@@ -178,9 +188,9 @@ class LaunchDetailsViewControllerTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func makeSUT(urls: [URL] = [], file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsViewController, LoaderSpy) {
+    private func makeSUT(launch: Launch = LaunchFactory.any(), file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsViewController, LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = LaunchDetailsUIComposer.composeWith(imageLoader: loader, urls: urls)
+        let sut = LaunchDetailsUIComposer.composeWith(imageLoader: loader, launch: launch)
         
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(loader, file: file, line: line)
