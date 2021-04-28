@@ -52,10 +52,18 @@ class LaunchEndpoint {
                 "sort": [
                     "date_utc": "desc"
                 ],
+                "populate": [
+                    [
+                        "path": "rocket",
+                        "select": [
+                            "name": 1
+                        ]
+                    ]
+                ],
                 "page": page
             ]
         ]
-
+        
         launchRequest.httpBody = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
         return launchRequest
     }
