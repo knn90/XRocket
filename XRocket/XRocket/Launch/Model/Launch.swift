@@ -15,6 +15,7 @@ public struct Launch: Codable, Equatable, Hashable {
     public let dateUnix: Date
     public let details: String
     public let links: Link
+    public let rocket: Rocket
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -24,9 +25,10 @@ public struct Launch: Codable, Equatable, Hashable {
         case dateUnix = "date_unix"
         case links = "links"
         case details = "details"
+        case rocket = "rocket"
     }
     
-    public init(id: String, name: String, flightNumber: Int, success: Bool, dateUTC: Date, details: String, links: Link) {
+    public init(id: String, name: String, flightNumber: Int, success: Bool, dateUTC: Date, details: String, links: Link, rocket: Rocket) {
         self.id = id
         self.name = name
         self.flightNumber = flightNumber
@@ -34,6 +36,7 @@ public struct Launch: Codable, Equatable, Hashable {
         self.dateUnix = dateUTC
         self.details = details
         self.links = links
+        self.rocket = rocket
     }
 }
 
@@ -57,11 +60,21 @@ public struct Flickr: Codable, Equatable, Hashable {
 }
 
 public struct Patch: Codable, Equatable, Hashable {
+    public let small: URL
+    public let large: URL
+    
     public init(small: URL, large: URL) {
         self.small = small
         self.large = large
     }
+}
+
+public struct Rocket: Codable, Equatable, Hashable {
+    public let id: String
+    public let name: String
     
-    public let small: URL
-    public let large: URL
+    public init(id: String, name: String) {
+        self.id = id
+        self.name = name
+    }
 }
