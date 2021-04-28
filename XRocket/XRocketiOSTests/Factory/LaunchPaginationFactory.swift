@@ -18,7 +18,6 @@ class LaunchPaginationFactory {
         LaunchPagination(
             docs: launches,
             totalDocs: 3,
-            offset: 0,
             limit: 3,
             totalPages: 1,
             page: 1,
@@ -29,15 +28,32 @@ class LaunchPaginationFactory {
             nextPage: nil)
     }
     
+    static func multiple(with launches: [Launch] = [
+        LaunchFactory.any(),
+        LaunchFactory.emptyName(),
+        LaunchFactory.launchFailed(),
+    ], page: Int) -> LaunchPagination {
+        LaunchPagination(
+            docs: launches,
+            totalDocs: 3,
+            limit: 3,
+            totalPages: 10,
+            page: page,
+            pagingCounter: 1,
+            hasPrevPage: true,
+            hasNextPage: true,
+            prevPage: nil,
+            nextPage: 2)
+    }
+    
     static func empty() -> LaunchPagination {
         LaunchPagination(
             docs: [],
             totalDocs: 0,
-            offset: 0,
             limit: 0,
-            totalPages: 0,
-            page: 0,
-            pagingCounter: 0,
+            totalPages: 1,
+            page: 1,
+            pagingCounter: 1,
             hasPrevPage: false,
             hasNextPage: false,
             prevPage: nil,

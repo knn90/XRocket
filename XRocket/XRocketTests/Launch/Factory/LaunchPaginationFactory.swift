@@ -13,7 +13,6 @@ class LaunchPaginationFactory {
         LaunchPagination(
             docs: [],
             totalDocs: 0,
-            offset: 0,
             limit: 0,
             totalPages: 0,
             page: 0,
@@ -32,7 +31,6 @@ class LaunchPaginationFactory {
                 LaunchFactory.launchFailed(),
             ],
             totalDocs: 3,
-            offset: 0,
             limit: 3,
             totalPages: 1,
             page: 1,

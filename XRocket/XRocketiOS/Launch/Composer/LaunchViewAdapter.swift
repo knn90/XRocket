@@ -20,16 +20,23 @@ class LaunchViewAdapter: LaunchView {
     }
     
     func display(_ viewModel: LaunchViewModel) {
-        launchViewController?.display(viewModel.launches.map { model in
-            let adapter = LaunchImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<LaunchCellController>, UIImage>(model: model, imageLoader: imageLoader)
-            let view = LaunchCellController(
-                delegate: adapter,
-                didSelectCell: { [weak self] in
-                    self?.didSelectLaunch(model)
-                })
-            adapter.presenter = LaunchCellPresenter(view: WeakRefVirtualProxy(view), imageTransformer: UIImage.init)
-            
-            return CellController(id: model, view)
-        })
+        let newItem = viewModel.launches.map(makeController)
+        if viewModel.pageNumber == 1 {
+            launchViewController?.set(newItem)
+        } else {
+            launchViewController?.append(newItem)
+        }
+    }
+    
+    private func makeController(_ model: Launch) -> CellController {
+        let adapter = LaunchImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<LaunchCellController>, UIImage>(model: model, imageLoader: imageLoader)
+        let view = LaunchCellController(
+            delegate: adapter,
+            didSelectCell: { [weak self] in
+                self?.didSelectLaunch(model)
+            })
+        adapter.presenter = LaunchCellPresenter(view: WeakRefVirtualProxy(view), imageTransformer: UIImage.init)
+        
+        return CellController(id: model, view)
     }
 }

@@ -13,8 +13,9 @@ public final class LaunchUIComposer {
     
     public static func composeWith(loader: LaunchLoader, imageLoader: ImageDataLoader, didSelectLaunch: @escaping (Launch) -> Void) -> LaunchViewController {
         let presentationAdapter = LaunchPresentationAdapter(loader: MainQueueDispatchDecorator(decoratee: loader))
-        
         let launchController = makeLaunchViewController(delegate: presentationAdapter)
+        let loadMoreController = LoadMoreController(delegate: presentationAdapter)
+        launchController.loadMoreController = loadMoreController
         
         let presenter = LaunchPresenter(
             loadingView: WeakRefVirtualProxy(launchController),
@@ -22,7 +23,8 @@ public final class LaunchUIComposer {
             launchView: LaunchViewAdapter(
                 launchViewController: launchController,
                 imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader),
-                didSelectLaunch: didSelectLaunch))
+                didSelectLaunch: didSelectLaunch),
+            loadMoreView: WeakRefVirtualProxy(loadMoreController))
         presentationAdapter.presenter = presenter
         
         return launchController

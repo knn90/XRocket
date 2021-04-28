@@ -34,6 +34,12 @@ extension WeakRefVirtualProxy: LaunchLoadingView where T: LaunchLoadingView {
     }
 }
 
+extension WeakRefVirtualProxy: LaunchLoadMoreView where T: LaunchLoadMoreView {
+    func display(_ viewModel: LaunchLoadMoreViewModel) {
+        object?.display(viewModel)
+    }
+}
+
 extension WeakRefVirtualProxy: LaunchCellView where T: LaunchCellView, T.Image == UIImage {
     func display(viewModel: LaunchCellViewModel<UIImage>) {
         object?.display(viewModel: viewModel)

@@ -34,6 +34,20 @@ class LaunchViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadLaunchCallCount, 3, "Expected yet another requests when user initiated another reload")
     }
     
+    func test_loadMoreAction_RequestLaunchFromLoader() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(loader.loadLaunchCallCount, 1, "Expected a request when user trigger load more action")
+        
+        loader.completeLoading(with: LaunchPaginationFactory.multiple(page: 1), at: 0)
+        sut.simulateLoadMoreAction()
+        XCTAssertEqual(loader.loadLaunchCallCount, 2, "Expected a request when user trigger load more action")
+        
+        loader.completeLoading(with: LaunchPaginationFactory.multiple(page: 2), at: 1)
+        sut.simulateLoadMoreAction()
+        XCTAssertEqual(loader.loadLaunchCallCount, 3, "Expected a request when user trigger load more action")
+    }
+    
     func test_loadingIndicator_isVisibleWhileLoadingLaunches() {
         let (sut, loader) = makeSUT()
         
@@ -79,6 +93,24 @@ class LaunchViewControllerTests: XCTestCase {
         sut.simulateUserInitiatedReload()
         loader.completeLoading(with: LaunchPaginationFactory.empty(), at: 1)
         assertThat(sut, isRendering: [])
+    }
+    
+    func test_loadMore_renderSuccessfullyLoadedLaunches() {
+        let (sut, loader) = makeSUT()
+        let launch0 = Launch(id: "", name: "name 1", flightNumber: 23, success: true, dateUTC: LaunchDateFactory.date1().date, links: anyLink())
+        let launch1 = Launch(id: "", name: "name 2", flightNumber: 45, success: true, dateUTC: LaunchDateFactory.date1().date, links: anyLink())
+        let launch2 = Launch(id: "", name: "name 3", flightNumber: 56, success: true, dateUTC: LaunchDateFactory.date1().date, links: anyLink())
+        
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(sut.numberOfRenderedCell, 0)
+        
+        loader.completeLoading(with: LaunchPaginationFactory.multiple(with: [launch0], page: 1), at: 0)
+        assertThat(sut, isRendering: [launch0])
+        
+        sut.simulateLoadMoreAction()
+        loader.completeLoading(with: LaunchPaginationFactory.multiple(with: [launch1, launch2], page: 2), at: 1)
+        XCTAssertEqual(sut.numberOfRenderedCell, 3)
+        assertThat(sut, isRendering: [launch0, launch1, launch2])
     }
     
     func test_loadCompletion_doesNotAlterCurrentRenderingStateOnError() {
@@ -421,6 +453,12 @@ extension LaunchViewController {
         return ds?.tableView(tableView, cellForRowAt: index)
     }
     
+    func simulateLoadMoreAction() {
+      let scrollView = DraggingScrollView()
+      scrollView.contentOffset.y = 1000
+      scrollViewDidScroll(scrollView)
+    }
+    
     var isShowingLoadingIndicator: Bool {
         return refreshControl?.isRefreshing == true
     }
@@ -464,4 +502,10 @@ class LaunchDateFactory {
     static func date4() -> (date: Date, string: String) {
         return (Date(timeIntervalSince1970: 1610072100), "2021-01-08")
     }
+}
+
+private class DraggingScrollView: UIScrollView {
+  override var isDragging: Bool {
+    true
+  }
 }

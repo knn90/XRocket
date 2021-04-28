@@ -50,13 +50,17 @@ public final class LaunchPresenter {
         loadMoreView.display(LaunchLoadMoreViewModel(isLoading: true, hasNextPage: false, pageNumber: 0))
     }
     
+    public func didStartLoadMoreLaunch(page: Int) {
+        loadMoreView.display(LaunchLoadMoreViewModel(isLoading: true, hasNextPage: false, pageNumber: page))
+    }
+    
     public func didFinishLoading(with error: Error) {
         errorView.display(LaunchErrorViewModel(message: loadErrorMessage))
         loadingView.display(LaunchLoadingViewModel(isLoading: false))
     }
     
     public func didFinishLoading(with launchPagination: LaunchPagination) {
-        launchView.display(LaunchViewModel(launches: launchPagination.docs))
+        launchView.display(LaunchViewModel(launches: launchPagination.docs, pageNumber: launchPagination.page))
         loadingView.display(LaunchLoadingViewModel(isLoading: false))
         loadMoreView.display(LaunchLoadMoreViewModel(isLoading: false, hasNextPage: launchPagination.hasNextPage, pageNumber: launchPagination.page))
     }

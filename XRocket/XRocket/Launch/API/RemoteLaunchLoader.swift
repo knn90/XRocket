@@ -10,17 +10,15 @@ import Foundation
 public protocol LaunchLoader {
     typealias Result = Swift.Result<LaunchPagination, Error>
     
-    func load(completion: @escaping (LaunchLoader.Result) -> Void)
+    func load(request: URLRequest, completion: @escaping (LaunchLoader.Result) -> Void)
 }
 
 public class RemoteLaunchLoader: LaunchLoader {
     
     private let client: HTTPClient
-    private let request: URLRequest
     
-    public init(client: HTTPClient, request: URLRequest) {
+    public init(client: HTTPClient) {
         self.client = client
-        self.request = request
     }
     
     public enum Error: Swift.Error {
@@ -29,7 +27,7 @@ public class RemoteLaunchLoader: LaunchLoader {
         case invalidData
     }
     
-    public func load(completion: @escaping (LaunchLoader.Result) -> Void) {
+    public func load(request: URLRequest, completion: @escaping (LaunchLoader.Result) -> Void) {
         client.load(from: request) { [weak self] result in
             guard self != nil else { return }
             switch result {

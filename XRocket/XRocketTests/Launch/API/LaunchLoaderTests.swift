@@ -17,19 +17,19 @@ class LaunchLoaderTests: XCTestCase {
     
     func test_load_sendsRequestFromURL() {
         let request = URLRequest(url: URL(string: "http://a-specific-url.com")!)
-        let (sut, client) = makeSUT(request: request)
+        let (sut, client) = makeSUT()
         
-        sut.load { _ in }
+        sut.load(request: request) { _ in }
         
         XCTAssertEqual(client.requestedRequests, [request])
     }
     
     func test_loadTwice_sendsRequestFromURLTwice() {
         let request = URLRequest(url: URL(string: "http://a-specific-url.com")!)
-        let (sut, client) = makeSUT(request: request)
+        let (sut, client) = makeSUT()
         
-        sut.load { _ in }
-        sut.load { _ in }
+        sut.load(request: request) { _ in }
+        sut.load(request: request) { _ in }
         
         XCTAssertEqual(client.requestedRequests, [request, request])
     }
@@ -72,10 +72,10 @@ class LaunchLoaderTests: XCTestCase {
     
     func test_load_doesNotDeliverResultAfterSUTHasBeenDeallocated() {
         let client = HTTPClientSpy()
-        var sut: RemoteLaunchLoader? = RemoteLaunchLoader(client: client, request: anyURLRequest())
+        var sut: RemoteLaunchLoader? = RemoteLaunchLoader(client: client)
         
         var receivedResult: RemoteLaunchLoader.Result?
-        sut?.load { receivedResult = $0 }
+        sut?.load(request: anyURLRequest()) { receivedResult = $0 }
         
         sut = nil
         client.complete(withStatusCode: 200, data: Data())
@@ -84,9 +84,9 @@ class LaunchLoaderTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func makeSUT(request: URLRequest = anyURLRequest(), file: StaticString = #file, line: UInt = #line) -> (RemoteLaunchLoader, HTTPClientSpy) {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (RemoteLaunchLoader, HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = RemoteLaunchLoader(client: client, request: request)
+        let sut = RemoteLaunchLoader(client: client)
         
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(client, file: file, line: line)
@@ -96,7 +96,7 @@ class LaunchLoaderTests: XCTestCase {
     
     private func expect(_ sut: RemoteLaunchLoader, toCompleteWithResult expectedResult: RemoteLaunchLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
-        sut.load { receivedResult in
+        sut.load(request: anyURLRequest()) { receivedResult in
             switch (expectedResult, receivedResult) {
             case let (.success(expectedResponse), .success(receivedResponse)):
                 XCTAssertEqual(expectedResponse, receivedResponse, "Expected to get success with \(expectedResponse), got \(receivedResponse) instead", file: file, line: line)

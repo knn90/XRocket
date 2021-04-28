@@ -9,9 +9,10 @@ import Foundation
 
 public struct LaunchViewModel {
     public let launches: [Launch]
-    
-    public init(launches: [Launch]) {
+    public let pageNumber: Int
+    public init(launches: [Launch], pageNumber: Int) {
         self.launches = launches
+        self.pageNumber = pageNumber
     }
 }
 

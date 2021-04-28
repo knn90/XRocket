@@ -16,6 +16,8 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
     
     @IBOutlet private(set) public var errorView: ErrorView?
     public var delegate: LaunchViewControllerDelegate?
+    public var loadMoreController: LoadMoreController?
+    
     private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
         .init(tableView: tableView) { tableView, indexPath, controller -> UITableViewCell? in
             return controller.dataSource.tableView(tableView, cellForRowAt: indexPath)
@@ -39,11 +41,17 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
         delegate?.didRequestForLaunches()
     }
     
-    func display(_ cellControllers: [CellController]) {
+    func set(_ cellControllers: [CellController]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
         snapshot.appendSections([0])
         snapshot.appendItems(cellControllers, toSection: 0)
         dataSource.apply(snapshot)
+    }
+    
+    func append(_ cellControllers: [CellController]) {
+        var snapshot = dataSource.snapshot()
+        snapshot.appendItems(cellControllers, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     public func display(_ viewModel: LaunchLoadingViewModel) {
@@ -56,6 +64,16 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
     
     public func display(_ viewModel: LaunchErrorViewModel) {
         errorView?.message = viewModel.message
+    }
+    
+    public override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView.isDragging else { return }
+        
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        if (offsetY > contentHeight - scrollView.frame.height) {
+            loadMoreController?.load()
+        }
     }
     
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

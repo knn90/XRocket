@@ -12,7 +12,7 @@ class LoaderSpy: LaunchLoader, ImageDataLoader {
     private(set) var loadLaunchCallCount = 0
     private(set) var completions = [(LaunchLoader.Result) -> Void]()
     
-    func load(completion: @escaping (Result<LaunchPagination, Error>) -> Void) {
+    func load(request: URLRequest, completion: @escaping (Result<LaunchPagination, Error>) -> Void) {
         loadLaunchCallCount += 1
         completions.append(completion)
     }

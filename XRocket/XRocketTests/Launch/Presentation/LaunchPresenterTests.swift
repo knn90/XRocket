@@ -45,13 +45,23 @@ class LaunchPresenterTests: XCTestCase {
     func test_didFinishLoadingWithLaunches_displaysLaunchesAndStopLoading() {
         let (sut, view) = makeSUT()
         let launchPagination = LaunchPaginationFactory.single()
-        let viewModel = LaunchViewModel(launches: launchPagination.docs)
+        let viewModel = LaunchViewModel(launches: launchPagination.docs, pageNumber: 1)
         sut.didFinishLoading(with: launchPagination)
         
         XCTAssertEqual(view.messages, [
             .display(launches: viewModel.launches),
             .display(isLoading: false),
             .display(isLoading: false, hasNextPage: launchPagination.hasNextPage, pageNumber: launchPagination.page)
+        ])
+    }
+    
+    func test_didStartLoadMoreLaunch_displayLoadMoreViewModel() {
+        let (sut, view) = makeSUT()
+        let launchPagination = LaunchPaginationFactory.single()
+        sut.didStartLoadMoreLaunch(page: 1)
+        
+        XCTAssertEqual(view.messages, [
+            .display(isLoading: true, hasNextPage: launchPagination.hasNextPage, pageNumber: launchPagination.page)
         ])
     }
     

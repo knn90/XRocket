@@ -27,8 +27,8 @@ final class MainQueueDispatchDecorator<T> {
 }
 
 extension MainQueueDispatchDecorator: LaunchLoader where T == LaunchLoader {
-    func load(completion: @escaping (Result<LaunchPagination, Error>) -> Void) {
-        decoratee.load { [weak self] result in
+    func load(request: URLRequest, completion: @escaping (Result<LaunchPagination, Error>) -> Void) {
+        decoratee.load(request: request) { [weak self] result in
             self?.dispatch { completion(result) }
         }
     }
