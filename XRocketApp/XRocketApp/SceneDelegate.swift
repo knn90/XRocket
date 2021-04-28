@@ -28,7 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func didSelectLaunch(_ launch: Launch) {
-        let launchDetailsViewController = LaunchDetailsUIComposer.composeWith(imageLoader: imageLoader, urls: launch.links.flickr.original)
+        let launchDetailsViewController = LaunchDetailsUIComposer.composeWith(imageLoader: imageLoader, launch: launch)
         navigationController?.pushViewController(launchDetailsViewController, animated: true)
     }
 }

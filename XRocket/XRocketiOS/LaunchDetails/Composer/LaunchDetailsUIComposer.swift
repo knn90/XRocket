@@ -12,8 +12,8 @@ import UIKit
 public final class LaunchDetailsUIComposer {
     private init() {}
     
-    public static func composeWith(imageLoader: ImageDataLoader, urls: [URL]) -> LaunchDetailsViewController {
-        let presentationAdapter = LaunchDetailsPresentationAdapter(urls: urls)
+    public static func composeWith(imageLoader: ImageDataLoader, launch: Launch) -> LaunchDetailsViewController {
+        let presentationAdapter = LaunchDetailsPresentationAdapter(urls: launch.links.flickr.original)
         let viewController = makeLaunchDetailsViewController(delegate: presentationAdapter)
         
         let presenter = LaunchDetailsPresenter(
