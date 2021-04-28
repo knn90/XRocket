@@ -7,6 +7,6 @@
 
 import Foundation
 
-public struct LaunchDetailsViewModel: Equatable {
+public struct LaunchDetailsImageViewModel: Equatable {
     public let urls: [URL]
 }
