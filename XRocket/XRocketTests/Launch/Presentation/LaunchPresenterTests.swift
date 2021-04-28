@@ -26,7 +26,8 @@ class LaunchPresenterTests: XCTestCase {
         
         XCTAssertEqual(view.messages, [
             .display(errorMessage: nil),
-            .display(isLoading: true)            
+            .display(isLoading: true),
+            .display(isLoading: true, hasNextPage: false, pageNumber: 0)
         ])
     }
     
@@ -49,14 +50,15 @@ class LaunchPresenterTests: XCTestCase {
         
         XCTAssertEqual(view.messages, [
             .display(launches: viewModel.launches),
-            .display(isLoading: false)
+            .display(isLoading: false),
+            .display(isLoading: false, hasNextPage: launchPagination.hasNextPage, pageNumber: launchPagination.page)
         ])
     }
     
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (LaunchPresenter, ViewSpy) {
         let view = ViewSpy()
-        let sut = LaunchPresenter(loadingView: view, errorView: view, launchView: view)
+        let sut = LaunchPresenter(loadingView: view, errorView: view, launchView: view, loadMoreView: view)
         
         trackForMemoryLeak(view, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
@@ -64,11 +66,12 @@ class LaunchPresenterTests: XCTestCase {
         return (sut, view)
     }
     
-    private class ViewSpy: LaunchLoadingView, LaunchErrorView, LaunchView {
+    private class ViewSpy: LaunchLoadingView, LaunchErrorView, LaunchView, LaunchLoadMoreView {
         enum Message: Equatable {
             case display(isLoading: Bool)
             case display(errorMessage: String?)
             case display(launches: [Launch])
+            case display(isLoading: Bool, hasNextPage: Bool, pageNumber: Int)
         }
         
         private(set) var messages = [Message]()
@@ -83,6 +86,10 @@ class LaunchPresenterTests: XCTestCase {
         
         func display(_ viewModel: LaunchViewModel) {
             messages.append(.display(launches: viewModel.launches))
+        }
+        
+        func display(_ viewModel: LaunchLoadMoreViewModel) {
+            messages.append(.display(isLoading: viewModel.isLoading, hasNextPage: viewModel.hasNextPage, pageNumber: viewModel.pageNumber))
         }
     }
     
