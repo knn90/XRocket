@@ -29,6 +29,7 @@ public final class LaunchDetailsUIComposer {
     private static func makeLaunchDetailsViewController(delegate: LaunchDetailsViewControllerDelegate) -> LaunchDetailsViewController {
         let storyboard = UIStoryboard(name: "LaunchDetails", bundle: Bundle(for: LaunchDetailsViewController.self))
         let viewController = storyboard.instantiateInitialViewController() as! LaunchDetailsViewController
+        viewController.title = LaunchDetailsPresenter.title
         viewController.delegate = delegate
         return viewController
     }
