@@ -9,4 +9,9 @@ import Foundation
 
 public struct LaunchDetailsImageViewModel: Equatable {
     public let urls: [URL]
+    
+    public init(urls: [URL]) {
+        self.urls = urls
+    }
+    
 }

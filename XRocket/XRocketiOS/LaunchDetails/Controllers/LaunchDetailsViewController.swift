@@ -19,9 +19,15 @@ public final class LaunchDetailsViewController: UIViewController {
     @IBOutlet private(set) public var tableView: UITableView!
     
     var delegate: LaunchDetailsViewControllerDelegate?
-    private var cellControllers = [LaunchDetailsImageCellController]() {
+    private var imageControllers = [LaunchDetailsImageCellController]() {
         didSet {
             collectionView.reloadData()
+        }
+    }
+    
+    private var infoControllers = [LaunchDetailsInfoCellController]() {
+        didSet {
+            tableView.reloadData()
         }
     }
     
@@ -37,7 +43,11 @@ public final class LaunchDetailsViewController: UIViewController {
     }
     
     public func display(_ cellControllers: [LaunchDetailsImageCellController]) {
-        self.cellControllers = cellControllers
+        self.imageControllers = cellControllers
+    }
+    
+    public func populate(_ cellControllers: [LaunchDetailsInfoCellController]) {
+        self.infoControllers = cellControllers
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout {
@@ -60,64 +70,66 @@ public final class LaunchDetailsViewController: UIViewController {
 
 extension LaunchDetailsViewController: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cellControllers.count
+        return imageControllers.count
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return cellControllers[indexPath.item].view(in: collectionView, at: indexPath)
+        return imageControllers[indexPath.item].view(in: collectionView, at: indexPath)
     }
 }
 
 extension LaunchDetailsViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        cellControllers[indexPath.item].cancelLoad()
+        imageControllers[indexPath.item].cancelLoad()
     }
 }
 
 extension LaunchDetailsViewController: UICollectionViewDataSourcePrefetching {
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            cellControllers[indexPath.item].preload()
+            imageControllers[indexPath.item].preload()
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            cellControllers[indexPath.item].cancelLoad()
+            imageControllers[indexPath.item].cancelLoad()
         }
     }
 }
 
 extension LaunchDetailsViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        infoControllers.count
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        infoControllers[indexPath.row].tableView(tableView, cellForRowAt: indexPath)
+    }
+}
+
+public class LaunchDetailsInfoCellController: NSObject {
+    private var cell: LaunchDetailsInfoCell?
+    private let viewModel: LaunchDetailsViewModel
+    
+    init(viewModel: LaunchDetailsViewModel) {
+        self.viewModel = viewModel
+    }
+}
+
+extension LaunchDetailsInfoCellController: UITableViewDataSource, UITableViewDelegate {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         1
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        LaunchDetailsInfoCell()
-    }
-    
-
-}
-
-extension LaunchDetailsViewController: UITableViewDelegate {
-    
-}
-
-class LaunchDetailsInfoCellController: NSObject {
-    private var cell: LaunchDetailsInfoCell?
-}
-
-extension LaunchDetailsInfoCellController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LaunchDetailsInfoCell") as! LaunchDetailsInfoCell
+        cell.nameLabel.text = viewModel.name
+        cell.launchDateLabel.text = viewModel.launchDateString
+        cell.rocketNameLabel.text = viewModel.rocketName
+        cell.statusLabel.text = viewModel.status
+        cell.descriptionLabel.text = viewModel.details
         self.cell = cell
         return cell
     }
-    
-    
 }

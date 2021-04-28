@@ -187,6 +187,21 @@ class LaunchDetailsViewControllerTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_populateLaunchDetails_rendersInfoCell() {
+        let date = LaunchDateFactory.date3()
+        let launch = LaunchFactory.any(id: "", name: "name", flightNumber: 1, success: true, dateUTC: date.0, details: "details")
+        let (sut, _) = makeSUT(launch: launch)
+        sut.loadViewIfNeeded()
+        
+        XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 1)
+        let cell = sut.getInfoCell(at: 0)
+        XCTAssertEqual(cell.name, launch.name)
+        XCTAssertEqual(cell.launchDate, date.1)
+        XCTAssertEqual(cell.status, "Success")
+        XCTAssertEqual(cell.rocketName, launch.rocket.name)
+        XCTAssertEqual(cell.descriptionText, launch.details)
+    }
+    
     // MARK: - Helpers
     private func makeSUT(launch: Launch = LaunchFactory.any(), file: StaticString = #file, line: UInt = #line) -> (LaunchDetailsViewController, LoaderSpy) {
         let loader = LoaderSpy()
@@ -251,6 +266,13 @@ extension LaunchDetailsViewController {
     private var launchImageSection: Int {
         return 0
     }
+    
+    func getInfoCell(at row: Int) -> LaunchDetailsInfoCell {
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: 0)
+        
+        return ds?.tableView(tableView, cellForRowAt: index) as! LaunchDetailsInfoCell
+    }
 }
 
 extension LaunchDetailsImageCell {
@@ -268,5 +290,27 @@ extension LaunchDetailsImageCell {
     
     func simulateRetryButtonTap() {
         retryButton.simulate(event: .touchUpInside)
+    }
+}
+
+extension LaunchDetailsInfoCell {
+    var name: String? {
+        nameLabel.text
+    }
+    
+    var launchDate: String? {
+        launchDateLabel.text
+    }
+    
+    var rocketName: String? {
+        rocketNameLabel.text
+    }
+    
+    var status: String? {
+        statusLabel.text
+    }
+    
+    var descriptionText: String? {
+        descriptionLabel.text
     }
 }

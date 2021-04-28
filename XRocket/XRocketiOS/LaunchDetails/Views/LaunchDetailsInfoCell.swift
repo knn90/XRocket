@@ -7,10 +7,10 @@
 
 import UIKit
 
-class LaunchDetailsInfoCell: UITableViewCell {
-    @IBOutlet private(set) var nameLabel: UILabel!
-//    @IBOutlet private(set) var launchDateLabel: UILabel!
-//    @IBOutlet private(set) var statusLabel: UILabel!
-//    @IBOutlet private(set) var rocketNameLabel: UILabel!
-//    @IBOutlet private(set) var descriptionLabel: UILabel!
+public class LaunchDetailsInfoCell: UITableViewCell {
+    @IBOutlet private(set) public var nameLabel: UILabel!
+    @IBOutlet private(set) public var launchDateLabel: UILabel!
+    @IBOutlet private(set) public var statusLabel: UILabel!
+    @IBOutlet private(set) public var rocketNameLabel: UILabel!
+    @IBOutlet private(set) public var descriptionLabel: UILabel!
 }

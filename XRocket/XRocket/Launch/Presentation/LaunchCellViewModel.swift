@@ -38,7 +38,7 @@ public struct LaunchCellViewModel<Image> {
     }
 }
 
-private class LaunchDateFormatter {
+class LaunchDateFormatter {
     static let dateFormatter = DateFormatter()
     
     static func format(from date: Date) -> String {

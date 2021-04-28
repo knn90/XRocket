@@ -21,6 +21,6 @@ class LaunchDetailsPresentationAdapter: LaunchDetailsViewControllerDelegate {
     }
     
     func populateLaunchDetails() {
-        
+        presenter?.display(launch: launch)
     }
 }

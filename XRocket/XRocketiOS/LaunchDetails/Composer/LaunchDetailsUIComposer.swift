@@ -16,10 +16,12 @@ public final class LaunchDetailsUIComposer {
         let presentationAdapter = LaunchDetailsPresentationAdapter(launch: launch)
         let viewController = makeLaunchDetailsViewController(delegate: presentationAdapter)
         
+        let viewAdapter = LaunchDetailsViewAdapter(
+            viewController: viewController,
+            imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader))
         let presenter = LaunchDetailsPresenter(
-            launchDetailsView: LaunchDetailsViewAdapter(
-                viewController: viewController,
-                imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)))
+            launchDetailsImageView: viewAdapter,
+            launchDetailsView: viewAdapter)
         presentationAdapter.presenter = presenter
         return viewController
     }
@@ -33,7 +35,7 @@ public final class LaunchDetailsUIComposer {
 }
 
 
-class LaunchDetailsViewAdapter: LaunchDetailsImageView {
+class LaunchDetailsViewAdapter: LaunchDetailsImageView, LaunchDetailsView {
     private weak var viewController: LaunchDetailsViewController?
     private let imageLoader: ImageDataLoader
     
@@ -51,5 +53,9 @@ class LaunchDetailsViewAdapter: LaunchDetailsImageView {
             
             return view
         })
+    }
+    
+    func display(_ viewModel: LaunchDetailsViewModel) {
+        viewController?.populate([LaunchDetailsInfoCellController(viewModel: viewModel)])
     }
 }
