@@ -14,3 +14,11 @@ Connect to SpaceX API to get the data of the rocket launches of SpaceX.
   - Snapshot testing.
   - Unit testing.
   - Github Action.
+
+## How to run:
+  - Clone the repository
+  - Open XRocketApp.xcworkspace
+  - To run the application, choose `XRocketApp` schema
+  - To run all the test, choose `CI_iOS` schema
+  - To test `XRocket` framework, choose `XRocket` schema
+  - to test `XRocketiOS` framework, choose `XRocketiOS` schema 
