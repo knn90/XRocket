@@ -30,9 +30,9 @@ public struct LaunchDetailsViewModel: Equatable {
     
     public var status: String {
         if success {
-            return LaunchString.localize(for: "launch_status_success")
+            return LaunchDetailsString.localize(for: "launch_status_success")
         } else {
-            return LaunchString.localize(for: "launch_status_failure")
+            return LaunchDetailsString.localize(for: "launch_status_failure")
         }
     }
     

@@ -8,11 +8,10 @@
 import XCTest
 import XRocket
 
-
 class LaunchDetailsPresenterTests: XCTestCase {
     
     func test_title_isLocalized() {
-        XCTAssertEqual(LaunchDetailsPresenter.title, localized("launch_details_view_title"))
+        XCTAssertEqual(LaunchDetailsPresenter.title, launchDetailsLocalized("launch_details_view_title"))
     }
     
     func test_init_doesNotSendMessageToView() {
@@ -66,15 +65,5 @@ class LaunchDetailsPresenterTests: XCTestCase {
         func display(_ viewModel: LaunchDetailsViewModel) {
             messages.append(.info(viewModel))
         }
-    }
-    
-    private func localized(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {
-        let table = "LaunchDetails"
-        let bundle = Bundle(for: LaunchDetailsPresenter.self)
-        let value = bundle.localizedString(forKey: key, value: nil, table: table)
-        if value == key {
-            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
-        }
-        return value
     }
 }

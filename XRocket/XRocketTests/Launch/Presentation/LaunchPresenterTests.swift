@@ -10,7 +10,7 @@ import XRocket
 
 class LaunchPresenterTests: XCTestCase {
     func test_title_shouldLocalized() {
-        XCTAssertEqual(LaunchPresenter.title, localized("launch_view_title"))
+        XCTAssertEqual(LaunchPresenter.title, launchLocalized("launch_view_title"))
     }
     
     func test_init_doesNotSendMessageToView() {
@@ -37,7 +37,7 @@ class LaunchPresenterTests: XCTestCase {
         sut.didFinishLoading(with: anyNSError())
         
         XCTAssertEqual(view.messages, [
-            .display(errorMessage: localized("launch_view_connection_error")),
+            .display(errorMessage: launchLocalized("launch_view_connection_error")),
             .display(isLoading: false)
         ])
     }
@@ -101,15 +101,5 @@ class LaunchPresenterTests: XCTestCase {
         func display(_ viewModel: LaunchLoadMoreViewModel) {
             messages.append(.display(isLoading: viewModel.isLoading, hasNextPage: viewModel.hasNextPage, pageNumber: viewModel.pageNumber))
         }
-    }
-    
-    private func localized(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {
-        let table = "Launch"
-        let bundle = Bundle(for: LaunchPresenter.self)
-        let value = bundle.localizedString(forKey: key, value: nil, table: table)
-        if value == key {
-            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
-        }
-        return value
     }
 }

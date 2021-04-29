@@ -1,1 +1,3 @@
 "launch_details_view_title" = "Launch Details";
+"launch_status_success" = "Success";
+"launch_status_failure" = "Failure";
