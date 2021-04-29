@@ -350,8 +350,6 @@ class LaunchViewControllerTests: XCTestCase {
         return (sut, loader)
     }
     
-    
-    
     private func localized(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {
         let table = "Launch"
         let bundle = Bundle(for: LaunchPresenter.self)
@@ -387,12 +385,6 @@ class LaunchViewControllerTests: XCTestCase {
     
     private func anyPatch() -> Patch {
         Patch(small: anyURL(), large: anyURL())
-    }
-}
-
-extension UIRefreshControl {
-    func simulatePullToRefresh() {
-        simulate(event: .valueChanged)
     }
 }
 
@@ -483,24 +475,6 @@ extension LaunchCell {
     
     var renderedImage: Data? {
         return rocketImageView.image?.pngData()
-    }
-}
-
-class LaunchDateFactory {
-    static func date1() -> (date: Date, string: String) {
-        return (Date(timeIntervalSince1970: 1614846240), "2021-03-04")
-    }
-    
-    static func date2() -> (date: Date, string: String) {
-        return (Date(timeIntervalSince1970: 1612419540), "2021-02-04")
-    }
-    
-    static func date3() -> (date: Date, string: String) {
-        return (Date(timeIntervalSince1970: 1611500400), "2021-01-24")
-    }
-    
-    static func date4() -> (date: Date, string: String) {
-        return (Date(timeIntervalSince1970: 1610072100), "2021-01-08")
     }
 }
 

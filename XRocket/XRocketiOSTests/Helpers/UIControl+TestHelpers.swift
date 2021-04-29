@@ -16,3 +16,9 @@ extension UIControl {
         }
     }
 }
+
+extension UIRefreshControl {
+    func simulatePullToRefresh() {
+        simulate(event: .valueChanged)
+    }
+}

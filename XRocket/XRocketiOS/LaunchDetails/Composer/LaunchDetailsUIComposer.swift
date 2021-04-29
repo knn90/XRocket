@@ -34,29 +34,3 @@ public final class LaunchDetailsUIComposer {
         return viewController
     }
 }
-
-
-class LaunchDetailsViewAdapter: LaunchDetailsImageView, LaunchDetailsView {
-    private weak var viewController: LaunchDetailsViewController?
-    private let imageLoader: ImageDataLoader
-    
-    init(viewController: LaunchDetailsViewController, imageLoader: ImageDataLoader) {
-        self.viewController = viewController
-        self.imageLoader = imageLoader
-    }
-    
-    func display(_ viewModel: LaunchDetailsImageViewModel) {
-        viewController?.display(viewModel.urls.map { url in
-            let adapter = LaunchDetailsImageCellPresentationAdapter<WeakRefVirtualProxy<LaunchDetailsImageCellController>, UIImage>(url: url, imageLoader: imageLoader)
-            let view = LaunchDetailsImageCellController(delegate: adapter)
-            
-            adapter.presenter = LaunchImageCellPresenter(view: WeakRefVirtualProxy(view), imageTransformer: UIImage.init)
-            
-            return view
-        })
-    }
-    
-    func display(_ viewModel: LaunchDetailsViewModel) {
-        viewController?.populate([LaunchDetailsInfoCellController(viewModel: viewModel)])
-    }
-}
