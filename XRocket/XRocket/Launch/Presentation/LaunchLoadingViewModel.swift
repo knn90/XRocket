@@ -9,4 +9,8 @@ import Foundation
 
 public struct LaunchLoadingViewModel {
     public let isLoading: Bool
+    
+    public init(isLoading: Bool) {
+        self.isLoading = isLoading
+    }
 }

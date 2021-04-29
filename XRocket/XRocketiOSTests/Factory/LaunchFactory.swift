@@ -28,4 +28,8 @@ class LaunchFactory {
     static func launchFailed() -> Launch {
         return Launch(id: "any Id", name: "", flightNumber: 3, success: false, dateUTC: Date(timeIntervalSince1970: 1616574480), details: "", links: Link(flickr: Flickr(original: [anyURL()]), patch: Patch(small: anyURL(), large: anyURL())), rocket: Rocket(id: "", name: ""))
     }
+    
+    static func fullDetails() -> Launch {
+        return Launch(id: "Id", name: "Starlink", flightNumber: 123, success: true, dateUTC: Date(timeIntervalSince1970: 1687357684), details: "This is the description of the lanch", links: Link(flickr: Flickr(original: []), patch: Patch(small: anyURL(), large: anyURL())), rocket: Rocket(id: "rocketId", name: "Falcon 11"))
+    }
 }

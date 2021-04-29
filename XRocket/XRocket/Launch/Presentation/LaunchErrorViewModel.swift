@@ -9,4 +9,8 @@ import Foundation
 
 public struct LaunchErrorViewModel {
     public let message: String?
+    
+    public init(message: String?) {
+        self.message = message
+    }
 }

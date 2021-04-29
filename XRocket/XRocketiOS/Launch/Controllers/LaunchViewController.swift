@@ -41,14 +41,14 @@ public final class LaunchViewController: UITableViewController, LaunchLoadingVie
         delegate?.didRequestForLaunches()
     }
     
-    func set(_ cellControllers: [CellController]) {
+    public func set(_ cellControllers: [CellController]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
         snapshot.appendSections([0])
         snapshot.appendItems(cellControllers, toSection: 0)
         dataSource.apply(snapshot)
     }
     
-    func append(_ cellControllers: [CellController]) {
+    public func append(_ cellControllers: [CellController]) {
         var snapshot = dataSource.snapshot()
         snapshot.appendItems(cellControllers, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)
