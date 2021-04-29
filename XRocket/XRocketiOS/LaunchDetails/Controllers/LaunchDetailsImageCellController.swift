@@ -19,7 +19,7 @@ public final class LaunchDetailsImageCellController: LaunchImageView {
     private var cell: LaunchDetailsImageCell?
     private let delegate: LaunchDetailsImageCellControllerDelegate
     
-    init(delegate: LaunchDetailsImageCellControllerDelegate) {
+    public init(delegate: LaunchDetailsImageCellControllerDelegate) {
         self.delegate = delegate
     }
     

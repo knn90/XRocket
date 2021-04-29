@@ -112,7 +112,7 @@ public class LaunchDetailsInfoCellController: NSObject {
     private var cell: LaunchDetailsInfoCell?
     private let viewModel: LaunchDetailsViewModel
     
-    init(viewModel: LaunchDetailsViewModel) {
+    public init(viewModel: LaunchDetailsViewModel) {
         self.viewModel = viewModel
     }
 }
